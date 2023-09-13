@@ -8,10 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // This is team member Sigurður Örn Gunnarsson
 // This is team member Friðrik Þór Ólafsson
 @SpringBootApplication
-public class Hbv1Application {
+public class Hbv1Application
+{
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         SpringApplication.run(Hbv1Application.class, args);
     }
-
 }
