@@ -1,10 +1,24 @@
 package is.hi.hbv501g.hbv1.patient;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table
 public class Patient
 {
-    private String id;
+    @Id
+    @SequenceGenerator(
+            name="patient_sequence",
+            sequenceName = "patient_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "patient_sequence"
+    )
+    private Long id;
     private String name;
     private LocalDate dob;
     private String email;
@@ -13,18 +27,24 @@ public class Patient
     {
     }
 
-    public Patient(String id, String name, LocalDate dob, String email) {
+    public Patient(Long id, String name, LocalDate dob, String email) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.email = email;
     }
 
-    public String getId() {
+    public Patient(String name, LocalDate dob, String email) {
+        this.name = name;
+        this.dob = dob;
+        this.email = email;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
