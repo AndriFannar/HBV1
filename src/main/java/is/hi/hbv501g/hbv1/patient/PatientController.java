@@ -1,9 +1,7 @@
 package is.hi.hbv501g.hbv1.patient;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,17 @@ public class PatientController
     public List<Patient> getPatients()
     {
         return patientService.getPatients();
+    }
+
+    @PostMapping
+    public void registerNewPatient(@RequestBody Patient patient)
+    {
+        patientService.addNewPatient(patient);
+    }
+
+    @DeleteMapping
+    public void deletePatient()
+    {
+
     }
 }

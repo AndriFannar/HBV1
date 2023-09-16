@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.patient;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table
@@ -22,6 +23,9 @@ public class Patient
     private String name;
     private LocalDate dob;
     private String email;
+
+    @Transient
+    private Integer age;
 
     public Patient()
     {
@@ -72,6 +76,10 @@ public class Patient
         this.email = email;
     }
 
+    public Integer getAge() {
+        return Period.between(this.dob, LocalDate.now()).getYears();
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
@@ -79,6 +87,7 @@ public class Patient
                 ", name='" + name + '\'' +
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
+                ", age=" + age +
                 '}';
     }
 }
