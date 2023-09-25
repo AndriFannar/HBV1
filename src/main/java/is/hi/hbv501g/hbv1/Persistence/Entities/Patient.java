@@ -24,8 +24,8 @@ public class Patient {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long id_counter) {
+        this.id = id_counter;
     }
 
     public String getName() {
