@@ -5,25 +5,45 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Servecies.PatientService;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+
+import is.hi.hbv501g.hbv1.Servecies.UserService;
 
 @Controller
 public class HomeController {
     
-    private PatientService patientService;
+    private UserService userService;
 
     @Autowired
-    public HomeController(PatientService pS){
-        this.patientService = pS;
+    public HomeController(UserService uS){
+        this.userService = uS;
     }
 
     @RequestMapping("/")
     public String index(Model model){
-        List<Patient> allPatient = patientService.findAll();
-        model.addAttribute("patient", allPatient);
+        List<User> allUsers = userService.findAll();
+        model.addAttribute("user", allUsers);
         return "index";
+    }
+
+
+    @RequestMapping(value="/signIn", method = RequestMethod.GET)
+    public String signInForm(User user, Model model){
+        return "newUser";
+    }
+
+    @RequestMapping(value="/signIn", method = RequestMethod.POST)
+    public String signIn(User user, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "newUser";
+        }
+        userService.save(user);
+        return "redirect:/";
+
+
     }
 }

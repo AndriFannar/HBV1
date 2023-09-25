@@ -1,8 +1,23 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
-public class Patient {
+@Entity
+@Table
+public class Patient
+{
+    @Id
+    @SequenceGenerator(
+            name="patient_sequence",
+            sequenceName = "patient_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "patient_sequence"
+    )
     private Long id;
     private String name;
     private LocalDate dob;

@@ -40,7 +40,6 @@ public class PatientServiceImplementation implements PatientService {
 
     @Override
     public List<Patient> findAll() {
-        System.out.println(patientReposity);
         return patientReposity;
     }
 
