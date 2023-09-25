@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Sign in</h2>
-    <form action="#" th:action="@{/signIn}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/signUp}" th:object="${user}" method="post">
         <label for="name">Name</label>
         <input type="name" th:field="*{name}" id="name" placeholder="Nafn">
         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
@@ -34,6 +34,7 @@
 
         <input type="submit" value="Skrá sig inn">
     </form>
+    <p><a href="/"> Til baka</a></p>
     
 </body>
 

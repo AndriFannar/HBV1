@@ -27,41 +27,16 @@ public class UserServiceImplemention implements UserService{
     }
 
     @Override
-    public User findByName(String name) {
-        for(User u: userRespotory){
-            if(u.getName().equals(name)){
-                return u;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public List<User> findAll() {
         return userRespotory;
     }
 
     @Override
-    public User findById(long ID) {
-        for(User u: userRespotory){
-            if(u.getId() == ID){
-                return u;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public User save(User user) {
+    public User signUp(User user) {
         user.setId((long) id_counter);
         id_counter++;
         userRespotory.add(user);
         return user;
-    }
-
-    @Override
-    public void delete(User user) {
-        userRespotory.remove(user);
     }
     
 }

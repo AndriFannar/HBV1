@@ -30,20 +30,4 @@ public class HomeController {
         return "index";
     }
 
-
-    @RequestMapping(value="/signIn", method = RequestMethod.GET)
-    public String signInForm(User user, Model model){
-        return "newUser";
-    }
-
-    @RequestMapping(value="/signIn", method = RequestMethod.POST)
-    public String signIn(User user, BindingResult result, Model model){
-        if(result.hasErrors()){
-            return "newUser";
-        }
-        userService.save(user);
-        return "redirect:/";
-
-
-    }
 }
