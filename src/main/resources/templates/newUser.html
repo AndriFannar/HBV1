@@ -7,32 +7,49 @@
 <body>
     <h2>Sign in</h2>
     <form action="#" th:action="@{/signUp}" th:object="${user}" method="post">
-        <label for="name">Name</label>
-        <input type="name" th:field="*{name}" id="name" placeholder="Nafn">
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <fieldset>
+            <legend>Notenda upplýsingar</legend>
 
-        <label for="email">Netfang</label>
-        <input type="text" th:field="*{email}" id="email" placeholder="xxx@email.com">
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            <label for="name">Name</label>
+            <input type="name" th:field="*{name}" id="name" placeholder="Nafn">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    
+            <label for="kennitala">Kennitala</label>
+            <input type="text" th:field="*{kennitala}" id="kennitala"  placeholder="">
+            <span th:if="${#fields.hasErrors('kennitala')}" th:errors="*{kennitala}"></span>
+    
+            <label for="phoneNumber">Símanúmer</label>
+            <input type="text" th:field="*{phoneNumber}" id="phNumber"  placeholder="">
+            <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+        </fieldset>
+        <fieldset>
+            <legend>Skráningar upplýsingar</legend>
 
-        <label for="password">Lykilorð</label>
-        <input type="password" th:field="*{password}" id="password"  placeholder="">
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            <label for="email">Netfang</label>
+            <input type="text" th:field="*{email}" id="email" placeholder="xxx@email.com">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    
+            <label for="password">Lykilorð</label>
+            <input type="text" th:field="*{password}" id="password"  placeholder="">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 
-        <label for="kennitala">Kennitala</label>
-        <input type="text" th:field="*{kennitala}" id="kennitala"  placeholder="">
-        <span th:if="${#fields.hasErrors('kennitala')}" th:errors="*{kennitala}"></span>
+            <label for="password">Staðfesta lykilorð</label>
+            <input type="password" th:field="*{password}" id="password"  placeholder="">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </fieldset>
+        <fieldset>
+            <legend>Röksemndar dót</legend>
+            
+            <label for="isAdmin">Er admin</label>
+            <input type="checkbox" th:field="*{isAdmin}" id="isAdmin"  >
+            <span th:if="${#fields.hasErrors('isAdmin')}" th:errors="*{isAdmin}"></span>
 
-        <label for="phoneNumber">Símanúmer</label>
-        <input type="text" th:field="*{phoneNumber}" id="phoneNumber"  placeholder="">
-        <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+            <label for="isLoggedIn">Er loggaður inn</label>
+            <input type="checkbox" th:field="*{isLoggedIn}" id="isLoggedIn">
+            <span th:if="${#fields.hasErrors('isLoggedIn')}" th:errors="*{isLoggedIn}"></span>
+        </fieldset>
 
-        <label for="isAdmin">Er admin</label>
-        <input type="checkbox" th:field="*{isAdmin}" id="isAdmin"  placeholder="">
-        <span th:if="${#fields.hasErrors('isAdmin')}" th:errors="*{isAdmin}"></span>
-
-
-        <input type="submit" value="Skrá sig inn">
+        <input type="submit"  value="Skrá sig inn">
     </form>
     <p><a href="/"> Til baka</a></p>
     

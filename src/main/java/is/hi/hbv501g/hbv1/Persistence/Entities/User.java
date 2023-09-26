@@ -1,9 +1,21 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="users")
 public class User
 {
 
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+        
+    )
     private Long id;
     private String name;
     private String email;
@@ -11,6 +23,7 @@ public class User
     private String kennitala;
     private String phoneNumber;
     private boolean isAdmin;
+    private boolean isLoggedIn;
 
 
     public User()
@@ -18,13 +31,14 @@ public class User
     }
 
 
-    public User(String name, String email, String password, String kennitala, String phNumber, boolean isAdmin) {
+    public User(String name, String email, String password, String kennitala, String phNumber, boolean isAdmin, boolean isLoggedIn) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.kennitala = kennitala;
         this.phoneNumber = phNumber;
         this.isAdmin = isAdmin;
+        this.isLoggedIn = isLoggedIn;
     }
 
     public Long getId() {
@@ -82,6 +96,14 @@ public class User
 
     public boolean getIsAdmin(){
         return this.isAdmin;
+    }
+
+    public void setIsLoggedIn(boolean isLoggedIn){
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public boolean getIsLoggedIn(){
+        return this.isLoggedIn;
     }
 
 }
