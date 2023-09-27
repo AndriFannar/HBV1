@@ -34,7 +34,7 @@
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 
             <label for="password">Staðfesta lykilorð</label>
-            <input type="password" th:field="*{password}" id="password"  placeholder="">
+            <input type="password" id="password"  placeholder="">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
         </fieldset>
         <fieldset>
