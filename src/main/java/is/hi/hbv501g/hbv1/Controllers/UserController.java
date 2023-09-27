@@ -41,8 +41,11 @@ public class UserController {
             return "redirect:/loggedin";
         }
         return "redirect:/";
+    }
 
-
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+    public String loginPost(User user, Model model){
+        return "login";
     }
 
     @RequestMapping(value="/loggedin", method=RequestMethod.GET)
@@ -54,5 +57,7 @@ public class UserController {
         }
         return "redirect:/";
     }
+
+
     
 }
