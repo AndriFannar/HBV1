@@ -43,10 +43,6 @@
             <label for="isAdmin">Er admin</label>
             <input type="checkbox" th:field="*{isAdmin}" id="isAdmin"  >
             <span th:if="${#fields.hasErrors('isAdmin')}" th:errors="*{isAdmin}"></span>
-
-            <label for="isLoggedIn">Er loggaður inn</label>
-            <input type="checkbox" th:field="*{isLoggedIn}" id="isLoggedIn">
-            <span th:if="${#fields.hasErrors('isLoggedIn')}" th:errors="*{isLoggedIn}"></span>
         </fieldset>
 
         <input type="submit"  value="Skrá sig inn">

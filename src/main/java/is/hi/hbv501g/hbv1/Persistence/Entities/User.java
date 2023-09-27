@@ -23,7 +23,6 @@ public class User
     private String kennitala;
     private String phoneNumber;
     private boolean isAdmin;
-    private boolean isLoggedIn;
 
 
     public User()
@@ -31,14 +30,13 @@ public class User
     }
 
 
-    public User(String name, String email, String password, String kennitala, String phNumber, boolean isAdmin, boolean isLoggedIn) {
+    public User(String name, String email, String password, String kennitala, String phNumber, boolean isAdmin) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.kennitala = kennitala;
         this.phoneNumber = phNumber;
         this.isAdmin = isAdmin;
-        this.isLoggedIn = isLoggedIn;
     }
 
     public Long getId() {
@@ -96,14 +94,6 @@ public class User
 
     public boolean getIsAdmin(){
         return this.isAdmin;
-    }
-
-    public void setIsLoggedIn(boolean isLoggedIn){
-        this.isLoggedIn = isLoggedIn;
-    }
-
-    public boolean getIsLoggedIn(){
-        return this.isLoggedIn;
     }
 
 }
