@@ -1,20 +1,19 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-@Entity
-@Table(name="users")
-public class User
+@MappedSuperclass
+public abstract class User
 {
-
     @Id
+    @SequenceGenerator(
+            name="patient_sequence",
+            sequenceName = "patient_sequence",
+            allocationSize = 1
+    )
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-        
+            strategy = GenerationType.SEQUENCE,
+            generator = "patient_sequence"
     )
     private Long id;
     private String name;

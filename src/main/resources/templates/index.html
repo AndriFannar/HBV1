@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Tjekk!!</h1>
-        <section th:switch="${user}">
+        <section th:switch="${patient}">
             <h2 th:case="null">Engir sjúklingar</h2>
             <div th:case="*">
                 <h2>Sjúklingar</h2>
@@ -21,12 +21,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="user : ${user}">
-                            <td th:text="${user.name}"></td>
-                            <td th:text="${user.email}"></td>
-                            <td th:text="${user.kennitala}"></td>
-                            <td th:text="${user.phoneNumber}"></td>
-                            <td th:text="${user.isAdmin}"></td>
+                        <tr th:each="patient : ${patient}">
+                            <td th:text="${patient.name}"></td>
+                            <td th:text="${patient.email}"></td>
+                            <td th:text="${patient.kennitala}"></td>
+                            <td th:text="${patient.phoneNumber}"></td>
+                            <td th:text="${patient.isAdmin}"></td>
                         </tr>
                     </tbody>
                 </table>
