@@ -41,13 +41,6 @@
             <input type="password"  placeholder="">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
         </fieldset>
-        <fieldset>
-            <legend>Röksemndar dót</legend>
-            
-            <label for="isAdmin">Er admin</label>
-            <input type="checkbox" th:field="*{isAdmin}" id="isAdmin"  >
-            <span th:if="${#fields.hasErrors('isAdmin')}" th:errors="*{isAdmin}"></span>
-        </fieldset>
 
         <input type="submit"  value="Skrá sig inn">
     </form>
