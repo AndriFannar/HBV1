@@ -1,0 +1,48 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Forsíða</title>
+    </head>
+    <body>
+        <h1>Tjekk!!</h1>
+        <section th:switch="${user}">
+            <h2 th:case="null">Engir sjúklingar</h2>
+            <div th:case="*">
+                <h2>Sjúklingar</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nafn</th>
+                            <th>Netfang</th>
+                            <th>kennitala</th>
+                            <th>Símanúmer</th>
+                            <th>Er admin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${user}">
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.kennitala}"></td>
+                            <td th:text="${user.phoneNumber}"></td>
+                            <td th:text="${user.isAdmin}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><a href="/signUp">Skrá sig inn</a></p>
+        </section>
+        <section>
+            <p> Buttons á annað til að koma í veg fyrir merge conflict</p>
+            <ul>
+                <li>
+                    <p><a href="/login">Logga sig inn</a></p>
+                </li>
+                <li>
+                    <p><a href="/createRequest">Búa til request</a></p>
+                </li>
+            </ul>
+        </section>
+    </body>
+</html>
