@@ -39,7 +39,7 @@ public class PatientController {
             
             session.setAttribute("LoggedInUser", exists);
             model.addAttribute("LoggedInUser", exists);
-            return "redirect:/loggedin";
+            return "redirect:/";
         }
         return "redirect:/";
     }

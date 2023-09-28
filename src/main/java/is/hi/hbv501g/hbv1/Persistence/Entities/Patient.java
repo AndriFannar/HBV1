@@ -2,15 +2,12 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-
 @Entity
 @Table(name="patient")
 public class Patient extends User
 {
 
     private String address;
-
 
     public Patient()
     {
@@ -33,8 +30,9 @@ public class Patient extends User
     }
 
     @Override
-    public String toString() {
-        return "Patient{" +
+    public String toString()
+    {
+        return super.toString() + "Patient{" +
                 "address='" + address + '\'' +
                 '}';
     }
