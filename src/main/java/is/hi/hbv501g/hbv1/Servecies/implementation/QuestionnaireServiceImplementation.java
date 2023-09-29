@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.Servecies.implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
 import jakarta.transaction.Transactional;
@@ -44,7 +43,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     @Override
     public Questionnaire getQuestionnaire(int listID)
     {
-        List<Question> qList = questionRepository.getQuestionByListID(listID);
+        List<Question> qList = questionRepository.findByListIDContaining(listID);
         return new Questionnaire(qList);
     }
 
@@ -90,5 +89,26 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     public void deleteQuestionById(Long questionID)
     {
         questionRepository.deleteById(questionID);
+    }
+
+    /**
+     * Gets all Question objects in database.
+     *
+     * @return List of all Question objects in database, if any.
+     */
+    @Override
+    public List<Question> getQuestions()
+    {
+        return questionRepository.findAll();
+    }
+
+    /**
+     * Gets Question object with matching ID from database.
+     *
+     * @return Question object with matching ID in database, if any.
+     */
+    public Question getQuestionById(Long questionID)
+    {
+        return questionRepository.getQuestionById(questionID);
     }
 }

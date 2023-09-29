@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -62,6 +61,8 @@ public class WaitingListController {
         {
             return "redirect:/createRequest";
         }
+
+        // If no errors, and request does not exist, create.
         WaitingListRequest exists = waitingListService.getRequestByPatient(waitingLR.getPatient());
         if(exists == null)
         {
@@ -77,17 +78,19 @@ public class WaitingListController {
      * @param waitingLR Updated WaitingListRequest.
      * @return          Redirect.
      *
-    @RequestMapping(value = "/updateRequest", method = RequestMethod.PUT)
-    public String updateRequest(WaitingListRequest waitingLR, BindingResult result, Model model)
+    @RequestMapping(value = "/updateRequest", path = "{requestID}", method = RequestMethod.PUT)
+    public String updateRequest(@PathVariable("requestID") Long requestID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID, BindingResult result, Model model)
     {
         if(result.hasErrors())
         {
             return "redirect:/updateRequest";
         }
-        WaitingListRequest exists = waitingListService.getRequestByPatient(waitingLR.getPatient());
+
+        // If no errors and request exists, update.
+        WaitingListRequest exists = waitingListService.getRequestByID(requestID);
         if(exists != null)
         {
-            waitingListService.updateRequest(waitingLR);
+            waitingListService.updateRequest(requestID, staff, bodyPart, description, status, questionnaireID);
         }
 
         return "redirect:/";
@@ -104,6 +107,7 @@ public class WaitingListController {
     public String deleteRequest(@PathVariable("waitingListID") Long waitingListID, Model model)
 
     {
+        // If request exists, delete.
         WaitingListRequest exists = waitingListService.getRequestByID(waitingListID);
 
         if(exists != null)
@@ -120,9 +124,13 @@ public class WaitingListController {
      * @return List of WaitingListRequest objects.
      *
     @RequestMapping(value = "/homePage", method = RequestMethod.GET)
-    public List<WaitingListRequest> getRequests()
+    public String getRequests(Model model)
     {
-        return waitingListService.getRequests();
+        // Get all requests and display.
+        List<WaitingListRequest> requests = waitingListService.getRequests();
+        model.addAttribute("requests", requests);
+        return "homePage";
+
     }
     */
 }

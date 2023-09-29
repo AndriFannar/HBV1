@@ -46,4 +46,18 @@ public interface QuestionnaireService
      * @param questionID ID of the Question to delete.
      */
     void deleteQuestionById(Long questionID);
+
+    /**
+     * Gets all Question objects in database.
+     *
+     * @return List of all Question objects in database, if any.
+     */
+    List<Question> getQuestions();
+
+    /**
+     * Gets Question object with matching ID from database.
+     *
+     * @return Question object with matching ID in database, if any.
+     */
+    Question getQuestionById(Long questionID);
 }

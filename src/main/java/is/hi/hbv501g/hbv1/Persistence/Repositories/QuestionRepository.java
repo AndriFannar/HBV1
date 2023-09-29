@@ -31,6 +31,13 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      */
     void deleteById(Long id);
 
+    /**
+     * Find all Question objects.
+     *
+     * @return List of all Question objects.
+     */
+    List<Question> findAll();
+
 
     /**
      * Finds Question by unique ID.
@@ -46,5 +53,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      * @param listID ID of the questionnaire.
      * @return       List of Question objects that have a matching list ID.
      */
-    List<Question> getQuestionByListID(int listID);
+    List<Question> findByListIDContaining(int listID);
 }
