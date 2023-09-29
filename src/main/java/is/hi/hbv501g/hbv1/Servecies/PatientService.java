@@ -8,7 +8,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 public interface PatientService {
     List<Patient> findAll();
     Patient save(Patient patient);
-    void delete(Patient patient);
+    void delete(Long ID);
     Patient findByEmail(String email);
     Patient login(Patient patient);
 }

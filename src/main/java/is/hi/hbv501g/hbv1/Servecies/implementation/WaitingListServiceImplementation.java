@@ -51,18 +51,23 @@ public class WaitingListServiceImplementation implements WaitingListService
     /**
      * Deletes a WaitingListRequest with a corresponding id.
      *
-     * @param id ID of the WaitingListRequest to delete.
+     * @param waitingListID ID of the WaitingListRequest to delete.
      */
     @Override
-    public void deleteRequest(Long id)
+    public void deleteRequest(Long waitingListID)
     {
-        waitingListRepository.deleteById(id);
+        waitingListRepository.deleteById(waitingListID);
     }
 
     /**
-     * Updates a matching WaitingListRequest.
+     * Updates a corresponding WaitingListRequest.
      *
-     * @param waitingListID ID of WaitingListRequest to update.
+     * @param waitingListID   ID of the request to update.
+     * @param staff           Updated staff info, if any.
+     * @param bodyPart        Updated body part info, if any.
+     * @param description     Updated description, if any.
+     * @param status          Updated status, if any.
+     * @param questionnaireID Updated Questionnaire ID, if any.
      */
     @Override
     @Transactional
@@ -93,13 +98,13 @@ public class WaitingListServiceImplementation implements WaitingListService
     /**
      * Gets a WaitingListRequest with matching unique ID.
      *
-     * @param id Unique ID of the WaitingListRequest object to find.
-     * @return   WaitingListRequest with a matching ID, if any.
+     * @param waitingListID Unique ID of the WaitingListRequest object to find.
+     * @return              WaitingListRequest with a matching ID, if any.
      */
     @Override
-    public WaitingListRequest getRequestByID(Long id)
+    public WaitingListRequest getRequestByID(Long waitingListID)
     {
-        return waitingListRepository.getWaitingListRequestById(id);
+        return waitingListRepository.getWaitingListRequestById(waitingListID);
     }
 
     /**

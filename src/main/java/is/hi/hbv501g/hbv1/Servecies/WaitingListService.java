@@ -26,14 +26,19 @@ public interface WaitingListService
     /**
      * Deletes a WaitingListRequest with a corresponding id.
      *
-     * @param id ID of the WaitingListRequest to delete.
+     * @param waitingListID ID of the WaitingListRequest to delete.
      */
-    void deleteRequest(Long id);
+    void deleteRequest(Long waitingListID);
 
     /**
-     * Updates a matching WaitingListRequest.
+     * Updates a corresponding WaitingListRequest.
      *
-     * @param waitingListID ID of WaitingListRequest to update.
+     * @param waitingListID   ID of the request to update.
+     * @param staff           Updated staff info, if any.
+     * @param bodyPart        Updated body part info, if any.
+     * @param description     Updated description, if any.
+     * @param status          Updated status, if any.
+     * @param questionnaireID Updated Questionnaire ID, if any.
      */
     void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID);
 
@@ -47,10 +52,10 @@ public interface WaitingListService
     /**
      * Gets a WaitingListRequest with matching unique ID.
      *
-     * @param id Unique ID of the WaitingListRequest object to find.
-     * @return   WaitingListRequest with a matching ID, if any.
+     * @param waitingListID Unique ID of the WaitingListRequest object to find.
+     * @return              WaitingListRequest with a matching ID, if any.
      */
-    WaitingListRequest getRequestByID(Long id);
+    WaitingListRequest getRequestByID(Long waitingListID);
 
     /**
      * Gets a WaitingListRequest with matching patient.

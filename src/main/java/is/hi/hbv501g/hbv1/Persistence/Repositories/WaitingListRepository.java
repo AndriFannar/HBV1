@@ -4,6 +4,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @since   2023-09-28
  * @version 1.0
  */
+@Repository
 public interface WaitingListRepository extends JpaRepository<WaitingListRequest, Long>
 {
     /**
@@ -25,7 +27,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
     WaitingListRequest save(WaitingListRequest waitingListRequest);
 
     /**
-     * Delete WaitingListRequest.
+     * Delete WaitingListRequest with corresponding ID.
      *
      * @param id must not be {@literal null}.
      */
@@ -39,7 +41,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
     List<WaitingListRequest> findAll();
 
     /**
-     * Finds WaitingListRequest by unique id.
+     * Finds WaitingListRequest by unique ID.
      *
      * @param id Unique id of WaitingListRequest.
      * @return   WaitingListRequest with matching id, if any.
