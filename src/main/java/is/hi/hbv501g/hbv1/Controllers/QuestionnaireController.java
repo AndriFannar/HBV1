@@ -43,7 +43,7 @@ public class QuestionnaireController
      * Form for answering a Questionnaire.
      *
      * @return questionnaire page with Questionnaire object.
-     */
+     *
     @RequestMapping(value = "/questionnaire", method = RequestMethod.GET)
     public String getQuestionnaire(WaitingListRequest waitingLR, Model model)
     {
@@ -60,7 +60,7 @@ public class QuestionnaireController
      * Get all Question objects in database.
      *
      * @return List of all Question objects in database.
-     */
+     *
     @RequestMapping(value = "/questionOverview", method = RequestMethod.GET)
     public String getQuestions(Model model)
     {
@@ -76,7 +76,7 @@ public class QuestionnaireController
      *
      * @param question Question object to save.
      * @return         Redirect.
-     */
+     *
     @RequestMapping(value = "/createQuestion", method = RequestMethod.POST)
     public String addQuestion(Question question, BindingResult result, Model model, HttpSession session)
     {
@@ -99,7 +99,7 @@ public class QuestionnaireController
      * @param weight         New weight of Question, if any.
      * @param listID         New list IDs, if any.
      * @return               Redirect.
-     */
+     *
     @RequestMapping(value = "/updateQuestion", path = "{questionID}", method = RequestMethod.PUT)
     public String updateQuestion(@PathVariable("questionID") Long questionID, String questionString, double weight, List<Integer> listID, BindingResult result, Model model)
     {
@@ -123,7 +123,7 @@ public class QuestionnaireController
      *
      * @param questionID ID of Question to delete.
      * @return           Redirect.
-     */
+     *
     @RequestMapping(value = "/deleteQuestion", path = "{questionID}", method = RequestMethod.DELETE)
     public String deleteQuestion(@PathVariable("questionID") Long questionID, Model model) {
         // If Question exists, delete.
@@ -134,5 +134,5 @@ public class QuestionnaireController
         }
 
         return "redirect:/";
-    }
+    }*/
 }

@@ -63,11 +63,11 @@ public class WaitingListController {
         }
 
         // If no errors, and request does not exist, create.
-        WaitingListRequest exists = waitingListService.getRequestByPatient(waitingLR.getPatient());
-        if(exists == null)
-        {
+        //WaitingListRequest exists = waitingListService.getRequestByPatient(waitingLR.getPatient());
+        //if(exists == null)
+        //{
             waitingListService.createNewRequest(waitingLR);
-        }
+        //}
 
         return "redirect:/";
     }

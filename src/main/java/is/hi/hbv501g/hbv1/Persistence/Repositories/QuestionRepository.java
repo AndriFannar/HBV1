@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,5 +54,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      * @param listID ID of the questionnaire.
      * @return       List of Question objects that have a matching list ID.
      */
-    List<Question> findByListIDContaining(int listID);
+    @Query("SELECT q FROM Question q WHERE q.listID LIKE %?1%")
+    List<Question> findByListIDContaining(String listID);
 }

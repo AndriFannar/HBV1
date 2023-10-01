@@ -31,7 +31,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long >
      *
      * @param patientID must not be {@literal null}.
      */
-    void delete(Long patientID);
+    void deleteById(Long patientID);
 
     /**
      * Finds Patient by unique E-mail.

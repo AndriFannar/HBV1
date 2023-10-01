@@ -31,7 +31,7 @@ public class Question
     // Variables.
     private String question;
     private Double weight;
-    private List<Integer> listID;
+    private int[] listID;
 
     /**
      * Create a new empty question.
@@ -48,7 +48,7 @@ public class Question
      * @param weight   Weight of question in score calculation.
      * @param listID   Questionnaires this question belongs on.
      */
-    public Question(String question, Double weight, List<Integer> listID) {
+    public Question(String question, Double weight, int[] listID) {
         this.question = question;
         this.weight = weight;
         this.listID = listID;
@@ -70,11 +70,11 @@ public class Question
         this.weight = weight;
     }
 
-    public List<Integer> getListID() {
+    public int[] getListID() {
         return listID;
     }
 
-    public void setListID(List<Integer> listID) {
+    public void setListID(int[] listID) {
         this.listID = listID;
     }
 

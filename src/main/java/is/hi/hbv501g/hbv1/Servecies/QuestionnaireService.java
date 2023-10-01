@@ -20,7 +20,7 @@ public interface QuestionnaireService
      * @param listID The ID of the questionnaire to fetch.
      * @return       Questionnaire that holds Question objects with corresponding list ID.
      */
-    Questionnaire getQuestionnaire(int listID);
+    Questionnaire getQuestionnaire(Integer listID);
 
     /**
      * Saves a new Question to database.
@@ -38,7 +38,7 @@ public interface QuestionnaireService
      * @param weight         Updated weight, if any.
      * @param listID         Updated Questionnaire ID, if any.
      */
-    void updateQuestion(Long questionID, String questionString, double weight, List<Integer> listID);
+    void updateQuestion(Long questionID, String questionString, double weight, int[] listID);
 
     /**
      * Deletes a Question with a corresponding id.

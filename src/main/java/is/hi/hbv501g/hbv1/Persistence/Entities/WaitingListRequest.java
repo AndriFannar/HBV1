@@ -64,6 +64,18 @@ public class WaitingListRequest
         this.bodyPart = bodyPart;
         this.description = description;
 
+        this.status = false;
+
+        this.dateOfRequest = LocalDateTime.now();
+    }
+
+
+    public WaitingListRequest(String bodyPart, String description) {
+        this.bodyPart = bodyPart;
+        this.description = description;
+
+        this.status = false;
+
         this.dateOfRequest = LocalDateTime.now();
     }
 

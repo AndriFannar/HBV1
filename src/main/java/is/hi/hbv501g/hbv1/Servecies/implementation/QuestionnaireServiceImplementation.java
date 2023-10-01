@@ -41,9 +41,9 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * @return       Questionnaire that holds Question objects with corresponding list ID.
      */
     @Override
-    public Questionnaire getQuestionnaire(int listID)
+    public Questionnaire getQuestionnaire(Integer listID)
     {
-        List<Question> qList = questionRepository.findByListIDContaining(listID);
+        List<Question> qList = questionRepository.findByListIDContaining(listID.toString());
         return new Questionnaire(qList);
     }
 
@@ -69,7 +69,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      */
     @Override
     @Transactional
-    public void updateQuestion(Long questionID, String questionString, double weight, List<Integer> listID)
+    public void updateQuestion(Long questionID, String questionString, double weight, int[] listID)
     {
         Question question = questionRepository.getQuestionById(questionID);
         if (question != null)
