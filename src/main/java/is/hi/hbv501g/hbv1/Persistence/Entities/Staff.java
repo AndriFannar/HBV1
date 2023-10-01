@@ -28,6 +28,7 @@ public class Staff extends User
 
     // Variables.
     private boolean isPhysiotherapist;
+    private boolean isAdmin;
     private String specialization;
     private String description;
 
@@ -53,7 +54,7 @@ public class Staff extends User
      * @param specialization    Staff member's specialization.
      * @param description       Description of staff member.
      */
-    public Staff(String name, String email, String password, String kennitala, String phNumber, boolean isAdmin, boolean isPhysiotherapist, String specialization, String description)
+    public Staff(String name, String email, String password, String kennitala, String phNumber, boolean isPhysiotherapist, boolean isAdmin, String specialization, String description)
     {
         super(name, email, password, kennitala, phNumber);
 
@@ -68,6 +69,14 @@ public class Staff extends User
 
     public void setPhysiotherapist(boolean physiotherapist) {
         isPhysiotherapist = physiotherapist;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getSpecialization() {

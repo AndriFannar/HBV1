@@ -11,7 +11,8 @@ import java.util.List;
  * @since   2023-09-28
  * @version 1.0
  */
-@Entity
+//@Entity
+@Deprecated
 public class Questionnaire
 {
     @Id
@@ -42,16 +43,7 @@ public class Questionnaire
         this.questions = questions;
     }
 
-    public double calculateScore()
-    {
-        double score = 0;
 
-        for (int i = 0; i < questions.size(); i++) {
-            score += answers.get(i) * questions.get(i).getWeight();
-        }
-
-        return score;
-    }
 
     public List<Question> getQuestions() {
         return questions;

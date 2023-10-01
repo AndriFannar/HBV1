@@ -40,40 +40,47 @@ public class WaitingListController {
      * @return createRequest page.
      */
     @RequestMapping(value = "/createRequest", method = RequestMethod.GET)
-    public String waitingListForm(WaitingListRequest waitingLR, Model model)
+    public String waitingListForm(Model model)
     {
-        return "createRequest";
+        model.addAttribute("waitingListRequest", new WaitingListRequest());
+        return "newRequest";
     }
 
 
     /**
      * Create a new WaitingListRequest.
      *
-     * @param waitingLR WaitingListRequest object to save.
-     * @return          Redirect.
+     * @param waitingListRequest WaitingListRequest object to save.
+     * @return                   Redirect.
      */
     @RequestMapping(value = "/createRequest", method = RequestMethod.POST)
-    public String createNewRequest(WaitingListRequest waitingLR, BindingResult result, Model model, HttpSession session)
+    public String createNewRequest(WaitingListRequest waitingListRequest, BindingResult result, Model model, HttpSession session)
     {
         if(result.hasErrors())
         {
-            return "redirect:/createRequest";
+            return "redirect:/newRequest";
         }
 
+        // Here the code should fetch the currently logged in Patient ID.
+        // Implement when logging in has been implemented.
+        //formData.setPatientID(patient.getId());
+
         // If no errors, and request does not exist, create.
-        //WaitingListRequest exists = waitingListService.getRequestByPatient(waitingLR.getPatient());
-        //if(exists == null)
-        //{
-            waitingListService.createNewRequest(waitingLR);
-        //}
+        WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
+        if(exists == null)
+        {
+            waitingListService.createNewRequest(waitingListRequest);
+        }
 
         return "redirect:/";
     }
 
+    // **** To be enabled when HTML templates are ready **** //
+
     /*/**
      * Update WaitingListRequest.
      *
-     * @param waitingLR Updated WaitingListRequest.
+     * @param requestID Unique ID of request to update.
      * @return          Redirect.
      *
     @RequestMapping(value = "/updateRequest", path = "{requestID}", method = RequestMethod.PUT)

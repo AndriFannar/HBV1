@@ -3,6 +3,8 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Waiting list request for physiotherapist clinics.
@@ -29,17 +31,16 @@ public class WaitingListRequest
     private Long id;
 
     // Variables.
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Patient patient;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Staff staff;
     private String bodyPart;
     private String description;
     private boolean status;
     private LocalDateTime dateOfRequest;
     private int questionnaireID;
-    @OneToOne
-    private Questionnaire questionnaire;
+    private int[] questionnaireAnswers;
     private double grade;
 
     /**
@@ -65,18 +66,26 @@ public class WaitingListRequest
         this.description = description;
 
         this.status = false;
+        this.questionnaireID = 0;
+        this.grade = 0;
+
+        System.out.println(LocalDateTime.now());
 
         this.dateOfRequest = LocalDateTime.now();
     }
 
+    /**
+     * Calculates the waiting list score according to given answers.
+     *
+     * @return Calculated score
+     */
+    public double calculateScore(List<Question> questions)
+    {
+        for (int i = 0; i < questions.size(); i++) {
+            grade += questionnaireAnswers[i] * questions.get(i).getWeight();
+        }
 
-    public WaitingListRequest(String bodyPart, String description) {
-        this.bodyPart = bodyPart;
-        this.description = description;
-
-        this.status = false;
-
-        this.dateOfRequest = LocalDateTime.now();
+        return grade;
     }
 
     public Patient getPatient() {
@@ -135,12 +144,12 @@ public class WaitingListRequest
         this.questionnaireID = questionnaireID;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
+    public int[] getQuestionnaireAnswers() {
+        return questionnaireAnswers;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
+    public void setQuestionnaireAnswers(int[] answers) {
+        this.questionnaireAnswers = answers;
     }
 
     public double getGrade() {
@@ -162,7 +171,7 @@ public class WaitingListRequest
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
                 ", questionnaireID=" + questionnaireID +
-                ", questionnaire=" + questionnaire +
+                ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
                 ", grade=" + grade +
                 '}';
     }
