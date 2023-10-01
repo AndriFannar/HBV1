@@ -1,12 +1,14 @@
 package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 
 /**
  * Repository class for Patient objects.
@@ -26,12 +28,14 @@ public interface PatientRepository extends JpaRepository<Patient, Long >
      */
     Patient save(Patient patient);
 
+
     /**
      * Delete Patient with corresponding ID.
      *
      * @param patientID must not be {@literal null}.
      */
     void deleteById(Long patientID);
+
 
     /**
      * Finds Patient by unique E-mail.
@@ -40,6 +44,16 @@ public interface PatientRepository extends JpaRepository<Patient, Long >
      * @return      Patient with matching e-mail, if any.
      */
     Patient findByEmail(String email);
+
+
+    /**
+     * Find a Patient object by unique ID.
+     *
+     * @param patientID Unique ID of Patient object to find.
+     * @return          Patient with corresponding ID, if any.
+     */
+    Patient findPatientById(Long patientID);
+
 
     /**
      * Finds all Patient objects in database.

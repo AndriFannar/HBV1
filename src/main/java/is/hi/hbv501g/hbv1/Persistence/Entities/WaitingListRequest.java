@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * Waiting list request for physiotherapist clinics.
  *
@@ -43,13 +44,19 @@ public class WaitingListRequest
     private int[] questionnaireAnswers;
     private double grade;
 
+
     /**
      * Create an empty WaitingListRequest.
      */
     public WaitingListRequest()
     {
+        this.status = false;
+        this.questionnaireID = 0;
+        this.grade = 0;
 
+        this.dateOfRequest = LocalDateTime.now();
     }
+
 
     /**
      * Create a WaitingListRequest.
@@ -69,10 +76,9 @@ public class WaitingListRequest
         this.questionnaireID = 0;
         this.grade = 0;
 
-        System.out.println(LocalDateTime.now());
-
         this.dateOfRequest = LocalDateTime.now();
     }
+
 
     /**
      * Calculates the waiting list score according to given answers.
@@ -81,12 +87,14 @@ public class WaitingListRequest
      */
     public double calculateScore(List<Question> questions)
     {
-        for (int i = 0; i < questions.size(); i++) {
+        for (int i = 0; i < questions.size(); i++)
+        {
             grade += questionnaireAnswers[i] * questions.get(i).getWeight();
         }
 
         return grade;
     }
+
 
     public Patient getPatient() {
         return patient;
@@ -161,7 +169,8 @@ public class WaitingListRequest
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "WaitingListRequest{" +
                 "id=" + id +
                 ", patient=" + patient +

@@ -4,12 +4,14 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+
 
 /**
  * Service class implementation for Questionnaire objects.
@@ -21,7 +23,9 @@ import java.util.Objects;
 @Service
 public class QuestionnaireServiceImplementation implements QuestionnaireService
 {
+    // Variables.
     QuestionRepository questionRepository;
+
 
     /**
      * Constructs a new QuestionnaireServiceImplementation.
@@ -33,6 +37,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     {
         this.questionRepository = qR;
     }
+
 
     /**
      * Get a Questionnaire object.
@@ -47,6 +52,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
         return new Questionnaire(qList);
     }
 
+
     /**
      * Saves a new Question to database.
      *
@@ -58,6 +64,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     {
         return questionRepository.save(question);
     }
+
 
     /**
      * Update a matching Question.
@@ -80,6 +87,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
         }
     }
 
+
     /**
      * Deletes a Question with a corresponding id.
      *
@@ -91,6 +99,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
         questionRepository.deleteById(questionID);
     }
 
+
     /**
      * Gets all Question objects in database.
      *
@@ -101,6 +110,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     {
         return questionRepository.findAll();
     }
+
 
     /**
      * Gets Question object with matching ID from database.

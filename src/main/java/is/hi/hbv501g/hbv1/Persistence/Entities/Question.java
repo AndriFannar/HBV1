@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 
 /**
  * Health questions.
@@ -33,6 +32,7 @@ public class Question
     private Double weight;
     private int[] listID;
 
+
     /**
      * Create a new empty question.
      */
@@ -41,6 +41,7 @@ public class Question
 
     }
 
+
     /**
      * Create a new question.
      *
@@ -48,38 +49,53 @@ public class Question
      * @param weight   Weight of question in score calculation.
      * @param listID   Questionnaires this question belongs on.
      */
-    public Question(String question, Double weight, int[] listID) {
+    public Question(String question, Double weight, int[] listID)
+    {
         this.question = question;
         this.weight = weight;
         this.listID = listID;
     }
 
-    public String getQuestion() {
+
+    public String getQuestion()
+    {
         return question;
     }
 
-    public void setQuestion(String question) {
+
+    public void setQuestion(String question)
+    {
         this.question = question;
     }
 
-    public Double getWeight() {
+
+    public Double getWeight()
+    {
         return weight;
     }
 
-    public void setWeight(Double weight) {
+
+    public void setWeight(Double weight)
+    {
         this.weight = weight;
     }
 
-    public int[] getListID() {
+
+    public int[] getListID()
+    {
         return listID;
     }
 
-    public void setListID(int[] listID) {
+
+    public void setListID(int[] listID)
+    {
         this.listID = listID;
     }
 
+
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Question{" +
                 "question='" + question + '\'' +
                 ", weight=" + weight +

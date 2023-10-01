@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+
 /**
  * Staff members for physiotherapist clinics.
  *
@@ -59,44 +60,63 @@ public class Staff extends User
         super(name, email, password, kennitala, phNumber);
 
         this.isPhysiotherapist = isPhysiotherapist;
+        this.isAdmin = isAdmin;
         this.specialization = specialization;
         this.description = description;
     }
 
-    public boolean isPhysiotherapist() {
+
+    public boolean isPhysiotherapist()
+    {
         return isPhysiotherapist;
     }
 
-    public void setPhysiotherapist(boolean physiotherapist) {
+
+    public void setPhysiotherapist(boolean physiotherapist)
+    {
         isPhysiotherapist = physiotherapist;
     }
 
-    public boolean isAdmin() {
+
+    public boolean isAdmin()
+    {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+
+    public void setAdmin(boolean admin)
+    {
         isAdmin = admin;
     }
 
-    public String getSpecialization() {
+
+    public String getSpecialization()
+    {
         return specialization;
     }
 
-    public void setSpecialization(String specialization) {
+
+    public void setSpecialization(String specialization)
+    {
         this.specialization = specialization;
     }
 
-    public String getDescription() {
+
+    public String getDescription()
+    {
         return description;
     }
 
-    public void setDescription(String description) {
+
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
+
     @Override
-    public String toString() {
+    public String toString()
+    {
         return super.toString() + "Staff{" +
                 "jobTitle='" + isPhysiotherapist + '\'' +
                 ", specialization='" + specialization + '\'' +

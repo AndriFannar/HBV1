@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+
 /**
  * Users for physiotherapist clinics.
  *
@@ -39,6 +40,7 @@ public abstract class User
      */
     public User()
     {
+
     }
 
 
@@ -51,7 +53,8 @@ public abstract class User
      * @param kennitala User's kennitala.
      * @param phNumber  User's phone number.
      */
-    public User(String name, String email, String password, String kennitala, String phNumber) {
+    public User(String name, String email, String password, String kennitala, String phNumber)
+    {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -59,51 +62,75 @@ public abstract class User
         this.phoneNumber = phNumber;
     }
 
-    public Long getId() {
+
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id_counter) {
+
+    public void setId(Long id_counter)
+    {
         this.id = id_counter;
     }
 
-    public String getName() {
+
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getEmail() {
+
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public void setPassword(String password){
+
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public String getPassword(){
+
+    public String getPassword()
+    {
         return this.password;
     }
 
-    public void setKennitala(String kennitala){
+
+    public void setKennitala(String kennitala)
+    {
         this.kennitala = kennitala;
     }
 
-    public String getKennitala(){
+
+    public String getKennitala()
+    {
         return this.kennitala;
     }
 
-    public void setPhoneNumber(String phNumber){
+
+    public void setPhoneNumber(String phNumber)
+    {
         this.phoneNumber = phNumber;
     }
 
-    public String getPhoneNumber(){
+
+    public String getPhoneNumber()
+    {
         return this.phoneNumber;
     }
 }

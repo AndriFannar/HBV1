@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 /**
  * Repository class for Staff objects.
  *
@@ -24,12 +25,14 @@ public interface StaffRepository extends JpaRepository<Staff, Long >
      */
     Staff save(Staff staff);
 
+
     /**
      * Delete Patient with corresponding ID.
      *
      * @param staffID must not be {@literal null}.
      */
     void deleteById(Long staffID);
+
 
     /**
      * Finds Patient by unique E-mail.
@@ -39,6 +42,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long >
      */
     Staff findByEmail(String email);
 
+
     /**
      * Find a Staff object by unique ID.
      *
@@ -47,6 +51,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long >
      */
     Staff findStaffById(Long staffID);
 
+
     /**
      * Finds Staff members by physiotherapist.
      *
@@ -54,6 +59,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long >
      * @return                Staff objects with matching role, if any.
      */
     List<Staff> findStaffByIsPhysiotherapist(boolean physiotherapist);
+
 
     /**
      * Finds all Patient objects in database.

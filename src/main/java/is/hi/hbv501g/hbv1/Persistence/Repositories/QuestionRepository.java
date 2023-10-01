@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 /**
  * Repository class for Question objects.
  *
@@ -25,12 +26,14 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      */
     Question save(Question question);
 
+
     /**
      * Delete Question with corresponding ID.
      *
      * @param id must not be {@literal null}.
      */
     void deleteById(Long id);
+
 
     /**
      * Find all Question objects.
@@ -47,6 +50,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      * @return   Question with matching id, if any.
      */
     Question getQuestionById(Long id);
+
 
     /**
      * Returns list of Question with matching list IDs.

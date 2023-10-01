@@ -5,12 +5,14 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
 import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+
 
 /**
  * Service class implementation for WaitingListRequest.
@@ -25,6 +27,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     // Variables
     private WaitingListRepository waitingListRepository;
 
+
     /**
      * Constructs a new WaitingListServiceImplementation.
      *
@@ -35,6 +38,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     {
         this.waitingListRepository = waitingListRepository;
     }
+
 
     /**
      * Saves a new WaitingListRequest in database.
@@ -48,6 +52,7 @@ public class WaitingListServiceImplementation implements WaitingListService
         return waitingListRepository.save(waitingLR);
     }
 
+
     /**
      * Deletes a WaitingListRequest with a corresponding id.
      *
@@ -58,6 +63,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     {
         waitingListRepository.deleteById(waitingListID);
     }
+
 
     /**
      * Updates a corresponding WaitingListRequest.
@@ -84,6 +90,7 @@ public class WaitingListServiceImplementation implements WaitingListService
         }
     }
 
+
     /**
      * Gets all WaitingListRequest objects.
      *
@@ -94,6 +101,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     {
         return waitingListRepository.findAll();
     }
+
 
     /**
      * Gets a WaitingListRequest with matching unique ID.
@@ -107,6 +115,7 @@ public class WaitingListServiceImplementation implements WaitingListService
         return waitingListRepository.getWaitingListRequestById(waitingListID);
     }
 
+
     /**
      * Gets a WaitingListRequest with matching patient.
      *
@@ -119,6 +128,7 @@ public class WaitingListServiceImplementation implements WaitingListService
         return waitingListRepository.getWaitingListRequestByPatient(patient);
     }
 
+    
     /**
      * Finds WaitingListRequest by staff (physiotherapist).
      *

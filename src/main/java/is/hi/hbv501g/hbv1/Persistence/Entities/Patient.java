@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+
 /**
  * Patients for physiotherapist clinics.
  *
@@ -43,13 +44,16 @@ public class Patient extends User
         this.address = address;
     }
 
+
     public String getAddress() {
         return address;
     }
 
+
     public void setAddress(String address) {
         this.address = address;
     }
+
 
     @Override
     public String toString()

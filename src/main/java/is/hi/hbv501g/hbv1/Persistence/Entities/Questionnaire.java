@@ -12,6 +12,9 @@ import java.util.List;
  * @version 1.0
  */
 //@Entity
+// Deprecating this class, since it has little to no use.
+// Answers to questions will instead be kept in WaitingListRequest, along with the questionnaireID,
+// to make it possible to reconstruct questionnaire.
 @Deprecated
 public class Questionnaire
 {

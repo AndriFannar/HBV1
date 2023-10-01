@@ -3,12 +3,14 @@ package is.hi.hbv501g.hbv1.Servecies.implementation;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.StaffRepository;
 import is.hi.hbv501g.hbv1.Servecies.StaffService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+
 
 /**
  * Service class implementation for Staff objects.
@@ -23,15 +25,18 @@ public class StaffServiceImplementation implements StaffService
     // Variables.
     private StaffRepository staffRepository;
 
+
     /**
      * Constructs a new StaffServiceImplementation.
      *
      * @param staffRepository StaffRepository linked to service.
      */
     @Autowired
-    public StaffServiceImplementation(StaffRepository staffRepository){
+    public StaffServiceImplementation(StaffRepository staffRepository)
+    {
         this.staffRepository = staffRepository;
     }
+
 
     /**
      * Find all Staff objects saved to database, if any.
@@ -43,6 +48,7 @@ public class StaffServiceImplementation implements StaffService
     {
         return (List<Staff>)(List<?>)staffRepository.findAll();
     }
+
 
     /**
      * Save a new Staff object to database.
@@ -56,6 +62,7 @@ public class StaffServiceImplementation implements StaffService
         return staffRepository.save(staff);
     }
 
+
     /**
      * Delete a Staff object from database by ID.
      *
@@ -66,6 +73,7 @@ public class StaffServiceImplementation implements StaffService
     {
         staffRepository.deleteById(staffID);
     }
+
 
     /**
      * Find Staff object by e-mail.
@@ -79,6 +87,7 @@ public class StaffServiceImplementation implements StaffService
         return staffRepository.findByEmail(email);
     }
 
+
     /**
      * Find a Staff object by unique ID.
      *
@@ -91,6 +100,7 @@ public class StaffServiceImplementation implements StaffService
         return staffRepository.findStaffById(staffID);
     }
 
+
     /**
      * Finds Staff members by physiotherapist.
      *
@@ -101,6 +111,7 @@ public class StaffServiceImplementation implements StaffService
     {
         return staffRepository.findStaffByIsPhysiotherapist(physiotherapist);
     }
+
 
     /**
      * Update Staff member.
@@ -134,6 +145,7 @@ public class StaffServiceImplementation implements StaffService
                 staff.setDescription(description);
         }
     }
+
 
     /**
      * Log in given Staff object.

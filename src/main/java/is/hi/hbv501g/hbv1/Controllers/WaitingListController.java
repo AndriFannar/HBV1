@@ -1,14 +1,18 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 
 /**
  * Controller for WaitingListRequest.
@@ -18,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @version 1.0
  */
 @Controller
-public class WaitingListController {
-
+public class WaitingListController
+{
     // Variables.
     private WaitingListService waitingListService;
+
 
     /**
      * Constructs a new WaitingListController.
@@ -29,7 +34,8 @@ public class WaitingListController {
      * @param wS WaitingListService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService wS){
+    public WaitingListController(WaitingListService wS)
+    {
         this.waitingListService = wS;
     }
 
@@ -61,9 +67,9 @@ public class WaitingListController {
             return "redirect:/newRequest";
         }
 
-        // Here the code should fetch the currently logged in Patient ID.
-        // Implement when logging in has been implemented.
-        //formData.setPatientID(patient.getId());
+        //Get Patient that is logged in, and link to WaitingListRequest.
+        Patient patient = (Patient) session.getAttribute("LoggedInUser");
+        waitingListRequest.setPatient(patient);
 
         // If no errors, and request does not exist, create.
         WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
@@ -110,7 +116,6 @@ public class WaitingListController {
      *
     @RequestMapping(value = "/updateRequest", path = "{waitingListID}", method = RequestMethod.DELETE)
     public String deleteRequest(@PathVariable("waitingListID") Long waitingListID, Model model)
-
     {
         // If request exists, delete.
         WaitingListRequest exists = waitingListService.getRequestByID(waitingListID);
@@ -136,6 +141,5 @@ public class WaitingListController {
         model.addAttribute("requests", requests);
         return "homePage";
 
-    }
-    */
+    }*/
 }

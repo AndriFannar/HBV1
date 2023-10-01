@@ -5,6 +5,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 
 import java.util.List;
 
+
 /**
  * Service class for health Questionnaires.
  *
@@ -22,6 +23,7 @@ public interface QuestionnaireService
      */
     Questionnaire getQuestionnaire(Integer listID);
 
+
     /**
      * Saves a new Question to database.
      *
@@ -29,6 +31,7 @@ public interface QuestionnaireService
      * @return         Saved Question.
      */
     Question addQuestion(Question question);
+
 
     /**
      * Update a matching Question.
@@ -40,6 +43,7 @@ public interface QuestionnaireService
      */
     void updateQuestion(Long questionID, String questionString, double weight, int[] listID);
 
+
     /**
      * Deletes a Question with a corresponding id.
      *
@@ -47,12 +51,14 @@ public interface QuestionnaireService
      */
     void deleteQuestionById(Long questionID);
 
+
     /**
      * Gets all Question objects in database.
      *
      * @return List of all Question objects in database, if any.
      */
     List<Question> getQuestions();
+
 
     /**
      * Gets Question object with matching ID from database.

@@ -26,6 +26,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      */
     WaitingListRequest save(WaitingListRequest waitingListRequest);
 
+
     /**
      * Delete WaitingListRequest with corresponding ID.
      *
@@ -33,12 +34,14 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      */
     void deleteById(Long id);
 
+
     /**
      * Finds all WaitingListRequest objects in database.
      *
      * @return List of all WaitingListRequest objects in database, if any.
      */
     List<WaitingListRequest> findAll();
+
 
     /**
      * Finds WaitingListRequest by unique ID.
@@ -48,6 +51,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      */
     WaitingListRequest getWaitingListRequestById(Long id);
 
+
     /**
      * Finds WaitingListRequest by patient.
      *
@@ -56,6 +60,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      */
     WaitingListRequest getWaitingListRequestByPatient(Patient patient);
 
+    
     /**
      * Finds WaitingListRequest by staff (physiotherapist).
      *

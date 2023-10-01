@@ -6,6 +6,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 
 import java.util.List;
 
+
 /**
  * Service class for WaitingListRequest.
  *
@@ -23,12 +24,14 @@ public interface WaitingListService
      */
     WaitingListRequest createNewRequest(WaitingListRequest waitingLR);
 
+
     /**
      * Deletes a WaitingListRequest with a corresponding id.
      *
      * @param waitingListID ID of the WaitingListRequest to delete.
      */
     void deleteRequest(Long waitingListID);
+
 
     /**
      * Updates a corresponding WaitingListRequest.
@@ -42,12 +45,14 @@ public interface WaitingListService
      */
     void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID);
 
+
     /**
      * Gets all WaitingListRequest objects.
      *
      * @return List of all WaitingListRequest objects, if any.
      */
     List<WaitingListRequest> getRequests();
+
 
     /**
      * Gets a WaitingListRequest with matching unique ID.
@@ -57,6 +62,7 @@ public interface WaitingListService
      */
     WaitingListRequest getRequestByID(Long waitingListID);
 
+
     /**
      * Gets a WaitingListRequest with matching patient.
      *
@@ -64,6 +70,7 @@ public interface WaitingListService
      * @return        WaitingListRequest with matching patient, if any.
      */
     WaitingListRequest getRequestByPatient(Patient patient);
+
 
     /**
      * Finds WaitingListRequest by staff (physiotherapist).

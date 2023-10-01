@@ -2,9 +2,8 @@ package is.hi.hbv501g.hbv1.Servecies;
 
 import java.util.List;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+
 
 /**
  * Service class for Staff objects.
@@ -22,6 +21,7 @@ public interface StaffService
      */
     List<Staff> findAll();
 
+
     /**
      * Save a new Staff object to database.
      *
@@ -30,12 +30,14 @@ public interface StaffService
      */
     Staff save(Staff staff);
 
+
     /**
      * Delete a Staff object from database by ID.
      *
      * @param staffID Unique ID of the Staff object to delete.
      */
     void delete(Long staffID);
+
 
     /**
      * Find Staff object by e-mail.
@@ -45,6 +47,7 @@ public interface StaffService
      */
     Staff findByEmail(String email);
 
+
     /**
      * Find a Staff object by unique ID.
      *
@@ -53,6 +56,7 @@ public interface StaffService
      */
     Staff findById(Long staffID);
 
+
     /**
      * Finds Staff members by physiotherapist.
      *
@@ -60,6 +64,7 @@ public interface StaffService
      * @return                Staff objects with matching role, if any.
      */
     List<Staff> findByIsPhysiotherapist(boolean physiotherapist);
+
 
     /**
      * Update Staff member.
@@ -75,6 +80,7 @@ public interface StaffService
      * @param description       Updated description, if any.
      */
     void updateStaff(Long staffID, String name, String email, String password, String phNumber, boolean isPhysiotherapist, boolean isAdmin, String specialization, String description);
+
 
     /**
      * Log in given Staff object.
