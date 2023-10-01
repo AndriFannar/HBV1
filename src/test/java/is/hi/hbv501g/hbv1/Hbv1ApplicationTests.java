@@ -10,4 +10,10 @@ class Hbv1ApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void addRequest()
+    {
+
+    }
+
 }
