@@ -2,11 +2,49 @@
 <html xmlns:th="https://thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Forsíða</title>
+        <title>Skrá á Biðlista</title>
     </head>
     <body>
         <h2> Create Request</h2>
-        <p>Hér er til að búa til request dótið</p>
+        <form action="#" th:action="@{/createRequest}" th:object="${waitingLR}" method="post">
+            <fieldset>
+                <legend>Upplýsingar</legend>
+
+                <label for="name">Name</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="Nafn">
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+
+                <label for="kennitala">Kennitala</label>
+                <input type="text" th:field="*{kennitala}" id="kennitala"  placeholder="">
+                <span th:if="${#fields.hasErrors('kennitala')}" th:errors="*{kennitala}"></span>
+
+                <label for="phNumber">Símanúmer</label>
+                <input type="text" th:field="*{phoneNumber}" id="phNumber"  placeholder="">
+                <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+
+                <label for="address">Heimilisfang</label>
+                <input type="text" th:field="*{address}" id="address"  placeholder="">
+                <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </fieldset>
+            <fieldset>
+                <legend>Skráningar upplýsingar</legend>
+
+                <label for="email">Netfang</label>
+                <input type="text" th:field="*{email}" id="email" placeholder="xxx@email.com">
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+
+                <label for="password">Lykilorð</label>
+                <input type="password" th:field="*{password}" id="password"  placeholder="">
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+
+                <label for="password">Staðfesta lykilorð</label>
+                <input type="password"  placeholder="">
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </fieldset>
+
+            <input type="submit"  value="Skrá sig inn">
+        </form>
+
         <p><a href="/">Til baka</a></p>
     </body>
 </html>
