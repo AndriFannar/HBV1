@@ -5,11 +5,30 @@
         <title>Forsíða</title>
     </head>
     <body>
-        <h1>Tjekk!!</h1>
+        <h1>Biðlistaskráning</h1>
+
+        <section th:switch="${login}">
+            <h2 th:case="null">Notandi ekki skráður inn</h2>
+            <div th:case="*">
+                <h2>Notandi skráður inn:</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nafn</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <td th:text="${login.name}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section th:switch="${patient}">
             <h2 th:case="null">Engir sjúklingar</h2>
             <div th:case="*">
-                <h2>Sjúklingar</h2>
+                <h2>Allir skráðir sjúklingar</h2>
                 <table>
                     <thead>
                         <tr>
@@ -31,14 +50,38 @@
             </div>
             <p><a href="/signUp">Búa til aðgang</a></p>
         </section>
+
+        <section th:switch="${request}">
+            <h2 th:case="null">Engin beiðni</h2>
+            <div th:case="*">
+                <h2>Beiðni:</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Dags.</th>
+                        <th>Líkamshluti</th>
+                        <th>Lýsing</th>
+                        <th>Samþykkt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <td th:text="${request.dateOfRequest}"></td>
+                        <td th:text="${request.bodyPart}"></td>
+                        <td th:text="${request.description}"></td>
+                        <td th:text="${request.status}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section>
-            <p> Buttons á annað til að koma í veg fyrir merge conflict</p>
             <ul>
                 <li>
                     <p><a href="/login">Logga sig inn</a></p>
                 </li>
                 <li>
-                    <p><a href="/createRequest">Búa til request</a></p>
+                    <p><a href="/createRequest">Senda inn beiðni</a></p>
                 </li>
             </ul>
         </section>

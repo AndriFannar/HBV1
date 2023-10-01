@@ -21,7 +21,7 @@ public class QuestionnaireController
 
 
     /**
-     * Constructs a new QuestionnaireController.
+     * Construct a new QuestionnaireController.
      *
      * @param qS QuestionnaireService linked to controller.
      */

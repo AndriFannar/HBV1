@@ -29,7 +29,7 @@ public class PatientController
 
 
     /**
-     * Constructs a new PatientController.
+     * Construct a new PatientController.
      *
      * @param uS PatientService linked to controller.
      */

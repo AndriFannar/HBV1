@@ -29,7 +29,7 @@ public class WaitingListController
 
 
     /**
-     * Constructs a new WaitingListController.
+     * Construct a new WaitingListController.
      *
      * @param wS WaitingListService linked to controller.
      */

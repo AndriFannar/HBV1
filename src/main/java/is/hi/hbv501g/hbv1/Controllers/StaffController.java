@@ -29,7 +29,7 @@ public class StaffController
 
 
     /**
-     * Constructs a new StaffController.
+     * Construct a new StaffController.
      *
      * @param sS StaffService linked to controller.
      */
