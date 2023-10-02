@@ -2,6 +2,8 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 /**
  * Staff members for physiotherapist clinics.
@@ -32,6 +34,9 @@ public class Staff extends User
     private boolean isAdmin;
     private String specialization;
     private String description;
+
+    @OneToMany(mappedBy = "staff")
+    private List<WaitingListRequest> waitingListRequests;
 
 
     /**
@@ -114,13 +119,27 @@ public class Staff extends User
     }
 
 
-    @Override
-    public String toString()
+    public List<WaitingListRequest> getWaitingListRequests()
     {
-        return super.toString() + "Staff{" +
-                "jobTitle='" + isPhysiotherapist + '\'' +
+        return waitingListRequests;
+    }
+
+
+    public void setWaitingListRequests(List<WaitingListRequest> waitingListRequests)
+    {
+        this.waitingListRequests = waitingListRequests;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Staff{" +
+                "id=" + id +
+                ", isPhysiotherapist=" + isPhysiotherapist +
+                ", isAdmin=" + isAdmin +
                 ", specialization='" + specialization + '\'' +
                 ", description='" + description + '\'' +
+                ", waitingListRequests=" + waitingListRequests +
                 '}';
     }
 }

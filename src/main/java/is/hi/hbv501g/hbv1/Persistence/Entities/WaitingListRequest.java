@@ -34,7 +34,7 @@ public class WaitingListRequest
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
     private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Staff staff;
     private String bodyPart;
     private String description;

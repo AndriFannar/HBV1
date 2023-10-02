@@ -59,8 +59,15 @@ public class HomeController
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
         model.addAttribute("login", patient);
 
-        WaitingListRequest waitingListRequest = waitingListService.getRequestByPatient(patient);
-        model.addAttribute("request", waitingListRequest);
+        if (patient != null)
+        {
+            System.out.println("HC:" + patient.getName());
+            WaitingListRequest waitingListRequest = patient.getWaitingListRequest();
+            if (waitingListRequest != null)
+            {
+                model.addAttribute("request", waitingListRequest);
+            }
+        }
 
         return "index";
     }

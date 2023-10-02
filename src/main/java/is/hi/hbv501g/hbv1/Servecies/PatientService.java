@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Servecies;
 import java.util.List;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
+import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 
 
 /**
@@ -71,12 +72,13 @@ public interface PatientService
     /**
      * Update Patient.
      *
-     * @param patientID           Unique ID of Staff object to update.
-     * @param name              Updated name, if any.
-     * @param email             Updated e-mail, if any.
-     * @param password          Updated password, if any.
-     * @param phNumber          Updated phone number, if any.
-     * @param address           Updated address, if any.
+     * @param patientID          Unique ID of Patient object to update.
+     * @param name               Updated name, if any.
+     * @param email              Updated e-mail, if any.
+     * @param password           Updated password, if any.
+     * @param phNumber           Updated phone number, if any.
+     * @param address            Updated address, if any.
+     * @param waitingListRequest Updated WaitingListRequest, if any.
      */
-    void updatePatient(Long patientID, String name, String email, String password, String phNumber, String address);
+    void updatePatient(Long patientID, String name, String email, String password, String phNumber, String address, WaitingListRequest waitingListRequest);
 }

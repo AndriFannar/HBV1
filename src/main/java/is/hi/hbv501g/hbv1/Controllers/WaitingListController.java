@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Servecies.PatientService;
 import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ public class WaitingListController
 {
     // Variables.
     private WaitingListService waitingListService;
+    private PatientService patientService;
 
 
     /**
@@ -34,9 +36,10 @@ public class WaitingListController
      * @param wS WaitingListService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService wS)
+    public WaitingListController(WaitingListService wS, PatientService pS)
     {
         this.waitingListService = wS;
+        this.patientService = pS;
     }
 
 
@@ -69,13 +72,21 @@ public class WaitingListController
 
         //Get Patient that is logged in, and link to WaitingListRequest.
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
-        waitingListRequest.setPatient(patient);
 
-        // If no errors, and request does not exist, create.
-        WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
-        if(exists == null)
+        if (patient != null && patient.getWaitingListRequest() == null)
         {
+            waitingListRequest.setPatient(patient);
+
             waitingListService.createNewRequest(waitingListRequest);
+
+            patientService.updatePatient(patient.getId(), null, null, null, null, null, waitingListRequest);
+
+            System.out.println("WLR:" + patient.getName());
+
+            //patient.setWaitingListRequest(waitingListRequest);
+            // call update in service
+
+
         }
 
         return "redirect:/";
