@@ -1,8 +1,6 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 
 import java.util.List;
 
@@ -42,8 +40,11 @@ public interface WaitingListService
      * @param description     Updated description, if any.
      * @param status          Updated status, if any.
      * @param questionnaireID Updated Questionnaire ID, if any.
+     * @param addAnswers      Add questionnaire answers, if any.
+     * @param grade           Updated grade, if any.
+     * @return                Updated WaitingListRequest.
      */
-    void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID);
+    WaitingListRequest updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, Integer questionnaireID, QuestionnaireForm addAnswers, Double grade);
 
 
     /**

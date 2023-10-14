@@ -1,6 +1,10 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,9 +32,15 @@ public class Question
     private Long id;
 
     // Variables.
-    private String question;
+    private String questionString;
     private Double weight;
-    private int[] listID;
+
+    private int numberOfAnswers;
+    @ElementCollection
+    private List<Integer> listID;
+
+    @Transient
+    private Integer answer;
 
 
     /**
@@ -45,27 +55,30 @@ public class Question
     /**
      * Create a new question.
      *
-     * @param question Question.
+     * @param questionString Question.
      * @param weight   Weight of question in score calculation.
      * @param listID   Questionnaires this question belongs on.
      */
-    public Question(String question, Double weight, int[] listID)
+    public Question(String questionString, Double weight, List<Integer> listID, int numberOfAnswers)
     {
-        this.question = question;
+        this.questionString = questionString;
         this.weight = weight;
         this.listID = listID;
     }
 
+    public Long getId() {
+        return id;
+    }
 
-    public String getQuestion()
+    public String getQuestionString()
     {
-        return question;
+        return questionString;
     }
 
 
-    public void setQuestion(String question)
+    public void setQuestionString(String questionString)
     {
-        this.question = question;
+        this.questionString = questionString;
     }
 
 
@@ -81,25 +94,53 @@ public class Question
     }
 
 
-    public int[] getListID()
-    {
+    public List<Integer> getListID() {
         return listID;
     }
 
-
-    public void setListID(int[] listID)
-    {
+    public void setListID(List<Integer> listID) {
         this.listID = listID;
     }
 
 
-    @Override
-    public String toString()
+    public void setListID(String listID) {
+        String[] list = listID.split(",");
+        List<Integer> listIDs = new ArrayList<>();
+
+        for (String id : list)
+        {
+            listIDs.add(Integer.parseInt(id));
+        }
+
+        this.listID = listIDs;
+    }
+
+    public int getNumberOfAnswers() {
+        return numberOfAnswers;
+    }
+
+    public void setNumberOfAnswers(int numberOfAnswers) {
+        this.numberOfAnswers = numberOfAnswers;
+    }
+
+    public Integer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer)
     {
+        this.answer = Integer.parseInt(answer);
+    }
+
+    @Override
+    public String toString() {
         return "Question{" +
-                "question='" + question + '\'' +
+                "id=" + id +
+                ", questionString='" + questionString + '\'' +
                 ", weight=" + weight +
+                ", numberOfAnswers=" + numberOfAnswers +
                 ", listID=" + listID +
+                ", answer=" + answer +
                 '}';
     }
 }

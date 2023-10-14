@@ -1,9 +1,22 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
+import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
+import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -18,6 +31,7 @@ public class QuestionnaireController
 {
     // Variables.
     private QuestionnaireService questionnaireService;
+    private WaitingListService waitingListService;
 
 
     /**
@@ -26,9 +40,10 @@ public class QuestionnaireController
      * @param qS QuestionnaireService linked to controller.
      */
     @Autowired
-    public QuestionnaireController(QuestionnaireService qS)
+    public QuestionnaireController(QuestionnaireService qS, WaitingListService wS)
     {
         this.questionnaireService = qS;
+        this.waitingListService = wS;
     }
 
     // **** Will be enabled when Questionnaires are implemented. **** //
@@ -37,17 +52,43 @@ public class QuestionnaireController
      * Form for answering a Questionnaire.
      *
      * @return questionnaire page with Questionnaire object.
-     *
+     */
     @RequestMapping(value = "/questionnaire", method = RequestMethod.GET)
-    public String getQuestionnaire(WaitingListRequest waitingLR, Model model)
+    public String getQuestionnaire(WaitingListRequest waitingLR, Model model, HttpSession session)
     {
         // Get ID of questionnaire to get from request.
         int questionnaireID = waitingLR.getQuestionnaireID();
 
         // Find and add corresponding Questionnaire to model.
-        Questionnaire questionnaire = questionnaireService.getQuestionnaire(questionnaireID);
-        model.addAttribute("questionnaire", questionnaire);
+        QuestionnaireForm form = questionnaireService.getQuestionnaire(questionnaireID);
+
+        model.addAttribute("questionnaire", form);
+
         return "questionnaire";
+    }
+
+
+    /**
+     * Form for answering a Questionnaire.
+     *
+     * @return questionnaire page with Questionnaire object.
+     */
+    @RequestMapping(value = "/answerQuestionnaire", method = RequestMethod.POST)
+    public String answerQuestionnaire(QuestionnaireForm form, Model model, BindingResult result, HttpSession session)
+    {
+        if(result.hasErrors())
+        {
+            return "redirect:/questionnaire";
+        }
+
+        Patient patient = (Patient) session.getAttribute("LoggedInUser");
+
+        System.out.println(model.getAttribute("questionnaire"));
+        System.out.println("Eftir" + form.getQuestions().get(0));
+
+        waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
+
+        return "redirect:/";
     }
 
 
@@ -55,13 +96,14 @@ public class QuestionnaireController
      * Get all Question objects in database.
      *
      * @return List of all Question objects in database.
-     *
+     */
     @RequestMapping(value = "/questionOverview", method = RequestMethod.GET)
     public String getQuestions(Model model)
     {
         // Get all Question objects and display.
         List<Question> questions = questionnaireService.getQuestions();
         model.addAttribute("questions", questions);
+        model.addAttribute("question", new Question());
         return "questionOverview";
     }
 
@@ -71,19 +113,19 @@ public class QuestionnaireController
      *
      * @param question Question object to save.
      * @return         Redirect.
-     *
-    @RequestMapping(value = "/createQuestion", method = RequestMethod.POST)
-    public String addQuestion(Question question, BindingResult result, Model model, HttpSession session)
+     */
+    @RequestMapping(value = "/addQuestion", method = RequestMethod.POST)
+    public String addQuestion(Question question, BindingResult result)
     {
         if(result.hasErrors())
         {
-            return "redirect:/createQuestion";
+            return "redirect:/questionOverview";
         }
 
         // Add Question to database if no errors.
         questionnaireService.addQuestion(question);
 
-        return "redirect:/";
+        return "redirect:/questionOverview";
     }
 
 
@@ -120,8 +162,8 @@ public class QuestionnaireController
      *
      * @param questionID ID of Question to delete.
      * @return           Redirect.
-     *
-    @RequestMapping(value = "/deleteQuestion", path = "{questionID}", method = RequestMethod.DELETE)
+     */
+    @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.GET)
     public String deleteQuestion(@PathVariable("questionID") Long questionID, Model model) {
         // If Question exists, delete.
         Question exists = questionnaireService.getQuestionById(questionID);
@@ -130,6 +172,6 @@ public class QuestionnaireController
             questionnaireService.deleteQuestionById(questionID);
         }
 
-        return "redirect:/";
-    }*/
+        return "redirect:/questionOverview";
+    }
 }

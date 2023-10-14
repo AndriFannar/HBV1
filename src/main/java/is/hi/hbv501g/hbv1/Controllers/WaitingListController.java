@@ -2,7 +2,8 @@ package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
-import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+import is.hi.hbv501g.hbv1.Services.PatientService;
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -26,6 +29,7 @@ public class WaitingListController
 {
     // Variables.
     private WaitingListService waitingListService;
+    private PatientService patientService;
 
 
     /**
@@ -34,9 +38,10 @@ public class WaitingListController
      * @param wS WaitingListService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService wS)
+    public WaitingListController(WaitingListService wS, PatientService pS)
     {
         this.waitingListService = wS;
+        this.patientService = pS;
     }
 
 
@@ -69,13 +74,15 @@ public class WaitingListController
 
         //Get Patient that is logged in, and link to WaitingListRequest.
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
-        waitingListRequest.setPatient(patient);
 
-        // If no errors, and request does not exist, create.
-        WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
-        if(exists == null)
+        if (patient != null && patient.getWaitingListRequest() == null)
         {
+            // Link currently logged-in user to request.
+            waitingListRequest.setPatient(patient);
             waitingListService.createNewRequest(waitingListRequest);
+
+            // Update currently logged-in user's session info.
+            session.setAttribute("LoggedInUser", patientService.updatePatient(patient.getId(), null, null, null, null, null));
         }
 
         return "redirect:/";
@@ -126,20 +133,21 @@ public class WaitingListController
         }
 
         return "redirect:/";
-    }
+    }*/
 
 
     /**
      * Get all WaitingListRequest objects.
-     * @return List of WaitingListRequest objects.
      *
-    @RequestMapping(value = "/homePage", method = RequestMethod.GET)
+     * @return List of WaitingListRequest objects.
+     */
+    @RequestMapping(value = "/requestOverview", method = RequestMethod.GET)
     public String getRequests(Model model)
     {
         // Get all requests and display.
         List<WaitingListRequest> requests = waitingListService.getRequests();
         model.addAttribute("requests", requests);
-        return "homePage";
+        return "requestOverview";
 
-    }*/
+    }
 }

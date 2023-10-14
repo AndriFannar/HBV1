@@ -34,7 +34,7 @@
                         <tr>
                             <th>Nafn</th>
                             <th>Netfang</th>
-                            <th>kennitala</th>
+                            <th>Kennitala</th>
                             <th>Símanúmer</th>
                         </tr>
                     </thead>
@@ -44,6 +44,7 @@
                             <td th:text="${patient.email}"></td>
                             <td th:text="${patient.kennitala}"></td>
                             <td th:text="${patient.phoneNumber}"></td>
+                            <td><a th:href="@{/deletePatient/{id}(id=${patient.id})}">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,8 +73,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <p th:if="${request.questionnaireID != 0}"><a href="/questionnaire">Svara Spurningalista</a></p>
             </div>
         </section>
+        <p th:if="${login != null && request == null}"><a href="/createRequest">Senda inn beiðni</a></p>
 
         <section>
             <ul>
@@ -81,7 +84,10 @@
                     <p><a href="/login">Logga sig inn</a></p>
                 </li>
                 <li>
-                    <p><a href="/createRequest">Senda inn beiðni</a></p>
+                    <p><a href="/questionOverview">Spurningar</a></p>
+                </li>
+                <li>
+                    <p><a href="/requestOverview">Skráningar á Biðlista</a></p>
                 </li>
             </ul>
         </section>

@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
 import java.util.List;
 
@@ -71,12 +71,15 @@ public interface PatientService
     /**
      * Update Patient.
      *
-     * @param patientID           Unique ID of Staff object to update.
-     * @param name              Updated name, if any.
-     * @param email             Updated e-mail, if any.
-     * @param password          Updated password, if any.
-     * @param phNumber          Updated phone number, if any.
-     * @param address           Updated address, if any.
+     * @param patientID          Unique ID of Patient object to update.
+     * @param name               Updated name, if any.
+     * @param email              Updated e-mail, if any.
+     * @param password           Updated password, if any.
+     * @param phNumber           Updated phone number, if any.
+     * @param address            Updated address, if any.
+     * @return                   Updated Patient.
      */
-    void updatePatient(Long patientID, String name, String email, String password, String phNumber, String address);
+    Patient updatePatient(Long patientID, String name, String email, String password, String phNumber, String address);
+
+    void updatePatient(Patient patient);
 }

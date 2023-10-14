@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
 import java.util.List;
 

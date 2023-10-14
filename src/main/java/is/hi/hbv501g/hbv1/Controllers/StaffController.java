@@ -1,17 +1,9 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Servecies.StaffService;
+import is.hi.hbv501g.hbv1.Services.StaffService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import jakarta.servlet.http.HttpSession;
 
 
 /**

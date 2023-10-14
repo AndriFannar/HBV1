@@ -1,8 +1,8 @@
-package is.hi.hbv501g.hbv1.Servecies.implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.StaffRepository;
-import is.hi.hbv501g.hbv1.Servecies.StaffService;
+import is.hi.hbv501g.hbv1.Services.StaffService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

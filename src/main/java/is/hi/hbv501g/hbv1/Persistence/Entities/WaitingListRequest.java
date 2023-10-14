@@ -1,8 +1,10 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,14 +36,16 @@ public class WaitingListRequest
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
     private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Staff staff;
     private String bodyPart;
     private String description;
     private boolean status;
     private LocalDateTime dateOfRequest;
     private int questionnaireID;
-    private int[] questionnaireAnswers;
+
+    @ElementCollection
+    private List<Integer> questionnaireAnswers;
     private double grade;
 
 
@@ -51,10 +55,12 @@ public class WaitingListRequest
     public WaitingListRequest()
     {
         this.status = false;
-        this.questionnaireID = 0;
+        this.questionnaireID = 1;
         this.grade = 0;
 
         this.dateOfRequest = LocalDateTime.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -77,24 +83,14 @@ public class WaitingListRequest
         this.grade = 0;
 
         this.dateOfRequest = LocalDateTime.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
-
-    /**
-     * Calculates the waiting list score according to given answers.
-     *
-     * @return Calculated score
-     */
-    public double calculateScore(List<Question> questions)
+    public Long getId()
     {
-        for (int i = 0; i < questions.size(); i++)
-        {
-            grade += questionnaireAnswers[i] * questions.get(i).getWeight();
-        }
-
-        return grade;
+        return id;
     }
-
 
     public Patient getPatient() {
         return patient;
@@ -152,12 +148,18 @@ public class WaitingListRequest
         this.questionnaireID = questionnaireID;
     }
 
-    public int[] getQuestionnaireAnswers() {
+    public List<Integer> getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(int[] answers) {
+    public void setQuestionnaireAnswers(List<Integer> answers) {
         this.questionnaireAnswers = answers;
+    }
+
+    public void addQuestionnaireAnswer(Question question)
+    {
+        this.questionnaireAnswers.add(question.getAnswer());
+        this.grade += question.getAnswer() * question.getWeight();
     }
 
     public double getGrade() {
@@ -173,14 +175,14 @@ public class WaitingListRequest
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patient +
+                ", patient=" + patient.getId() +
                 ", staff=" + staff +
                 ", bodyPart='" + bodyPart + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
                 ", questionnaireID=" + questionnaireID +
-                ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
+                ", questionnaire=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
     }
