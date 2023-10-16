@@ -51,15 +51,15 @@ public abstract class User
      * @param email     User e-mail.
      * @param password  User password.
      * @param kennitala User's kennitala.
-     * @param phNumber  User's phone number.
+     * @param phoneNumber  User's phone number.
      */
-    public User(String name, String email, String password, String kennitala, String phNumber)
+    public User(String name, String email, String password, String kennitala, String phoneNumber)
     {
         this.name = name;
         this.email = email;
         this.password = password;
         this.kennitala = kennitala;
-        this.phoneNumber = phNumber;
+        this.phoneNumber = phoneNumber;
     }
 
 

@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -27,7 +30,6 @@ public class PatientController
     // Variables.
     private PatientService patientService;
 
-
     /**
      * Construct a new PatientController.
      *
@@ -48,6 +50,8 @@ public class PatientController
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
     public String signUpForm(Patient patient, Model model)
     {
+        model.addAttribute("patient", new Patient());
+        //model.addAttribute("waitingListRequest", new WaitingListRequest());
         return "newUser";
     }
 
@@ -59,21 +63,31 @@ public class PatientController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public String signUp(Patient patient, BindingResult result,  Model model, HttpSession session)
+    public String signUp(@Validated Patient patient, BindingResult result,  Model model, HttpSession session)
     {
+        Patient exists = patientService.findByEmail(patient.getEmail());
+        String errKen = patientService.validateKennitala(patient);
+        String errPass = patientService.validatePassword(patient);
 
-        if(patient.getKennitala().length() != 10){
-            return "redirect:/signUp";
+        if (!errKen.isEmpty()) {
+            FieldError error = new FieldError( "patient", "kennitala", errKen);
+            result.addError(error);
         }
-        if(checkKennitala(patient.getKennitala())){
-            return "redirect:/signUp";
+        if(exists != null){
+            FieldError error = new FieldError( "patient", "email", "Notandi nú þegar til");
+            result.addError(error);
         }
+        if(!errPass.isEmpty()){
+            FieldError error = new FieldError("patient", "password", errPass);
+            result.addError(error);
+        }
+
+
         if(result.hasErrors())
         {
-            return "redirect:/signUp";
+            model.addAttribute("patient", patient);
+            return "newUser";
         }
-
-        Patient exists = patientService.findByEmail(patient.getEmail());
 
         // If no errors, and Patient does not exist, save.
         if(exists == null)
@@ -86,27 +100,9 @@ public class PatientController
 
             model.addAttribute("LoggedInUser", patient);
             return "redirect:/";
-        }
-        return "redirect:/";
-    }
-
-    private boolean checkKennitala(String kennitala){
-        int sum = 0;
-        String[] stringKenni = kennitala.split("");
-        int[] kennitolur = new int[10];
-        int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
-
-        for(int i = 0; i < kennitolur.length; i++){
-            kennitolur[i] = Integer.parseInt(stringKenni[i]);
-        }
-
-        for(int i = 0; i < margfeldisTala.length; i++){
-            sum += kennitolur[i]*margfeldisTala[i];
-        }
-
-        int magicNumber = sum % 11;
-
-        return magicNumber == kennitolur[8];
+        } 
+        model.addAttribute("patient", patient);
+        return "newUser";
     }
 
 

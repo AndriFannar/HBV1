@@ -146,4 +146,55 @@ public class PatientServiceImplemention implements PatientService
             if (address != null && !Objects.equals(patient.getAddress(), address)) patient.setAddress(address);
         }
     }
+
+    @Override
+    public String validateKennitala(Patient patient) {
+        String message = "";
+        String kennitala = patient.getKennitala();
+        if(kennitala.length() == 0){
+            message += "Vantar að setja inn lykilorð";
+        }
+        else if(kennitala.length() != 10){
+            message += "Kennitala ekki nógu löng.";
+        } else if(!checkKennitala(kennitala)){
+            message += "Kennitala ólögleg.";
+        }
+        
+        return message;
+    }
+
+    private boolean checkKennitala(String kennitala){
+        int sum = 0;
+        String[] stringKenni = kennitala.split("");
+        int[] kennitolur = new int[10];
+        int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
+
+        for(int i = 0; i < kennitolur.length; i++){
+            kennitolur[i] = Integer.parseInt(stringKenni[i]);
+        }
+
+        for(int i = 0; i < margfeldisTala.length; i++){
+            sum += kennitolur[i]*margfeldisTala[i];
+        }
+
+        int mod = sum % 11;
+        int magicNumber = 0;
+        if (mod != 0) {
+            magicNumber = 11 - mod;
+        }
+
+        return magicNumber == kennitolur[8];
+    }
+
+    @Override
+    public String validatePassword(Patient patient){
+        String message = "";
+        String password = patient.getPassword();
+        if(password.length() == 0){
+            message += "Vantar að setja inn lykilorð";
+        } else if(password.length() < 8 || password.length() > 250){
+            message += "Lykilorð ekki á lengd á milli 8 til 250 stafi";
+        }
+        return message;
+    }
 }

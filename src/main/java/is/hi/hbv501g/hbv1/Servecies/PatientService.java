@@ -79,4 +79,18 @@ public interface PatientService
      * @param address           Updated address, if any.
      */
     void updatePatient(Long patientID, String name, String email, String password, String phNumber, String address);
+
+    /**
+     * Checks if kennitala is valid
+     * @param patient Patient that is signing up
+     * @return boolean if kennitala is valid 
+     */
+    String validateKennitala(Patient patient);
+
+    /**
+     * Checks if password is valid
+     * @param patient Patient that is signing up
+     * @return boolean if password is valid 
+     */
+    String validatePassword(Patient patient);
 }
