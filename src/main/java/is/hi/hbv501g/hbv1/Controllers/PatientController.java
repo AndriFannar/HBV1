@@ -61,6 +61,13 @@ public class PatientController
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
     public String signUp(Patient patient, BindingResult result,  Model model, HttpSession session)
     {
+
+        if(patient.getKennitala().length() != 10){
+            return "redirect:/signUp";
+        }
+        if(checkKennitala(patient.getKennitala())){
+            return "redirect:/signUp";
+        }
         if(result.hasErrors())
         {
             return "redirect:/signUp";
@@ -81,6 +88,25 @@ public class PatientController
             return "redirect:/";
         }
         return "redirect:/";
+    }
+
+    private boolean checkKennitala(String kennitala){
+        int sum = 0;
+        String[] stringKenni = kennitala.split("");
+        int[] kennitolur = new int[10];
+        int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
+
+        for(int i = 0; i < kennitolur.length; i++){
+            kennitolur[i] = Integer.parseInt(stringKenni[i]);
+        }
+
+        for(int i = 0; i < margfeldisTala.length; i++){
+            sum += kennitolur[i]*margfeldisTala[i];
+        }
+
+        int magicNumber = sum % 11;
+
+        return magicNumber == kennitolur[8];
     }
 
 

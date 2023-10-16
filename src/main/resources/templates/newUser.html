@@ -37,9 +37,11 @@
             <input type="password" th:field="*{password}" id="password"  placeholder="">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 
-            <label for="password">Staðfesta lykilorð</label>
+            <!--
+                <label for="password">Staðfesta lykilorð</label>
             <input type="password"  placeholder="">
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            -->
         </fieldset>
 
         <input type="submit"  value="Skrá sig inn">
