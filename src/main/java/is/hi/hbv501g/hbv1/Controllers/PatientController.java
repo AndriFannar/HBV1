@@ -68,6 +68,7 @@ public class PatientController
         String errKen = patientService.validateKennitala(patient);
         String errPass = patientService.validatePassword(patient);
         String errEmail = patientService.validateEmail(patient);
+        String errPhN = patientService.validatePhoneNumber(patient);
 
         if (!errKen.isEmpty()) {
             FieldError error = new FieldError( "patient", "kennitala", errKen);
@@ -75,10 +76,6 @@ public class PatientController
         }
         if(!errEmail.isEmpty()){
             FieldError error = new FieldError( "patient", "email", errEmail);
-            result.addError(error);
-        }
-        if(patient.getEmail().length() == 0){
-            FieldError error = new FieldError("patient", "email", "Vantar netfang");
             result.addError(error);
         }
         if(!errPass.isEmpty()){
@@ -93,8 +90,8 @@ public class PatientController
             FieldError error = new FieldError("patient", "address", "Vantar heimilsfang");
             result.addError(error);
         }
-        if(patient.getAddress().length() == 0){
-            FieldError error = new FieldError("patient", "phoneNumber", "Vantar símanúmer");
+        if(!errPhN.isEmpty()){
+            FieldError error = new FieldError("patient", "phoneNumber", errPhN);
             result.addError(error);
         }
 

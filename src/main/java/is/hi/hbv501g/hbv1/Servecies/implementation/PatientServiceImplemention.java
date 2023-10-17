@@ -149,9 +149,15 @@ public class PatientServiceImplemention implements PatientService
     }
 
     @Override
+    public Patient findByKennitala(String kennitala){
+        return patientRepository.findByKennitala(kennitala);
+    }
+
+    @Override
     public String validateKennitala(Patient patient) {
         String message = "";
         String kennitala = patient.getKennitala();
+        Patient exists = findByKennitala(kennitala);
         if(kennitala.length() == 0){
             message += "Vantar að setja inn lykilorð";
         }
@@ -159,32 +165,38 @@ public class PatientServiceImplemention implements PatientService
             message += "Kennitala ekki nógu löng.";
         } else if(!checkKennitala(kennitala)){
             message += "Kennitala ólögleg.";
-        } 
+        } else if(exists != null){
+            message += "Notandi nú þegar til með þessa kennitölu";
+        }
         
         return message;
     }
 
     private boolean checkKennitala(String kennitala){
-        int sum = 0;
-        String[] stringKenni = kennitala.split("");
-        int[] kennitolur = new int[10];
-        int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
+        try {  
+            int sum = 0;
+            String[] stringKenni = kennitala.split("");
+            int[] kennitolur = new int[10];
+            int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
 
-        for(int i = 0; i < kennitolur.length; i++){
-            kennitolur[i] = Integer.parseInt(stringKenni[i]);
-        }
+            for(int i = 0; i < kennitolur.length; i++){
+                kennitolur[i] = Integer.parseInt(stringKenni[i]);
+            }
 
-        for(int i = 0; i < margfeldisTala.length; i++){
-            sum += kennitolur[i]*margfeldisTala[i];
-        }
+            for(int i = 0; i < margfeldisTala.length; i++){
+                sum += kennitolur[i]*margfeldisTala[i];
+            }
 
-        int mod = sum % 11;
-        int magicNumber = 0;
-        if (mod != 0) {
-            magicNumber = 11 - mod;
-        }
+            int mod = sum % 11;
+            int magicNumber = 0;
+            if (mod != 0) {
+                magicNumber = 11 - mod;
+            }
 
-        return magicNumber == kennitolur[8];
+            return magicNumber == kennitolur[8];
+        } catch(NumberFormatException e){  
+            return false;  
+        } 
     }
 
     @Override
@@ -192,7 +204,7 @@ public class PatientServiceImplemention implements PatientService
         String message = "";
         String password = patient.getPassword();
         if(password.length() == 0){
-            message += "Vantar að setja inn lykilorð";
+            message += "Vantar lykilorð";
         } else {
             message = strengthOfPassword(password);
         }
@@ -252,5 +264,22 @@ public class PatientServiceImplemention implements PatientService
                               
         Pattern pat = Pattern.compile(emailRegex); 
         return pat.matcher(email).matches();
+    }
+
+    public String validatePhoneNumber(Patient patient){
+        try{
+            String message = "";
+            String phNumber = patient.getPhoneNumber();
+            if(phNumber.length() == 0){
+                message += "Vantar símanúmer";
+            } 
+            int numbers = Integer.parseInt(phNumber);
+            if(Integer.toString(numbers).length() != 7){
+                message += "Símanúmer ekki 7 stafir";
+            }
+            return message;
+        } catch(NumberFormatException e){  
+            return "Símanúmer ólöglegt" ;  
+        }  
     }
 }

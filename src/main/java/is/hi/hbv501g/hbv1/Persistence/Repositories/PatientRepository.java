@@ -61,4 +61,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long >
      * @return List of all Patient objects in database, if any.
      */
     List<Patient> findAll();
+
+    Patient findByKennitala(String kennitala);
 }
