@@ -7,8 +7,11 @@
     <body>
         <h2>Innskráning</h2>
         <form action="#" th:action="@{/login}" th:object="${patient}" method="post">
-          <input type="text" name="email" id="email" th:field="*{email}"/>
-          <input type="text" name="password" id="password" th:field="*{password}"/>
+          <label for="email">Netfang</label>
+          <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
+
+          <label for="password">Lykilorð</label>
+          <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
           <input type="submit" value="Innskráning"/>
         </form>
         <p><a href="/"> Til baka</a></p>
