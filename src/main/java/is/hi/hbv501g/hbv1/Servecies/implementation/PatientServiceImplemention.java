@@ -29,12 +29,12 @@ public class PatientServiceImplemention implements PatientService
     /**
      * Constructs a new PatientServiceImplementation.
      *
-     * @param patientRespotory PatientRepository linked to service.
+     * @param patientRepository PatientRepository linked to service.
      */
     @Autowired
-    public PatientServiceImplemention(PatientRepository patientRespotory)
+    public PatientServiceImplemention(PatientRepository patientRepository)
     {
-        this.patientRepository = patientRespotory;
+        this.patientRepository = patientRepository;
     }
 
 

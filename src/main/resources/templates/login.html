@@ -2,11 +2,18 @@
 <html xmlns:th="https://thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Forsíða</title>
+        <title>Innskráning</title>
     </head>
     <body>
-        <h2>Log in</h2>
-        <p>Hér kemur form til að logga sig inn</p>
+        <h2>Innskráning</h2>
+        <form action="#" th:action="@{/login}" th:object="${patient}" method="post">
+          <label for="email">Netfang</label>
+          <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
+
+          <label for="password">Lykilorð</label>
+          <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
+          <input type="submit" value="Innskráning"/>
+        </form>
         <p><a href="/"> Til baka</a></p>
     </body>
 </html>
