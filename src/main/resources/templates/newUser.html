@@ -14,28 +14,16 @@
                 <input type="text" th:field="*{name}" id="name" placeholder="Nafn">
                 <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
             </div>
-
-            <div>
-                <label for="email">Netfang</label>
-                <input type="text" th:field="*{email}" id="email" placeholder="xxx@email.com">
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            </div>
-    
-            <div>
-                <label for="password">Lykilorð</label>
-                <input type="text" th:field="*{password}" id="password"  placeholder="">
-                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-            </div>
     
            <div>
             <label for="kennitala">Kennitala</label>
-            <input type="text" th:field="*{kennitala}" id="kennitala"  placeholder="">
+            <input type="text" th:field="*{kennitala}" id="kennitala"  placeholder="xxxxxxxxxx">
             <span th:if="${#fields.hasErrors('kennitala')}" th:errors="*{kennitala}"></span>
            </div>
     
             <div>
                 <label for="phNumber">Símanúmer</label>
-            <input type="text" th:field="*{phoneNumber}" id="phNumber" placeholder="">
+            <input type="text" th:field="*{phoneNumber}" id="phNumber" placeholder="xxxxxxx">
             <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
             </div>
             
@@ -48,6 +36,17 @@
         </fieldset>
         <fieldset>
             <legend>Skráningar upplýsingar</legend>
+            <div>
+                <label for="email">Netfang</label>
+                <input type="text" th:field="*{email}" id="email" placeholder="xxx@email.com">
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+    
+            <div>
+                <label for="password">Lykilorð</label>
+                <input type="text" th:field="*{password}" id="password"  placeholder="">
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
         </fieldset>
 
         <input type="submit"  value="Skrá sig inn">

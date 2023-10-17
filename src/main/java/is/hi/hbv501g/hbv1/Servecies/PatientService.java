@@ -93,4 +93,6 @@ public interface PatientService
      * @return boolean if password is valid 
      */
     String validatePassword(Patient patient);
+
+    String validateEmail(Patient patient);
 }

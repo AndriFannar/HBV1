@@ -65,20 +65,36 @@ public class PatientController
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
     public String signUp(@Validated Patient patient, BindingResult result,  Model model, HttpSession session)
     {
-        Patient exists = patientService.findByEmail(patient.getEmail());
         String errKen = patientService.validateKennitala(patient);
         String errPass = patientService.validatePassword(patient);
+        String errEmail = patientService.validateEmail(patient);
 
         if (!errKen.isEmpty()) {
             FieldError error = new FieldError( "patient", "kennitala", errKen);
             result.addError(error);
         }
-        if(exists != null){
-            FieldError error = new FieldError( "patient", "email", "Notandi nú þegar til");
+        if(!errEmail.isEmpty()){
+            FieldError error = new FieldError( "patient", "email", errEmail);
+            result.addError(error);
+        }
+        if(patient.getEmail().length() == 0){
+            FieldError error = new FieldError("patient", "email", "Vantar netfang");
             result.addError(error);
         }
         if(!errPass.isEmpty()){
             FieldError error = new FieldError("patient", "password", errPass);
+            result.addError(error);
+        }
+        if(patient.getName().length() == 0){
+            FieldError error = new FieldError("patient", "name", "Vantar nafn");
+            result.addError(error);
+        }
+        if(patient.getAddress().length() == 0){
+            FieldError error = new FieldError("patient", "address", "Vantar heimilsfang");
+            result.addError(error);
+        }
+        if(patient.getAddress().length() == 0){
+            FieldError error = new FieldError("patient", "phoneNumber", "Vantar símanúmer");
             result.addError(error);
         }
 
@@ -89,20 +105,12 @@ public class PatientController
             return "newUser";
         }
 
-        // If no errors, and Patient does not exist, save.
-        if(exists == null)
-        {
-            patientService.save(patient);
+        patientService.save(patient);
             
-            session.setAttribute("LoggedInUser", patient);
+        session.setAttribute("LoggedInUser", patient);
 
-            System.out.println(session.getAttribute("LoggedInUser"));
-
-            model.addAttribute("LoggedInUser", patient);
-            return "redirect:/";
-        } 
-        model.addAttribute("patient", patient);
-        return "newUser";
+        model.addAttribute("LoggedInUser", patient);
+        return "redirect:/";
     }
 
 

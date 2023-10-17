@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Servecies.implementation;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -158,7 +159,7 @@ public class PatientServiceImplemention implements PatientService
             message += "Kennitala ekki nógu löng.";
         } else if(!checkKennitala(kennitala)){
             message += "Kennitala ólögleg.";
-        }
+        } 
         
         return message;
     }
@@ -192,9 +193,64 @@ public class PatientServiceImplemention implements PatientService
         String password = patient.getPassword();
         if(password.length() == 0){
             message += "Vantar að setja inn lykilorð";
-        } else if(password.length() < 8 || password.length() > 250){
-            message += "Lykilorð ekki á lengd á milli 8 til 250 stafi";
+        } else {
+            message = strengthOfPassword(password);
+        }
+        
+        return message;
+    }
+
+    private String strengthOfPassword(String password){
+        boolean hasLetter = false;
+        boolean hasDigit = false;
+        String message = "";
+
+        if (password.length() >= 8) {
+            for (int i = 0; i < password.length(); i++) {
+                char x = password.charAt(i);
+                if (Character.isLetter(x)) {
+                    hasLetter = true;
+                } else if (Character.isDigit(x)) {
+                    hasDigit = true;
+                }
+
+                if (hasLetter && hasDigit) {
+                    break;
+                }
+            }
+            if (hasLetter && hasDigit) {
+                message = "";
+            } else if(hasLetter || hasDigit){
+                message += "Lykilorð verður að innihalda bókstafi og tölur";
+            }
+        } else {
+            message += "Lykilorð verður að vera 8 stafir/tölur eða meira";
         }
         return message;
+    }
+
+    @Override
+    public String validateEmail(Patient patient){
+        String message = "";
+        String email = patient.getEmail();
+        Patient exists = findByEmail(email);
+        if(exists != null){
+            message += "Notandi þegar til";
+        } else if(email.length() == 0){
+            message += "Vantar netfang";
+        } else if(!validEmail(email)){
+            message += "Netfang ekki netfang";
+        }
+        return message;
+    }
+
+    private boolean validEmail(String email){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        return pat.matcher(email).matches();
     }
 }

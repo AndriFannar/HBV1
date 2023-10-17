@@ -37,9 +37,9 @@ public class Patient extends User
      * @param phoneNumber  Phone number of patient.
      * @param address   Patient's address.
      */
-    public Patient(String name, String email, String password, String kennitala, String phoneNumber, String address)
+    public Patient(String name, String email, String password, String kennitala, String phNumber, String address)
     {
-        super(name, email, password, kennitala, phoneNumber);
+        super(name, email, password, kennitala, phNumber);
 
         this.address = address;
     }

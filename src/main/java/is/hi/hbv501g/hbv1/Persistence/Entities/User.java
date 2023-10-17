@@ -53,13 +53,13 @@ public abstract class User
      * @param kennitala User's kennitala.
      * @param phoneNumber  User's phone number.
      */
-    public User(String name, String email, String password, String kennitala, String phoneNumber)
+    public User(String name, String email, String password, String kennitala, String phNumber)
     {
         this.name = name;
         this.email = email;
         this.password = password;
         this.kennitala = kennitala;
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phNumber;
     }
 
 
