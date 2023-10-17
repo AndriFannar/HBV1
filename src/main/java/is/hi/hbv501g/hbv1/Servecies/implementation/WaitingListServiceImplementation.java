@@ -85,8 +85,8 @@ public class WaitingListServiceImplementation implements WaitingListService
             if (staff != null && !Objects.equals(waitingLR.getStaff(), staff)) waitingLR.setStaff(staff);
             if (bodyPart != null && !Objects.equals(waitingLR.getBodyPart(), bodyPart)) waitingLR.setBodyPart(bodyPart);
             if (description != null && !Objects.equals(waitingLR.getDescription(), description)) waitingLR.setDescription(description);
-            if (!Objects.equals(waitingLR.isStatus(), status)) waitingLR.setStatus(status);
-            if (!Objects.equals(waitingLR.getQuestionnaireID(), questionnaireID)) waitingLR.setQuestionnaireID(questionnaireID);
+            if (status) waitingLR.setStatus(true);
+            if (!Objects.equals(waitingLR.getQuestionnaireID(), questionnaireID) && questionnaireID != 0) waitingLR.setQuestionnaireID(questionnaireID);
         }
     }
 
