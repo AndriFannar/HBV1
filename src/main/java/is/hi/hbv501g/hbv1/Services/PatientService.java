@@ -81,5 +81,10 @@ public interface PatientService
      */
     Patient updatePatient(Long patientID, String name, String email, String password, String phNumber, String address);
 
+    /**
+     * Update Patient.
+     *
+     * @param patient  Patient to update
+     */
     void updatePatient(Patient patient);
 }

@@ -46,6 +46,12 @@ public interface WaitingListService
      */
     WaitingListRequest updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, Integer questionnaireID, QuestionnaireForm addAnswers, Double grade);
 
+    /**
+     *
+     * @param waitingListRequest Waitning list request to be updated
+     */
+    void updateRequest(WaitingListRequest waitingListRequest);
+
 
     /**
      * Gets all WaitingListRequest objects.

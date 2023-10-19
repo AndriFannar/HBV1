@@ -104,6 +104,17 @@ public class WaitingListServiceImplementation implements WaitingListService
         return waitingLR;
     }
 
+    /**
+     *
+     * @param waitingListRequest Waitning list request to be updated
+     */
+    @Override
+    public void updateRequest(WaitingListRequest waitingListRequest) {
+        waitingListRepository.save(waitingListRequest);
+
+
+    }
+
 
     /**
      * Gets all WaitingListRequest objects.

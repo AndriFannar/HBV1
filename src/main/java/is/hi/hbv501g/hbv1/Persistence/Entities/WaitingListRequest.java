@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,21 +70,17 @@ public class WaitingListRequest
      *
      * @param patient     The patient requesting treatment.
      * @param staff       Selected physiotherapist.
-     * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description) {
+    public WaitingListRequest(Patient patient, Staff staff, String description) {
         this.patient = patient;
         this.staff = staff;
-        this.bodyPart = bodyPart;
+        this.bodyPart = "";
         this.description = description;
-
         this.status = false;
         this.questionnaireID = 0;
         this.grade = 0;
-
         this.dateOfRequest = LocalDateTime.now();
-
         this.questionnaireAnswers = new ArrayList<>();
     }
 

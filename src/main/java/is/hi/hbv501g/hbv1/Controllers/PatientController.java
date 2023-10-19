@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
+import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Services.StaffService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,14 +41,14 @@ public class PatientController
     @GetMapping("/editName")
     public String editName() {
         editingName = true;
-        return "redirect:/userPage"; // Redirect back to the user page.
-    }
+        // Redirect back to the user page.
+        return "redirect:/userPage"; }
 
     @GetMapping("/editKennitala")
     public String editKennitala() {
         editingKennitala = true;
-        return "redirect:/userPage"; // Redirect back to the user page.
-    }
+        // Redirect back to the user page.
+        return "redirect:/userPage"; }
 
     /**
      * Construct a new PatientController.
@@ -92,8 +94,8 @@ public class PatientController
         {
             patientService.save(patient);
             session.setAttribute("LoggedInUser", patient);
-            System.out.println(session.getAttribute("LoggedInUser"));
             model.addAttribute("LoggedInUser", patient);
+            model.addAttribute("waitingListRequest", new WaitingListRequest());
             return "LoggedInUser";
         }
         return "redirect:/";
@@ -111,10 +113,26 @@ public class PatientController
         return "login";
     }
 
+    /**
+     * Login page
+     *
+     * @param waitingListRequest WaitingListRequest for page
+     * @param patient            Logged in patient
+     * @param result             For error checking
+     * @param model              Model for page
+     * @param session            Current HttpSession.
+     * @return                   LoggedInUser page.
+     */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String LoginPOST(Patient patient, BindingResult result,  Model model, HttpSession session){
+    public String LoginPOST(WaitingListRequest waitingListRequest, Patient patient, BindingResult result,  Model model, HttpSession session){
         if(result.hasErrors()){
             return "login";
+        }
+        if (waitingListRequest == null) {
+            model.addAttribute("waitingListRequest", new WaitingListRequest());
+        }
+        if (waitingListRequest != null){
+            model.addAttribute("waitingListRequest" , waitingListRequest);
         }
         Patient exists = patientService.login(patient);
         if(exists != null){
@@ -144,9 +162,7 @@ public class PatientController
      */
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String toggleUpdateForm(Model model) {
-        System.out.println("Nú vil ég geta uppfært notendaupplýsingarnar!!");
         boolean showUpdateForm = (boolean) model.getAttribute("showUpdateForm");
-        System.out.println("Show update form" + showUpdateForm);
         model.addAttribute("showUpdateForm", !showUpdateForm);
         return "LoggedInUser";
     }
@@ -162,40 +178,35 @@ public class PatientController
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editPatientInformation(@ModelAttribute("LoggedInUser") Patient updatedPatient, Model model, HttpSession session) {
+        model.addAttribute("waitingListRequest", new WaitingListRequest());
         // Retrieve the existing patient from the session or database
         Patient existingPatient = (Patient) session.getAttribute("LoggedInUser");
-
         if (existingPatient == null) {
             // Handle the case where the patient is not in the session
             return "redirect:/";
         }
-
         // Update only the fields that have changed
         existingPatient.setName(updatedPatient.getName());
         existingPatient.setKennitala(updatedPatient.getKennitala());
         existingPatient.setAddress(updatedPatient.getAddress());
         existingPatient.setEmail(updatedPatient.getEmail());
         existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
-
         // Save the updated patient information back to the database
         patientService.updatePatient(existingPatient);
         return "LoggedInUser";
     }
 
     /**
-     * Get a list of physiotherapist for the basic waiting list registration.
+     * For logging out the current user
      *
-     * @param model Model for page.
-     *
-     * @return LoggedInUser page.
+     * @param request HttpServletRequest
+     * @return        Home page
      */
-    @RequestMapping(value = "/registerForBasicList", method = RequestMethod.GET)
-    public String registerForBasicWaitingList(Model model) {
-        // Retrieve the existing patient from the session or database
-        List<Staff> physiotherapists = staffService.findByIsPhysiotherapist(true);
-        model.addAttribute("physiotherapists", physiotherapists);
-        return "LoggedInUser";
-    }
-
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // Invalidate the user's session
+        request.getSession().invalidate();
+        // Redirect to the login page
+        return "redirect:/"; }
 
 }

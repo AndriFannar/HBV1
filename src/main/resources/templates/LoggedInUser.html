@@ -2,7 +2,6 @@
 <html xmlns:th="https://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/stylesheet.css">
     <title>Sjúklingur</title>
 </head>
 <body>
@@ -16,19 +15,19 @@
 <p><strong>Sími:</strong> <span th:text="${LoggedInUser.phoneNumber}"></span></p>
 
 <!-- Form to edit patient information -->
-<form method="post" th:action="@{/edit}">
+    <form method="post" th:action="@{/edit}">
     <input type="text" name="name" th:value="${LoggedInUser.name}" placeholder="Name" required/>
     <input type="text" name="kennitala" th:value="${LoggedInUser.kennitala}" placeholder="Kennitala" required/>
     <input type="text" name="address" th:value="${LoggedInUser.address}" placeholder="Address" required/>
     <input type="email" name="email" th:value="${LoggedInUser.email}" placeholder="Email" required/>
     <input type="tel" name="phoneNumber" th:value="${LoggedInUser.phoneNumber}" placeholder="Phone Number" required/>
-    <button type="submit">Update Information</button>
+        <button type="submit">Update Information</button>
 </form>
 <br>
 <br>
 <br>
 <!-- Form to register for basic waiting list -->
-<form method="post" th:action="@{/registerForBasicList}">
+<form action="#" th:action="@{/registerForBasicList}" th:object="${waitingListRequest}" method="post">
     <div class="form-group">
         <label for="physio">Veldu sjúkraþjálfara:</label>
         <select id="physio" name="physio">
@@ -37,39 +36,44 @@
             <option value="physio2">Ástríður Haraldsdóttir Passauer</option>
             <option value="physio3">Friðrik Þór Ólafsson</option>
             <option value="physio4">Sigurður Örn Gunnarsson</option>
-            <!-- Add more physiotherapists as needed -->
         </select>
     </div>
     <br><br><br>
-    <div class="form-group">
-        <label for="symptoms">Hér geturðu skrifað stutta lýsingu á vandamálinu</label>
-        <textarea id="symptoms" name="symptoms" rows="4" cols="50"></textarea>
-    </div>
-        <br><br><br>
-    <input type="hidden" th:field="*{registrationDate}" th:value="${#dates.createNow()}" />
-    <button type="submit">Skrá á biðlista</button>
-</form>
+       <div class="form-group">
+           <label for="description">Hér geturðu skrifað stutta lýsingu á vandamálinu</label>
+         <input type="text" id="description" th:value="*{description}" name="description" placeholder="Lýsing á vandamálinu" style="width: 480px;"/>
+     </div>
+         <br>
+     <button type="submit">Skrá á biðlista</button>
+ </form>
 
-<!--
-<div class="form-group">
-    <label for="physio">Select a Physiotherapist:</label>
-    <select id="physio" name="physio">
-        <option value="not_specified">Not Specified</option>
-        <option th:each="physiotherapist : ${physiotherapists}"
-                th:value="${physiotherapist.id}" th:text="${physiotherapist.name}"></option>
-    </select>
-</div>
-    <br>
-    <br>
-    <br>
+<br><br>
 
-<div class="form-group">
-    <label for="symptoms">Describe your Symptoms (Optional):</label>
-    <textarea id="symptoms" name="symptoms" rows="4" cols="50"></textarea>
-</div>
 
-<button type="submit">Register</button>
-</form> -->
+<!-- Overview of basic waiting list registration -->
+<section th:if="${waitingListRequest.status}" th:switch="@{/registrationOverview}" action="#" th:action="@{/registrationOverview}" th:object="${waitingListRequest}" method="post">
 
+        <table>
+            <thead>
+            <tr>
+                <th>Dagsetning</th>
+                <th>Vandamál</th>
+                <th>Sjúkraþjálfari</th>
+                <th>Staða umsóknar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${waitingListRequest.dateOfRequest }"></td>
+                <td th:text="${waitingListRequest.description}"></td>
+                <td th:text="${waitingListRequest.staff}"></td>
+                <td th:text="${waitingListRequest.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+</section>
+<br><br>
+
+<p><a th:href="@{/logout}">Útskrá</a></p>
 </body>
 </html>
