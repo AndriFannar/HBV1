@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -27,7 +30,6 @@ public class PatientController
     // Variables.
     private PatientService patientService;
 
-
     /**
      * Construct a new PatientController.
      *
@@ -48,6 +50,8 @@ public class PatientController
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
     public String signUpForm(Patient patient/*, Model model*/)
     {
+        model.addAttribute("patient", new Patient());
+        //model.addAttribute("waitingListRequest", new WaitingListRequest());
         return "newUser";
     }
 
@@ -59,28 +63,51 @@ public class PatientController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public String signUp(Patient patient, BindingResult result,  Model model , HttpSession session)
+    public String signUp(@Validated Patient patient, BindingResult result,  Model model, HttpSession session)
     {
+        String errKen = patientService.validateKennitala(patient);
+        String errPass = patientService.validatePassword(patient);
+        String errEmail = patientService.validateEmail(patient);
+        String errPhN = patientService.validatePhoneNumber(patient);
+
+        if (!errKen.isEmpty()) {
+            FieldError error = new FieldError( "patient", "kennitala", errKen);
+            result.addError(error);
+        }
+        if(!errEmail.isEmpty()){
+            FieldError error = new FieldError( "patient", "email", errEmail);
+            result.addError(error);
+        }
+        if(!errPass.isEmpty()){
+            FieldError error = new FieldError("patient", "password", errPass);
+            result.addError(error);
+        }
+        if(patient.getName().length() == 0){
+            FieldError error = new FieldError("patient", "name", "Vantar nafn");
+            result.addError(error);
+        }
+        if(patient.getAddress().length() == 0){
+            FieldError error = new FieldError("patient", "address", "Vantar heimilsfang");
+            result.addError(error);
+        }
+        if(!errPhN.isEmpty()){
+            FieldError error = new FieldError("patient", "phoneNumber", errPhN);
+            result.addError(error);
+        }
+
+
         if(result.hasErrors())
         {
-            return "redirect:/signUp";
+            model.addAttribute("patient", patient);
+            return "newUser";
         }
 
-        Patient exists = patientService.findByEmail(patient.getEmail());
-
-        // If no errors, and Patient does not exist, save.
-        if(exists == null)
-        {
-            patientService.save(patient);
+        patientService.save(patient);
             
-            session.setAttribute("LoggedInUser", patient);
+        session.setAttribute("LoggedInUser", patient);
 
-            System.out.println(session.getAttribute("LoggedInUser"));
-
-            model.addAttribute("LoggedInUser", patient);
-            return "LoggedInUser";
-        }
-        return "redirect:/";
+        model.addAttribute("LoggedInUser", patient);
+        return "LoggedInUser";
     }
 
 
