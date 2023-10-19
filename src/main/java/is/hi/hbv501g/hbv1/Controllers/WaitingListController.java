@@ -133,7 +133,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/updateRequest/{requestID}", method = RequestMethod.POST)
-    public String updateRequest(@ModelAttribute("request") WaitingListRequest request, BindingResult result, Model model)
+    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest request, BindingResult result, Model model)
     {
         if(result.hasErrors())
         {
