@@ -35,8 +35,10 @@ public class WaitingListRequest
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
     private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Staff staff;
+    @Transient
+    private Long staffID;
     private String bodyPart;
     private String description;
     private boolean status;
@@ -67,11 +69,12 @@ public class WaitingListRequest
      * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description) {
+    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description, Long staffID) {
         this.patient = patient;
         this.staff = staff;
         this.bodyPart = bodyPart;
         this.description = description;
+        this.staffID = staffID;
 
         this.status = false;
         this.questionnaireID = 0;
@@ -114,6 +117,16 @@ public class WaitingListRequest
 
     public void setStaff(Staff staff) {
         this.staff = staff;
+    }
+
+    public void setStaffID(Long staffID)
+    {
+        this.staffID = staffID;
+    }
+
+    public Long getStaffID()
+    {
+        return this.staffID;
     }
 
     public String getBodyPart() {

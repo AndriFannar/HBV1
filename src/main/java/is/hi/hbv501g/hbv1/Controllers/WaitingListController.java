@@ -60,6 +60,10 @@ public class WaitingListController
     public String waitingListForm(Model model)
     {
         model.addAttribute("waitingListRequest", new WaitingListRequest());
+
+        List<Staff> staff = staffService.findByIsPhysiotherapist(true);
+        model.addAttribute("physiotherapists", staff);
+
         return "newRequest";
     }
 
@@ -75,12 +79,18 @@ public class WaitingListController
     {
         if(result.hasErrors())
         {
-            return "redirect:/newRequest";
+            System.out.println("Error Create:" + result.getAllErrors());
+            return "redirect:/createRequest";
         }
 
         //Get Patient that is logged in, and link to WaitingListRequest.
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
+        System.out.println("Staff:" + waitingListRequest.getStaffID());
+        System.out.println("Staff List: " + model.getAttribute("physiotherapists"));
+        System.out.println("Request: " + waitingListRequest);
         waitingListRequest.setPatient(patient);
+        Staff staff = staffService.findByEmail("afk6@hi.is");
+        waitingListRequest.setStaff(staff);
 
         // If no errors, and request does not exist, create.
         WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
@@ -124,6 +134,7 @@ public class WaitingListController
         return "redirect:/staffIndex";
     }
 
+
     // **** To be enabled when HTML templates are ready **** //
 
     /**
@@ -137,18 +148,11 @@ public class WaitingListController
     {
         if(result.hasErrors())
         {
-            return "redirect:/viewRequest" + requestID;
+            System.out.println("Error Update" + result.getAllErrors());
+            return "redirect:/viewRequest/" + requestID;
         }
 
-        // If no errors and request exists, update.
-        WaitingListRequest exists = waitingListService.getRequestByID(requestID);
-
-        if(exists != null)
-        {
-            System.out.println(request);
-            System.out.println(model.getAttribute("request"));
-            //waitingListService.updateRequest(requestID, staff, bodyPart, description, status, questionnaireID);
-        }
+        System.out.println("Request Update:" + request);
 
         return "redirect:/viewRequest/" + requestID;
     }

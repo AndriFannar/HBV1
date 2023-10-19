@@ -10,6 +10,11 @@
             <fieldset>
                 <legend>Upplýsingar</legend>
 
+                <label for="staff">Starfsmaður</label>
+                <select id="staff">
+                    <option th:each="staffMember : ${physiotherapists}" th:field="*{staff}" th:value="${staffMember}" th:text="${staffMember.name}"></option>
+                <select/>
+
                 <label for="bodyPart">Líkamshluti</label>
                 <input type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
                 <span th:if="${#fields.hasErrors('bodyPart')}" th:errors="*{bodyPart}"></span>
