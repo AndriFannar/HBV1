@@ -1,0 +1,93 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Skoða beiðni</title>
+</head>
+<body>
+<section th:switch="${request}">
+    <h2 th:case="null">Engin beiðni valin</h2>
+    <div th:case="*">
+        <h2>Beiðni:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Nafn</th>
+                <th>Starfsmaður</th>
+                <th>Líkamshluti</th>
+                <th>Lýsing</th>
+                <th>Staða</th>
+                <th>Forgangur</th>
+                <th>Dagsetning</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${request.patient.name}"></td>
+                <td th:text="${request.staff}"></td>
+                <td th:text="${request.bodyPart}"></td>
+                <td th:text="${request.description}"></td>
+
+                <td th:switch="${request.status}">
+                    <p th:if="${request.status == false}">Ekki Samþykkt</p>
+                    <p th:if="${request.status == true}">Samþykkt</p>
+                </td>
+
+                <td th:text="${request.grade}"></td>
+
+                <td th:text="${request.dateOfRequest}">
+
+
+                <td><p th:if="${request.status == false}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
+                <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2>Breyta beiðni</h2>
+    <form class="form-control" id="dropDownList" action="#" th:action="@{/updateRequest/__${request.id}__}" method="POST">
+        <fieldset>
+            <legend>Upplýsingar</legend>
+
+            <label for="staff">Starfsmaður</label>
+            <select th:field="*{request.staff}" id="staff">
+                <option value="0">Select</option>
+                <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}" th:selected="${request.staff}"></option>
+            <select/>
+
+            <label for="grade">Forgangur</label>
+            <input type="number" th:value="${request.grade}" id="grade" th:placeholder="${request.grade}">
+        </fieldset>
+        <input type="submit"  value="Skrá breytingar">
+    </form>
+</section>
+
+<section>
+    <details th:if="${answers != null}">
+        <summary>Svör spurningalista:</summary>
+        <table>
+            <thead>
+                <tr>
+                    <th>Spurning</th>
+                    <th>Svar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="question : ${questionnaire}">
+                    <td th:text="${question.questionString}"></td>
+                </tr>
+                <tr th:each="answer : ${answers}">
+                    <td th:text="${answer}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </details>
+</section>
+<section>
+    <p><a href="/staffIndex">Til baka</a></p>
+</section>
+</body>
+</html>

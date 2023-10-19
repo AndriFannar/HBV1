@@ -54,7 +54,7 @@ public class StaffController
      * @param model   Page Model.
      * @return        Redirect to staffIndex.
      */
-    @RequestMapping(value="/loggedinStaff", method=RequestMethod.GET)
+    @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model)
     {
         Staff sessionUser = staffService.findByEmail("Andri@Hilti.is");

@@ -44,6 +44,7 @@
                             <td th:text="${patient.email}"></td>
                             <td th:text="${patient.kennitala}"></td>
                             <td th:text="${patient.phoneNumber}"></td>
+                            <td><a th:href="@{/deletePatient/{id}(id=${patient.id})}">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>

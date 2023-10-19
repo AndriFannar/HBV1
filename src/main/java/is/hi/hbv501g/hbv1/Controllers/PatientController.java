@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -117,6 +118,24 @@ public class PatientController
             model.addAttribute("LoggedInUser", sessionUser);
             return "LoggedInUser";
         }
+        return "redirect:/";
+    }
+
+    /**
+     * Delete Patient.
+     *
+     * @param patientID ID of Patient to delete.
+     * @return          Redirect.
+     */
+    @RequestMapping(value = "/deletePatient/{patientID}", method = RequestMethod.GET)
+    public String deletePatient(@PathVariable("patientID") Long patientID, Model model) {
+        // If Patient exists, delete.
+        Patient exists = patientService.findByID(patientID);
+
+        if (exists != null) {
+            patientService.delete(patientID);
+        }
+
         return "redirect:/";
     }
 }

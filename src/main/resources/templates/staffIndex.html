@@ -40,7 +40,7 @@
 
                     <td><p th:if="${request.status == false}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
                     <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
-                    <td><a th:href="@{/}">Skoða</a></td>
+                    <td><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></td>
                 </tr>
             </tbody>
         </table>
