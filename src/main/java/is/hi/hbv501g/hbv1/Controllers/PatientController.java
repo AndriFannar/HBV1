@@ -48,7 +48,7 @@ public class PatientController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(Patient patient, Model model)
+    public String signUpForm(Patient patient/*, Model model*/)
     {
         model.addAttribute("patient", new Patient());
         //model.addAttribute("waitingListRequest", new WaitingListRequest());
@@ -107,7 +107,7 @@ public class PatientController
         session.setAttribute("LoggedInUser", patient);
 
         model.addAttribute("LoggedInUser", patient);
-        return "redirect:/";
+        return "LoggedInUser";
     }
 
 
@@ -117,9 +117,25 @@ public class PatientController
      * @return Login page.
      */
     @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginPost(Patient patient, Model model){
+    public String loginGET(Patient patient/* , Model model*/){
         return "login";
     }
+
+    @RequestMapping(value="/login", method = RequestMethod.POST)
+    public String LoginPOST(Patient patient, BindingResult result,  Model model, HttpSession session){
+      if(result.hasErrors()){
+        return "login";
+      }
+      Patient exists = patientService.login(patient);
+      if(exists != null){
+        session.setAttribute("LoggedInUser", exists);
+        model.addAttribute("LoggedInUser", exists);
+        return "LoggedInUser";
+      }
+      return "redirect:/";
+    }
+
+
 
     @RequestMapping(value="/loggedin", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model) {
