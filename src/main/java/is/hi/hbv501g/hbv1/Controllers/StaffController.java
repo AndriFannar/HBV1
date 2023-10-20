@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Servecies.StaffService;
 
@@ -72,16 +73,31 @@ public class StaffController
 
 
     /**
-     * Get log inpage for Staff.
+     * Get log in page for Staff.
      *
      * @param staff Staff to log in.
      * @return      Redirect.
      */
-    /*@RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginPost(Staff staff, Model model)
+    @RequestMapping(value="/staffLogin", method = RequestMethod.GET)
+    public String loginGet(Staff staff, Model model)
     {
-        return "login";
-    }*/
+        return "staffLogin";
+    }
+
+    @RequestMapping(value="/staffLogin", method = RequestMethod.POST)
+    public String LoginPOST(Staff staff, BindingResult result,  Model model, HttpSession session){
+      if(result.hasErrors()){
+        return "staffLogin";
+      }
+      Staff exists = staffService.login(staff);
+      if(exists != null){
+        session.setAttribute("LoggedInUser", exists);
+        model.addAttribute("LoggedInUser", exists);
+        return "LoggedInUser";
+      }
+      return "redirect:/";
+    }
+
 
 
     /**
@@ -90,18 +106,15 @@ public class StaffController
      * @param session Session to log Staff into.
      * @return        Redirect.
      */
-    /*@RequestMapping(value="/loggedInUser", method=RequestMethod.GET)
-    public String loggedInGET(HttpSession session, Model model)
-    {
+    @RequestMapping(value="/loggedIn", method=RequestMethod.GET)
+    public String loggedInGET(HttpSession session, Model model){
         Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
-
-        if(sessionUser != null)
-        {
+        if(sessionUser != null){
             model.addAttribute("LoggedInUser", sessionUser);
             return "LoggedInUser";
         }
         return "redirect:/";
-    }*/
+    }
 
 
     /**
