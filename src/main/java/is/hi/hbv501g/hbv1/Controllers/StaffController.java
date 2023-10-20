@@ -57,7 +57,7 @@ public class StaffController
     @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model)
     {
-        Staff sessionUser = staffService.findByEmail("Andri@Hilti.is");
+        Staff sessionUser = staffService.findByEmail("afk6@hi.is");
         //Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
 
         if(sessionUser != null)
@@ -117,7 +117,8 @@ public class StaffController
         WaitingListRequest exists = waitingListService.getRequestByID(requestID);
 
         if (exists != null) {
-            waitingListService.updateRequest(requestID, null, null, null, true, 0);
+            System.out.println("******Accept");
+            waitingListService.acceptRequest(requestID);
         }
 
         return "redirect:/staffIndex";

@@ -24,7 +24,7 @@
             <tbody>
                 <tr th:each="request : ${requests}">
                     <td th:text="${request.patient.name}"></td>
-                    <td th:text="${request.staff}"></td>
+                    <td th:text="${request.staff.name}"></td>
                     <td th:text="${request.bodyPart}"></td>
                     <td th:text="${request.description}"></td>
 

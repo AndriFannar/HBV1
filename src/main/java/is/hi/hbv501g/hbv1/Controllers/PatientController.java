@@ -47,7 +47,7 @@ public class PatientController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(Patient patient/*, Model model*/)
+    public String signUpForm(Patient patient, Model model)
     {
         return "newUser";
     }

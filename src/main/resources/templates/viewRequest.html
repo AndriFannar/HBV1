@@ -24,7 +24,7 @@
             <tbody>
             <tr>
                 <td th:text="${request.patient.name}"></td>
-                <td th:text="${request.staff}"></td>
+                <td th:text="${request.staff.name}"></td>
                 <td th:text="${request.bodyPart}"></td>
                 <td th:text="${request.description}"></td>
 
@@ -53,12 +53,12 @@
             <legend>Upplýsingar</legend>
 
             <label for="staff">Starfsmaður</label>
-            <select th:field="*{staff.id}" id="staff">
-                <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.id}" th:selected="${staff.id}"></option>
+            <select th:field="*{staff}" th:each="stff : *{staff}" id="staff">
+                <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}" th:selected="${stff.id == staffMember.id}"></option>
             <select/>
 
             <label for="grade">Forgangur</label>
-            <input type="number" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
+            <input type="number" th:field="*{grade}" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
         </fieldset>
         <input type="submit"  value="Skrá breytingar">
     </form>

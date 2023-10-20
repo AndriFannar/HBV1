@@ -59,7 +59,7 @@ public class WaitingListController
     @RequestMapping(value = "/createRequest", method = RequestMethod.GET)
     public String waitingListForm(Model model)
     {
-        model.addAttribute("waitingListRequest", new WaitingListRequest());
+        model.addAttribute("request", new WaitingListRequest());
 
         List<Staff> staff = staffService.findByIsPhysiotherapist(true);
         model.addAttribute("physiotherapists", staff);
@@ -79,18 +79,12 @@ public class WaitingListController
     {
         if(result.hasErrors())
         {
-            System.out.println("Error Create:" + result.getAllErrors());
             return "redirect:/createRequest";
         }
 
         //Get Patient that is logged in, and link to WaitingListRequest.
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
-        System.out.println("Staff:" + waitingListRequest.getStaffID());
-        System.out.println("Staff List: " + model.getAttribute("physiotherapists"));
-        System.out.println("Request: " + waitingListRequest);
         waitingListRequest.setPatient(patient);
-        Staff staff = staffService.findByEmail("afk6@hi.is");
-        waitingListRequest.setStaff(staff);
 
         // If no errors, and request does not exist, create.
         WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
@@ -144,15 +138,17 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/updateRequest/{requestID}", method = RequestMethod.POST)
-    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest request, BindingResult result, Model model)
+    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest updatedRequest, BindingResult result, Model model)
     {
         if(result.hasErrors())
         {
-            System.out.println("Error Update" + result.getAllErrors());
             return "redirect:/viewRequest/" + requestID;
         }
 
-        System.out.println("Request Update:" + request);
+        waitingListService.updateRequest(requestID, updatedRequest);
+
+
+        System.out.println("Request Update:" + updatedRequest);
 
         return "redirect:/viewRequest/" + requestID;
     }

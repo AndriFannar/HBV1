@@ -36,14 +36,18 @@ public interface WaitingListService
     /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param waitingListID   ID of the request to update.
-     * @param staff           Updated staff info, if any.
-     * @param bodyPart        Updated body part info, if any.
-     * @param description     Updated description, if any.
-     * @param status          Updated status, if any.
-     * @param questionnaireID Updated Questionnaire ID, if any.
+     * @param waitingListID  ID of the request to update.
+     * @param updatedRequest WaitingListRequest with updated info.
      */
-    void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID);
+    void updateRequest(Long waitingListID, WaitingListRequest updatedRequest);
+
+
+    /**
+     * Accept a WaitingListRequest.
+     *
+     * @param waitingListID ID of the WaitingListRequest to accept;
+     */
+    void acceptRequest(Long waitingListID);
 
 
     /**
