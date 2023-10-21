@@ -1,7 +1,10 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
+import is.hi.hbv501g.hbv1.Servecies.StaffService;
 import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
 
 import jakarta.servlet.http.HttpSession;
@@ -10,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -26,6 +33,8 @@ public class WaitingListController
 {
     // Variables.
     private WaitingListService waitingListService;
+    private QuestionnaireService questionnaireService;
+    private StaffService staffService;
 
 
     /**
@@ -34,9 +43,11 @@ public class WaitingListController
      * @param wS WaitingListService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService wS)
+    public WaitingListController(WaitingListService wS, QuestionnaireService qS, StaffService sS)
     {
         this.waitingListService = wS;
+        this.questionnaireService = qS;
+        this.staffService = sS;
     }
 
 
@@ -48,7 +59,11 @@ public class WaitingListController
     @RequestMapping(value = "/createRequest", method = RequestMethod.GET)
     public String waitingListForm(Model model)
     {
-        model.addAttribute("waitingListRequest", new WaitingListRequest());
+        model.addAttribute("request", new WaitingListRequest());
+
+        List<Staff> staff = staffService.findByIsPhysiotherapist(true);
+        model.addAttribute("physiotherapists", staff);
+
         return "newRequest";
     }
 
@@ -64,7 +79,7 @@ public class WaitingListController
     {
         if(result.hasErrors())
         {
-            return "redirect:/newRequest";
+            return "redirect:/createRequest";
         }
 
         //Get Patient that is logged in, and link to WaitingListRequest.
@@ -81,34 +96,67 @@ public class WaitingListController
         return "redirect:/";
     }
 
+
+    /**
+     * View WaitingListRequest.
+     *
+     * @param requestID ID of WaitingListRequest to view.
+     * @return          Redirect.
+     */
+    @RequestMapping(value = "/viewRequest/{requestID}", method = RequestMethod.GET)
+    public String viewRequest(@PathVariable("requestID") Long requestID, Model model, HttpSession session)
+    {
+        WaitingListRequest exists = waitingListService.getRequestByID(requestID);
+        Staff user = (Staff) session.getAttribute("LoggedInUser");
+
+        if (exists != null)
+        {
+            List<Staff> staff = staffService.findByIsPhysiotherapist(true);
+
+            model.addAttribute("request", exists);
+            model.addAttribute("physiotherapists", staff);
+            model.addAttribute("LoggedInUser", user);
+
+            int[] answers  = exists.getQuestionnaireAnswers();
+
+            if(answers != null)
+            {
+                model.addAttribute("answers", answers);
+            }
+
+            return "viewRequest";
+        }
+
+        return "redirect:/staffIndex";
+    }
+
+
     // **** To be enabled when HTML templates are ready **** //
 
-    /*/**
+    /**
      * Update WaitingListRequest.
      *
      * @param requestID Unique ID of request to update.
      * @return          Redirect.
-     *
-    @RequestMapping(value = "/updateRequest", path = "{requestID}", method = RequestMethod.PUT)
-    public String updateRequest(@PathVariable("requestID") Long requestID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID, BindingResult result, Model model)
+     */
+    @RequestMapping(value = "/updateRequest/{requestID}", method = RequestMethod.POST)
+    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest updatedRequest, BindingResult result, Model model)
     {
         if(result.hasErrors())
         {
-            return "redirect:/updateRequest";
+            return "redirect:/viewRequest/" + requestID;
         }
 
-        // If no errors and request exists, update.
-        WaitingListRequest exists = waitingListService.getRequestByID(requestID);
-        if(exists != null)
-        {
-            waitingListService.updateRequest(requestID, staff, bodyPart, description, status, questionnaireID);
-        }
+        waitingListService.updateRequest(requestID, updatedRequest);
 
-        return "redirect:/";
+
+        System.out.println("Request Update:" + updatedRequest);
+
+        return "redirect:/viewRequest/" + requestID;
     }
 
 
-    /**
+    /*/**
      * Delete WaitingListRequest.
      *
      * @param waitingListID ID of the request to delete.

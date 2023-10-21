@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -34,12 +35,14 @@ public class WaitingListRequest
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
     private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Staff staff;
+    @Transient
+    private Long staffID;
     private String bodyPart;
     private String description;
     private boolean status;
-    private LocalDateTime dateOfRequest;
+    private LocalDate dateOfRequest;
     private int questionnaireID;
     private int[] questionnaireAnswers;
     private double grade;
@@ -54,7 +57,7 @@ public class WaitingListRequest
         this.questionnaireID = 0;
         this.grade = 0;
 
-        this.dateOfRequest = LocalDateTime.now();
+        this.dateOfRequest = LocalDate.now();
     }
 
 
@@ -66,17 +69,18 @@ public class WaitingListRequest
      * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description) {
+    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description, Long staffID) {
         this.patient = patient;
         this.staff = staff;
         this.bodyPart = bodyPart;
         this.description = description;
+        this.staffID = staffID;
 
         this.status = false;
         this.questionnaireID = 0;
         this.grade = 0;
 
-        this.dateOfRequest = LocalDateTime.now();
+        this.dateOfRequest = LocalDate.now();
     }
 
 
@@ -95,6 +99,9 @@ public class WaitingListRequest
         return grade;
     }
 
+    public Long getId() {
+        return id;
+    }
 
     public Patient getPatient() {
         return patient;
@@ -110,6 +117,16 @@ public class WaitingListRequest
 
     public void setStaff(Staff staff) {
         this.staff = staff;
+    }
+
+    public void setStaffID(Long staffID)
+    {
+        this.staffID = staffID;
+    }
+
+    public Long getStaffID()
+    {
+        return this.staffID;
     }
 
     public String getBodyPart() {
@@ -136,11 +153,11 @@ public class WaitingListRequest
         this.status = status;
     }
 
-    public LocalDateTime getDateOfRequest() {
+    public LocalDate getDateOfRequest() {
         return dateOfRequest;
     }
 
-    public void setDateOfRequest(LocalDateTime dateOfRequest) {
+    public void setDateOfRequest(LocalDate dateOfRequest) {
         this.dateOfRequest = dateOfRequest;
     }
 

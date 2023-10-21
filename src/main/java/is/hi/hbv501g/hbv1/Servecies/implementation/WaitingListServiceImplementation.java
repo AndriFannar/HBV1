@@ -7,6 +7,7 @@ import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
 import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,27 +67,42 @@ public class WaitingListServiceImplementation implements WaitingListService
 
 
     /**
+     * Accept a WaitingListRequest.
+     *
+     * @param waitingListID ID of the WaitingListRequest to accept;
+     */
+    @Transactional
+    public void acceptRequest(Long waitingListID)
+    {
+        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
+
+        if(request != null)
+        {
+            System.out.println("******Set to true");
+            request.setStatus(true);
+        }
+    }
+
+
+    /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param waitingListID   ID of the request to update.
-     * @param staff           Updated staff info, if any.
-     * @param bodyPart        Updated body part info, if any.
-     * @param description     Updated description, if any.
-     * @param status          Updated status, if any.
-     * @param questionnaireID Updated Questionnaire ID, if any.
+     * @param waitingListID  ID of the request to update.
+     * @param updatedRequest WaitingListRequest with updated info.
      */
-    @Override
     @Transactional
-    public void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID)
+    public void updateRequest(Long waitingListID, WaitingListRequest updatedRequest)
     {
         WaitingListRequest waitingLR = waitingListRepository.getWaitingListRequestById(waitingListID);
+
         if (waitingLR != null)
         {
-            if (staff != null && !Objects.equals(waitingLR.getStaff(), staff)) waitingLR.setStaff(staff);
-            if (bodyPart != null && !Objects.equals(waitingLR.getBodyPart(), bodyPart)) waitingLR.setBodyPart(bodyPart);
-            if (description != null && !Objects.equals(waitingLR.getDescription(), description)) waitingLR.setDescription(description);
-            if (!Objects.equals(waitingLR.isStatus(), status)) waitingLR.setStatus(status);
-            if (!Objects.equals(waitingLR.getQuestionnaireID(), questionnaireID)) waitingLR.setQuestionnaireID(questionnaireID);
+            if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
+            if (updatedRequest.getBodyPart() != null) waitingLR.setBodyPart(updatedRequest.getBodyPart());
+            if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
+            if (updatedRequest.isStatus()) waitingLR.setStatus(true);
+            if (updatedRequest.getQuestionnaireID() != 0) waitingLR.setQuestionnaireID(updatedRequest.getQuestionnaireID());
+            if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
         }
     }
 
@@ -99,7 +115,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public List<WaitingListRequest> getRequests()
     {
-        return waitingListRepository.findAll();
+        return waitingListRepository.findAllByOrderByGradeDescPatientNameAsc();
     }
 
 

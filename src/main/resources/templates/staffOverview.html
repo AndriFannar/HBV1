@@ -1,0 +1,56 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Forsíða starfsmanns</title>
+</head>
+<body>
+<section th:switch="${requests}">
+    <h2 th:case="null">Engar beiðnir í kerfinu</h2>
+    <div th:case="*">
+        <h2>Beiðnir:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Nafn</th>
+                <th>Starfsmaður</th>
+                <th>Líkamshluti</th>
+                <th>Lýsing</th>
+                <th>Staða</th>
+                <th>Forgangur</th>
+                <th>Dagsetning</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.patient.name}"></td>
+                <td th:text="${request.staff}"></td>
+                <td th:text="${request.bodyPart}"></td>
+                <td th:text="${request.description}"></td>
+
+                <td th:switch="${request.status}">
+                    <p th:if="${request.status == false}">Ekki Samþykkt</p>
+                    <p th:if="${request.status == true}">Samþykkt</p>
+                </td>
+
+                <td th:text="${request.grade}"></td>
+
+                <td th:text="${request.dateOfRequest}">
+
+
+                <td><p th:if="${request.status == false}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
+                <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
+                <td><a th:href="@{/}">Skoða</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section>
+    <p th:if="${LoggedInUser.isAdmin}"><a th:href="@{/staff/}">Skoða starfsmenn</a></p>
+</section>
+<section>
+    <p><a href="/logOutStaff">Skrá út</a></p>
+</section>
+</body>
+</html>

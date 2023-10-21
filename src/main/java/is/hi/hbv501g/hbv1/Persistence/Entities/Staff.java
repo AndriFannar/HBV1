@@ -2,6 +2,8 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 /**
  * Staff members for physiotherapist clinics.
@@ -32,6 +34,9 @@ public class Staff extends User
     private boolean isAdmin;
     private String specialization;
     private String description;
+
+    @OneToMany(mappedBy = "staff")
+    private List<WaitingListRequest> waitingListRequests;
 
 
     /**
@@ -65,6 +70,12 @@ public class Staff extends User
         this.description = description;
     }
 
+
+    @Override
+    public Long getId()
+    {
+        return id;
+    }
 
     public boolean isPhysiotherapist()
     {
