@@ -43,7 +43,6 @@ public class StaffController
     }
 
     // **** Will be enabled once HTML pages get set up **** //
-
     /**
      * Create a new Staff object.
      *
@@ -73,12 +72,12 @@ public class StaffController
         return "redirect:/";
     }*/
 
-
     /**
      * Get log in page for Staff.
      *
      * @param staff Staff to log in.
-     * @return      Redirect.
+     * @param model used to populate data for the view
+     * @return      staffLogin, which is the login page for staff.
      */
     @RequestMapping(value="/staffLogin", method = RequestMethod.GET)
     public String loginGet(Staff staff, Model model)
@@ -86,11 +85,20 @@ public class StaffController
         return "staffLogin";
     }
 
+
+    /**
+     * Logs in staff
+     * 
+     * @param staff   Staff to log in
+     * @param result  captures and handles validation errors
+     * @param model   used to populate data for the view
+     * @param session used to for accessing staff session data
+     * @return        staffLogin, login page
+     */
     @RequestMapping(value="/staffLogin", method = RequestMethod.POST)
     public String LoginPOST(@Validated Staff staff, BindingResult result,  Model model, HttpSession session){
 
       if(result.hasErrors()){
-        System.out.println("Er bara að checka 1");
         return "staffLogin";
       }
       Staff exists = staffService.login(staff);
@@ -107,9 +115,10 @@ public class StaffController
 
 
     /**
-     * Log in Staff.
+     * Redirects to the homepage of the staff
      *
-     * @param session Session to log Staff into.
+     * @param session used to for accessing staff session data
+     * @param model   used to populate staff data for the view
      * @return        Redirect.
      */
     @RequestMapping(value="/loggedIn", method=RequestMethod.GET)
