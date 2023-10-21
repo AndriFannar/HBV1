@@ -45,10 +45,12 @@ public class PatientController
     /**
      * Get page with form to sign up a new Patient.
      *
+     * @param patient to register.
+     * @param model   used to populate data for the view.
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(Patient patient/*, Model model*/)
+    public String signUpForm(Patient patient, Model model)
     {
         model.addAttribute("patient", new Patient());
         //model.addAttribute("waitingListRequest", new WaitingListRequest());
@@ -60,6 +62,9 @@ public class PatientController
      * Sign up a new Patient.
      *
      * @param patient Patient to register.
+     * @param result  captures and handles validation errors
+     * @param model   used to populate data for the view
+     * @param session used to for accessing patient session data
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
@@ -113,14 +118,25 @@ public class PatientController
 
     /**
      * Get login page.
-     *
-     * @return Login page.
+     * 
+     * @param patient patient to log in.
+     * @param model   used to populate data for the view
+     * @return        Login page.
      */
     @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginGET(Patient patient/* , Model model*/){
+    public String loginGET(Patient patient, Model model){
         return "login";
     }
 
+    /**
+     * Logs in patient
+     * 
+     * @param patient patient to log in
+     * @param result  captures and handles validation errors
+     * @param model   used to populate data for the view
+     * @param session used to for accessing patient session data
+     * @return        Redirect.
+     */
     @RequestMapping(value="/login", method = RequestMethod.POST)
     public String LoginPOST(Patient patient, BindingResult result,  Model model, HttpSession session){
       if(result.hasErrors()){
@@ -132,11 +148,19 @@ public class PatientController
         model.addAttribute("LoggedInUser", exists);
         return "LoggedInUser";
       }
-      return "redirect:/";
+      FieldError error = new FieldError("patient", "email", "Vitlaust netfang eða lykilorð");
+      result.addError(error);
+      return "login";
     }
 
 
-
+    /**
+     * Redirects to the homepage of the patient.
+     *
+     * @param session used to for accessing patient session data.
+     * @param model   used to populate patient data for the view.
+     * @return        Redirect.
+     */
     @RequestMapping(value="/loggedin", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model) {
         Patient sessionUser = (Patient) session.getAttribute("LoggedInUser");

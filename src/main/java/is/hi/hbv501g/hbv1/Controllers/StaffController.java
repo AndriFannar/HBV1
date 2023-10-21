@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Servecies.StaffService;
 
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +43,6 @@ public class StaffController
     }
 
     // **** Will be enabled once HTML pages get set up **** //
-
     /**
      * Create a new Staff object.
      *
@@ -70,38 +72,64 @@ public class StaffController
         return "redirect:/";
     }*/
 
-
     /**
-     * Get log inpage for Staff.
+     * Get log in page for Staff.
      *
      * @param staff Staff to log in.
-     * @return      Redirect.
+     * @param model used to populate data for the view
+     * @return      staffLogin, which is the login page for staff.
      */
-    /*@RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginPost(Staff staff, Model model)
+    @RequestMapping(value="/staffLogin", method = RequestMethod.GET)
+    public String loginGet(Staff staff, Model model)
     {
-        return "login";
-    }*/
+        return "staffLogin";
+    }
 
 
     /**
-     * Log in Staff.
+     * Logs in staff
+     * 
+     * @param staff   Staff to log in
+     * @param result  captures and handles validation errors
+     * @param model   used to populate data for the view
+     * @param session used to for accessing staff session data
+     * @return        staffLogin, login page
+     */
+    @RequestMapping(value="/staffLogin", method = RequestMethod.POST)
+    public String LoginPOST(@Validated Staff staff, BindingResult result,  Model model, HttpSession session){
+
+      if(result.hasErrors()){
+        return "staffLogin";
+      }
+      Staff exists = staffService.login(staff);
+      if(exists != null){
+        session.setAttribute("LoggedInUser", exists);
+        model.addAttribute("LoggedInUser", exists);
+        return "LoggedInUser";
+      }
+      FieldError error = new FieldError("staff", "email", "Vitlaust netfang eða lykilorð");
+      result.addError(error);
+      return "staffLogin";
+    }
+
+
+
+    /**
+     * Redirects to the homepage of the staff
      *
-     * @param session Session to log Staff into.
+     * @param session used to for accessing staff session data
+     * @param model   used to populate staff data for the view
      * @return        Redirect.
      */
-    /*@RequestMapping(value="/loggedInUser", method=RequestMethod.GET)
-    public String loggedInGET(HttpSession session, Model model)
-    {
+    @RequestMapping(value="/loggedIn", method=RequestMethod.GET)
+    public String loggedInGET(HttpSession session, Model model){
         Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
-
-        if(sessionUser != null)
-        {
+        if(sessionUser != null){
             model.addAttribute("LoggedInUser", sessionUser);
             return "LoggedInUser";
         }
         return "redirect:/";
-    }*/
+    }
 
 
     /**
