@@ -50,17 +50,17 @@ public class StaffController
 
 
     /**
-     * Get index page for staff.
+     * Redirects to the homepage of the staff
      *
-     * @param session Current session.
-     * @param model   Page Model.
-     * @return        Redirect to staffIndex.
+     * @param session used to for accessing staff session data
+     * @param model   used to populate staff data for the view
+     * @return        Redirect.
      */
     @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model)
     {
-        Staff sessionUser = staffService.findByEmail("afk7@hi.is");
-        //Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
+        Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
+        System.out.println(sessionUser);
 
         if(sessionUser != null)
         {
@@ -212,30 +212,11 @@ public class StaffController
       if(exists != null){
         session.setAttribute("LoggedInUser", exists);
         model.addAttribute("LoggedInUser", exists);
-        return "LoggedInUser";
+        return "redirect:/staffIndex";
       }
       FieldError error = new FieldError("staff", "email", "Vitlaust netfang eða lykilorð");
       result.addError(error);
       return "staffLogin";
-    }
-
-
-
-    /**
-     * Redirects to the homepage of the staff
-     *
-     * @param session used to for accessing staff session data
-     * @param model   used to populate staff data for the view
-     * @return        Redirect.
-     */
-    @RequestMapping(value="/loggedIn", method=RequestMethod.GET)
-    public String loggedInGET(HttpSession session, Model model){
-        Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
-        if(sessionUser != null){
-            model.addAttribute("LoggedInUser", sessionUser);
-            return "LoggedInUser";
-        }
-        return "redirect:/";
     }
 
 
