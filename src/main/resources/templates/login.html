@@ -7,9 +7,11 @@
     <body>
         <h2>Patient Innskráning</h2>
         <form th:action="@{/login}" th:object="${patient}" method="post">
+          <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+          <br>
           <label for="email">Netfang</label>
           <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
-
+          <br>
           <label for="password">Lykilorð</label>
           <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
           <input type="submit" value="Innskráning"/>

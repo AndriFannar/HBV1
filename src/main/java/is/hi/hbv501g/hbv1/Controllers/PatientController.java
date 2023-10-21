@@ -48,7 +48,7 @@ public class PatientController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(Patient patient/*, Model model*/)
+    public String signUpForm(Patient patient, Model model)
     {
         model.addAttribute("patient", new Patient());
         //model.addAttribute("waitingListRequest", new WaitingListRequest());
@@ -132,7 +132,9 @@ public class PatientController
         model.addAttribute("LoggedInUser", exists);
         return "LoggedInUser";
       }
-      return "redirect:/";
+      FieldError error = new FieldError("patient", "email", "Vitlaust netfang eða lykilorð");
+      result.addError(error);
+      return "login";
     }
 
 

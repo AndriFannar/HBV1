@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,8 +87,10 @@ public class StaffController
     }
 
     @RequestMapping(value="/staffLogin", method = RequestMethod.POST)
-    public String LoginPOST(Staff staff, BindingResult result,  Model model, HttpSession session){
+    public String LoginPOST(@Validated Staff staff, BindingResult result,  Model model, HttpSession session){
+
       if(result.hasErrors()){
+        System.out.println("Er bara að checka 1");
         return "staffLogin";
       }
       Staff exists = staffService.login(staff);
@@ -95,7 +99,9 @@ public class StaffController
         model.addAttribute("LoggedInUser", exists);
         return "LoggedInUser";
       }
-      return "redirect:/";
+      FieldError error = new FieldError("staff", "email", "Vitlaust netfang eða lykilorð");
+      result.addError(error);
+      return "staffLogin";
     }
 
 
