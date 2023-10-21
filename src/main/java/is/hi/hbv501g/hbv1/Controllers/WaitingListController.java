@@ -104,9 +104,10 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/viewRequest/{requestID}", method = RequestMethod.GET)
-    public String viewRequest(@PathVariable("requestID") Long requestID, Model model)
+    public String viewRequest(@PathVariable("requestID") Long requestID, Model model, HttpSession session)
     {
         WaitingListRequest exists = waitingListService.getRequestByID(requestID);
+        Staff user = (Staff) session.getAttribute("LoggedInUser");
 
         if (exists != null)
         {
@@ -114,6 +115,7 @@ public class WaitingListController
 
             model.addAttribute("request", exists);
             model.addAttribute("physiotherapists", staff);
+            model.addAttribute("LoggedInUser", user);
 
             int[] answers  = exists.getQuestionnaireAnswers();
 

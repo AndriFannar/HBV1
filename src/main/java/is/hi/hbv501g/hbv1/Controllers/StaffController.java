@@ -57,7 +57,7 @@ public class StaffController
     @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
     public String loggedInGET(HttpSession session, Model model)
     {
-        Staff sessionUser = staffService.findByEmail("afk6@hi.is");
+        Staff sessionUser = staffService.findByEmail("afk7@hi.is");
         //Staff sessionUser = (Staff) session.getAttribute("LoggedInUser");
 
         if(sessionUser != null)
@@ -67,7 +67,7 @@ public class StaffController
 
             List<WaitingListRequest> requests;
 
-            if(sessionUser.isAdmin())
+            if(sessionUser.isAdmin() || !sessionUser.isPhysiotherapist())
             {
                 requests = waitingListService.getRequests();
             }
@@ -116,8 +116,8 @@ public class StaffController
         // If WaitingListRequest exists, accept.
         WaitingListRequest exists = waitingListService.getRequestByID(requestID);
 
-        if (exists != null) {
-            System.out.println("******Accept");
+        if (exists != null)
+        {
             waitingListService.acceptRequest(requestID);
         }
 

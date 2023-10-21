@@ -33,7 +33,7 @@ public class Patient extends User
      * @param name      Name of patient.
      * @param email     E-mail of patient.
      * @param password  Chosen password.
-     * @param kennitala Kennilata of patient.
+     * @param kennitala Kennilata of patient. //******* Muna að uppfæra í SSN! *******
      * @param phNumber  Phone number of patient.
      * @param address   Patient's address.
      */

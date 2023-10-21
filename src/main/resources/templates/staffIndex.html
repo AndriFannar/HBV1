@@ -6,6 +6,8 @@
 </head>
 <body>
 <section th:switch="${requests}">
+    <h1>Velkomin/nn</h1>
+    <h2 th:text="${LoggedInUser.name}"></h2>
     <h2 th:case="null">Engar beiðnir í kerfinu</h2>
     <div th:case="*">
         <h2>Beiðnir:</h2>
@@ -38,8 +40,8 @@
                     <td th:text="${request.dateOfRequest}">
 
 
-                    <td><p th:if="${request.status == false}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
-                    <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
+                    <td><p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
+                    <td><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
                     <td><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></td>
                 </tr>
             </tbody>

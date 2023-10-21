@@ -40,7 +40,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      *
      * @return List of all WaitingListRequest objects in database, if any.
      */
-    List<WaitingListRequest> findAllByOrderByGradeDesc();
+    List<WaitingListRequest> findAllByOrderByGradeDescPatientNameAsc();
 
 
     /**

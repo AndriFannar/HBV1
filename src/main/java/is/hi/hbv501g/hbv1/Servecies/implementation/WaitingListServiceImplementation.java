@@ -115,7 +115,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public List<WaitingListRequest> getRequests()
     {
-        return waitingListRepository.findAllByOrderByGradeDesc();
+        return waitingListRepository.findAllByOrderByGradeDescPatientNameAsc();
     }
 
 
