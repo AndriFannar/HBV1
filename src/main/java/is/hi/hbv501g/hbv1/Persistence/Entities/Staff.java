@@ -71,6 +71,12 @@ public class Staff extends User
     }
 
 
+    @Override
+    public Long getId()
+    {
+        return id;
+    }
+
     public boolean isPhysiotherapist()
     {
         return isPhysiotherapist;

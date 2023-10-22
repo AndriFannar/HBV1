@@ -52,37 +52,14 @@
             <p><a href="/signUp">Búa til aðgang</a></p>
         </section>
 
-        <section th:switch="${request}">
-            <h2 th:case="null">Engin beiðni</h2>
-            <div th:case="*">
-                <h2>Beiðni:</h2>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Dags.</th>
-                        <th>Líkamshluti</th>
-                        <th>Lýsing</th>
-                        <th>Samþykkt</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <td th:text="${request.dateOfRequest}"></td>
-                        <td th:text="${request.bodyPart}"></td>
-                        <td th:text="${request.description}"></td>
-                        <td th:text="${request.status}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <p th:if="${request.questionnaireID != 0}"><a href="/questionnaire">Svara Spurningalista</a></p>
-            </div>
-        </section>
-        <p th:if="${login != null && request == null}"><a href="/createRequest">Senda inn beiðni</a></p>
-
         <section>
             <ul>
                 <li>
                     <p><a href="/login">Logga sig inn</a></p>
                 </li>
+                <li>
+                  <p><a href="/staffLogin">Starfsmanna login</a></p>
+              </li>
                 <li>
                     <p><a href="/questionOverview">Spurningar</a></p>
                 </li>

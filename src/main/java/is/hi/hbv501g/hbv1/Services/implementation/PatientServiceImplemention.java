@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Services.implementation;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -156,5 +157,140 @@ public class PatientServiceImplemention implements PatientService
     @Override
     public void updatePatient(Patient patient) {
         patientRepository.save(patient);
+    }
+
+    @Override
+    public Patient findByKennitala(String kennitala){
+        return patientRepository.findByKennitala(kennitala);
+    }
+
+    @Override
+    public String validateKennitala(Patient patient) {
+        String message = "";
+        String kennitala = patient.getKennitala();
+        Patient exists = findByKennitala(kennitala);
+        if(kennitala.length() == 0){
+            message += "Vantar að setja inn lykilorð";
+        }
+        else if(kennitala.length() != 10){
+            message += "Kennitala ekki nógu löng.";
+        } else if(!checkKennitala(kennitala)){
+            message += "Kennitala ólögleg.";
+        } else if(exists != null){
+            message += "Notandi nú þegar til með þessa kennitölu";
+        }
+        
+        return message;
+    }
+
+    private boolean checkKennitala(String kennitala){
+        try {  
+            int sum = 0;
+            String[] stringKenni = kennitala.split("");
+            int[] kennitolur = new int[10];
+            int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
+
+            for(int i = 0; i < kennitolur.length; i++){
+                kennitolur[i] = Integer.parseInt(stringKenni[i]);
+            }
+
+            for(int i = 0; i < margfeldisTala.length; i++){
+                sum += kennitolur[i]*margfeldisTala[i];
+            }
+
+            int mod = sum % 11;
+            int magicNumber = 0;
+            if (mod != 0) {
+                magicNumber = 11 - mod;
+            }
+
+            return magicNumber == kennitolur[8];
+        } catch(NumberFormatException e){  
+            return false;  
+        } 
+    }
+
+    @Override
+    public String validatePassword(Patient patient){
+        String message = "";
+        String password = patient.getPassword();
+        if(password.length() == 0){
+            message += "Vantar lykilorð";
+        } else {
+            message = strengthOfPassword(password);
+        }
+        
+        return message;
+    }
+
+    private String strengthOfPassword(String password){
+        boolean hasLetter = false;
+        boolean hasDigit = false;
+        String message = "";
+
+        if (password.length() >= 8) {
+            for (int i = 0; i < password.length(); i++) {
+                char x = password.charAt(i);
+                if (Character.isLetter(x)) {
+                    hasLetter = true;
+                } else if (Character.isDigit(x)) {
+                    hasDigit = true;
+                }
+
+                if (hasLetter && hasDigit) {
+                    break;
+                }
+            }
+            if (hasLetter && hasDigit) {
+                message = "";
+            } else if(hasLetter || hasDigit){
+                message += "Lykilorð verður að innihalda bókstafi og tölur";
+            }
+        } else {
+            message += "Lykilorð verður að vera 8 stafir/tölur eða meira";
+        }
+        return message;
+    }
+
+    @Override
+    public String validateEmail(Patient patient){
+        String message = "";
+        String email = patient.getEmail();
+        Patient exists = findByEmail(email);
+        if(exists != null){
+            message += "Notandi þegar til";
+        } else if(email.length() == 0){
+            message += "Vantar netfang";
+        } else if(!validEmail(email)){
+            message += "Netfang ekki netfang";
+        }
+        return message;
+    }
+
+    private boolean validEmail(String email){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        return pat.matcher(email).matches();
+    }
+
+    public String validatePhoneNumber(Patient patient){
+        try{
+            String message = "";
+            String phNumber = patient.getPhoneNumber();
+            if(phNumber.length() == 0){
+                message += "Vantar símanúmer";
+            } 
+            int numbers = Integer.parseInt(phNumber);
+            if(Integer.toString(numbers).length() != 7){
+                message += "Símanúmer ekki 7 stafir";
+            }
+            return message;
+        } catch(NumberFormatException e){  
+            return "Símanúmer ólöglegt" ;  
+        }  
     }
 }

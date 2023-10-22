@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,11 +43,9 @@ public class WaitingListRequest
     private String bodyPart;
     private String description;
     private boolean status;
-    private LocalDateTime dateOfRequest;
+    private LocalDate dateOfRequest;
     private int questionnaireID;
-
-    @ElementCollection
-    private List<Integer> questionnaireAnswers;
+    private int[] questionnaireAnswers;
     private double grade;
 
 
@@ -56,12 +55,10 @@ public class WaitingListRequest
     public WaitingListRequest()
     {
         this.status = false;
-        this.questionnaireID = 1;
+        this.questionnaireID = 0;
         this.grade = 0;
 
-        this.dateOfRequest = LocalDateTime.now();
-
-        this.questionnaireAnswers = new ArrayList<>();
+        this.dateOfRequest = LocalDate.now();
     }
 
 
@@ -70,22 +67,39 @@ public class WaitingListRequest
      *
      * @param patient     The patient requesting treatment.
      * @param staff       Selected physiotherapist.
+     * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String description) {
+    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description, Long staffID) {
         this.patient = patient;
         this.staff = staff;
-        this.bodyPart = "";
+        this.bodyPart = bodyPart;
         this.description = description;
+
         this.status = false;
         this.questionnaireID = 0;
         this.grade = 0;
-        this.dateOfRequest = LocalDateTime.now();
-        this.questionnaireAnswers = new ArrayList<>();
+
+        this.dateOfRequest = LocalDate.now();
     }
 
-    public Long getId()
+
+    /**
+     * Calculates the waiting list score according to given answers.
+     *
+     * @return Calculated score
+     */
+    public double calculateScore(List<Question> questions)
     {
+        for (int i = 0; i < questions.size(); i++)
+        {
+            grade += questionnaireAnswers[i] * questions.get(i).getWeight();
+        }
+
+        return grade;
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -129,11 +143,11 @@ public class WaitingListRequest
         this.status = status;
     }
 
-    public LocalDateTime getDateOfRequest() {
+    public LocalDate getDateOfRequest() {
         return dateOfRequest;
     }
 
-    public void setDateOfRequest(LocalDateTime dateOfRequest) {
+    public void setDateOfRequest(LocalDate dateOfRequest) {
         this.dateOfRequest = dateOfRequest;
     }
 
@@ -145,18 +159,12 @@ public class WaitingListRequest
         this.questionnaireID = questionnaireID;
     }
 
-    public List<Integer> getQuestionnaireAnswers() {
+    public int[] getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(List<Integer> answers) {
+    public void setQuestionnaireAnswers(int[] answers) {
         this.questionnaireAnswers = answers;
-    }
-
-    public void addQuestionnaireAnswer(Question question)
-    {
-        this.questionnaireAnswers.add(question.getAnswer());
-        this.grade += question.getAnswer() * question.getWeight();
     }
 
     public double getGrade() {
@@ -179,7 +187,7 @@ public class WaitingListRequest
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
                 ", questionnaireID=" + questionnaireID +
-                ", questionnaire=" + questionnaireAnswers +
+                ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
                 ", grade=" + grade +
                 '}';
     }

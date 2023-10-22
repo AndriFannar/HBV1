@@ -5,15 +5,15 @@
         <title>Innskráning</title>
     </head>
     <body>
-        <h2>Patient Innskráning</h2>
-        <form th:action="@{/login}" th:object="${patient}" method="post">
+        <h2>Staff Innskráning</h2>
+        <form action="#" th:action="@{/staffLogin}" th:object="${staff}" method="post">
           <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
           <br>
           <label for="email">Netfang</label>
           <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
           <br>
           <label for="password">Lykilorð</label>
-          <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
+          <input type="password" name="password" th:field="*{password}" id="password" placeholder=""/>
           <input type="submit" value="Innskráning"/>
         </form>
         <p><a href="/"> Til baka</a></p>
