@@ -1,8 +1,6 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 
 import java.util.List;
 

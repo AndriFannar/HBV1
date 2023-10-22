@@ -1,9 +1,12 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,8 +40,6 @@ public class WaitingListRequest
     private Patient patient;
     @ManyToOne(fetch = FetchType.LAZY)
     private Staff staff;
-    @Transient
-    private Long staffID;
     private String bodyPart;
     private String description;
     private boolean status;
@@ -74,7 +75,6 @@ public class WaitingListRequest
         this.staff = staff;
         this.bodyPart = bodyPart;
         this.description = description;
-        this.staffID = staffID;
 
         this.status = false;
         this.questionnaireID = 0;
@@ -117,16 +117,6 @@ public class WaitingListRequest
 
     public void setStaff(Staff staff) {
         this.staff = staff;
-    }
-
-    public void setStaffID(Long staffID)
-    {
-        this.staffID = staffID;
-    }
-
-    public Long getStaffID()
-    {
-        return this.staffID;
     }
 
     public String getBodyPart() {
@@ -190,7 +180,7 @@ public class WaitingListRequest
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patient +
+                ", patient=" + patient.getId() +
                 ", staff=" + staff +
                 ", bodyPart='" + bodyPart + '\'' +
                 ", description='" + description + '\'' +

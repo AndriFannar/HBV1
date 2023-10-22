@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Servecies.implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.PatientRepository;
-import is.hi.hbv501g.hbv1.Servecies.PatientService;
+import is.hi.hbv501g.hbv1.Services.PatientService;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -135,7 +135,7 @@ public class PatientServiceImplemention implements PatientService
      */
     @Override
     @Transactional
-    public void updatePatient(Long patientID, String name, String email, String password, String phNumber, String address)
+    public Patient updatePatient(Long patientID, String name, String email, String password, String phNumber, String address)
     {
         Patient patient = patientRepository.findPatientById(patientID);
 
@@ -146,6 +146,17 @@ public class PatientServiceImplemention implements PatientService
             if (phNumber != null && !Objects.equals(patient.getPhoneNumber(), phNumber)) patient.setPhoneNumber(phNumber);
             if (address != null && !Objects.equals(patient.getAddress(), address)) patient.setAddress(address);
         }
+        return patient;
+    }
+
+    /**
+     * Update Patient.
+     *
+     * @param patient   Patient whose info to update.
+     */
+    @Override
+    public void updatePatient(Patient patient) {
+        patientRepository.save(patient);
     }
 
     @Override

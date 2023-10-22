@@ -18,6 +18,9 @@ public class Patient extends User
     // Variables.
     private String address;
 
+    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private WaitingListRequest waitingListRequest;
+
     /**
      * Create a new empty patient.
      */
@@ -45,6 +48,16 @@ public class Patient extends User
     }
 
 
+    public WaitingListRequest getWaitingListRequest() {
+        return waitingListRequest;
+    }
+
+
+    public void setWaitingListRequest(WaitingListRequest waitingListRequest) {
+        this.waitingListRequest = waitingListRequest;
+    }
+
+
     public String getAddress() {
         return address;
     }
@@ -56,10 +69,10 @@ public class Patient extends User
 
 
     @Override
-    public String toString()
-    {
-        return super.toString() + "Patient{" +
+    public String toString() {
+        return "Patient{" +
                 "address='" + address + '\'' +
+                ", waitingListRequest=" + waitingListRequest +
                 '}';
     }
 }

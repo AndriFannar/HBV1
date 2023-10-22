@@ -1,7 +1,7 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
+import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface QuestionnaireService
      * @param listID The ID of the questionnaire to fetch.
      * @return       Questionnaire that holds Question objects with corresponding list ID.
      */
-    Questionnaire getQuestionnaire(Integer listID);
+    QuestionnaireForm getQuestionnaire(Integer listID);
 
 
     /**
@@ -36,12 +36,13 @@ public interface QuestionnaireService
     /**
      * Update a matching Question.
      *
-     * @param questionID     ID of the question to update.
-     * @param questionString Updated question, if any.
-     * @param weight         Updated weight, if any.
-     * @param listID         Updated Questionnaire ID, if any.
+     * @param questionID      ID of the question to update.
+     * @param questionString  Updated question, if any.
+     * @param weight          Updated weight, if any.
+     * @param numberOfAnswers Updated number of answers possible, if any.
+     * @param listID          Updated Questionnaire ID, if any.
      */
-    void updateQuestion(Long questionID, String questionString, double weight, int[] listID);
+    void updateQuestion(Long questionID, String questionString, double weight, int numberOfAnswers, List<Integer> listID);
 
 
     /**

@@ -1,10 +1,8 @@
-package is.hi.hbv501g.hbv1.Servecies.implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
-import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

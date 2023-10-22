@@ -3,9 +3,11 @@ package is.hi.hbv501g.hbv1.Controllers;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
-import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
-import is.hi.hbv501g.hbv1.Servecies.StaffService;
-import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+import is.hi.hbv501g.hbv1.Services.PatientService;
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
+import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
+import is.hi.hbv501g.hbv1.Services.StaffService;
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -35,6 +40,7 @@ public class WaitingListController
     private WaitingListService waitingListService;
     private QuestionnaireService questionnaireService;
     private StaffService staffService;
+    private PatientService patientService;
 
 
     /**
@@ -52,7 +58,7 @@ public class WaitingListController
 
 
     /**
-     * Form for creating a new WaitingListRequest.
+     * Form for creating a new registration for the basic waiting list.
      *
      * @return createRequest page.
      */
@@ -179,15 +185,16 @@ public class WaitingListController
 
     /**
      * Get all WaitingListRequest objects.
-     * @return List of WaitingListRequest objects.
      *
-    @RequestMapping(value = "/homePage", method = RequestMethod.GET)
+     * @return List of WaitingListRequest objects.
+     */
+    @RequestMapping(value = "/registrationOverview", method = RequestMethod.GET)
     public String getRequests(Model model)
     {
         // Get all requests and display.
         List<WaitingListRequest> requests = waitingListService.getRequests();
-        model.addAttribute("requests", requests);
-        return "homePage";
+        model.addAttribute("waitingListRequest", requests);
+        return "LoggedInUser";
 
-    }*/
+    }
 }

@@ -1,11 +1,12 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Services.StaffService;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
-import is.hi.hbv501g.hbv1.Servecies.StaffService;
+import is.hi.hbv501g.hbv1.Services.StaffService;
 
-import is.hi.hbv501g.hbv1.Servecies.WaitingListService;
+import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -195,7 +196,7 @@ public class StaffController
 
     /**
      * Logs in staff
-     * 
+     *
      * @param staff   Staff to log in
      * @param result  captures and handles validation errors
      * @param model   used to populate data for the view

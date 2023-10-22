@@ -1,0 +1,49 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Biðlistaskráningar</title>
+</head>
+<body>
+<h1>Biðlistaskráningar</h1>
+
+<section th:switch="${requests}">
+    <h2 th:case="null">Engar skráningar</h2>
+    <div th:case="*">
+        <h2>Allar skráningar</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Patient</th>
+                <th>BodyPart</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>QID</th>
+                <th>Grade</th>
+                <th>Date requested</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.patient.name}"></td>
+                <td th:text="${request.bodyPart}"></td>
+                <td th:text="${request.description}"></td>
+                <td th:text="${request.status}"></td>
+                <td th:text="${request.questionnaireID}"></td>
+                <td th:text="${request.grade}"></td>
+                <td th:text="${request.dateOfRequest}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <ul>
+        <li>
+            <p><a href="/">Til baka</a></p>
+        </li>
+    </ul>
+</section>
+</body>
+</html>
