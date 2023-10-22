@@ -83,10 +83,7 @@ public class QuestionnaireController
 
         Patient patient = (Patient) session.getAttribute("LoggedInUser");
 
-        System.out.println(model.getAttribute("questionnaire"));
-        System.out.println("Eftir" + form.getQuestions().get(0));
-
-        waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
+        //waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
 
         return "redirect:/";
     }

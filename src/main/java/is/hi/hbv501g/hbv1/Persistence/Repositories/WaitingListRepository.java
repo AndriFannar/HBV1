@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -58,7 +59,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param patient Patient registered for the WaitingListRequest.
      * @return        WaitingListRequest with matching patient, if any.
      */
-    WaitingListRequest getWaitingListRequestByPatient(Patient patient);
+    WaitingListRequest getWaitingListRequestByPatient(User patient);
 
     
     /**
@@ -67,5 +68,5 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getWaitingListRequestByStaff(Staff staff);
+    List<WaitingListRequest> getWaitingListRequestByStaff(User staff);
 }

@@ -19,7 +19,7 @@ import java.util.Objects;
  * @since   2023-10-01
  * @version 1.0
  */
-@Service
+@Deprecated
 public class StaffServiceImplementation implements StaffService
 {
     // Variables.

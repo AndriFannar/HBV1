@@ -12,8 +12,7 @@ import java.util.List;
  * @since   2023-09-28
  * @version 1.1
  */
-@Entity
-@Table(name="staff")
+@Deprecated
 public class Staff extends User
 {
     // Database primary key.
@@ -62,7 +61,7 @@ public class Staff extends User
      */
     public Staff(String name, String email, String password, String kennitala, String phNumber, boolean isPhysiotherapist, boolean isAdmin, String specialization, String description)
     {
-        super(name, email, password, kennitala, phNumber);
+        //super(name, email, password, kennitala, phNumber);
 
         this.isPhysiotherapist = isPhysiotherapist;
         this.isAdmin = isAdmin;

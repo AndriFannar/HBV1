@@ -37,9 +37,9 @@ public class WaitingListRequest
 
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
-    private Patient patient;
+    private User patient;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Staff staff;
+    private User staff;
     private String bodyPart;
     private String description;
     private boolean status;
@@ -70,7 +70,7 @@ public class WaitingListRequest
      * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description, Long staffID) {
+    public WaitingListRequest(User patient, User staff, String bodyPart, String description, Long staffID) {
         this.patient = patient;
         this.staff = staff;
         this.bodyPart = bodyPart;
@@ -103,19 +103,19 @@ public class WaitingListRequest
         return id;
     }
 
-    public Patient getPatient() {
+    public User getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(User patient) {
         this.patient = patient;
     }
 
-    public Staff getStaff() {
+    public User getStaff() {
         return staff;
     }
 
-    public void setStaff(Staff staff) {
+    public void setStaff(User staff) {
         this.staff = staff;
     }
 

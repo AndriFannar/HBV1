@@ -2,6 +2,8 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 /**
  * Users for physiotherapist clinics.
@@ -11,8 +13,9 @@ import jakarta.persistence.*;
  * @since   2023-09-28
  * @version 1.1
  */
-@MappedSuperclass
-public abstract class User
+@Entity
+@Table(name="users")
+public class User
 {
     // Database primary key.
     @Id
@@ -31,8 +34,20 @@ public abstract class User
     private String name;
     private String email;
     private String password;
-    private String kennitala;
+    private String ssn;
     private String phoneNumber;
+    private String address;
+    private boolean isStaff;
+    private boolean isPhysiotherapist;
+    private boolean isAdmin;
+    private String specialization;
+    private String description;
+
+    @OneToMany(mappedBy = "staff")
+    private List<WaitingListRequest> waitingListRequests;
+
+    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private WaitingListRequest waitingListRequest;
 
 
     /**
@@ -40,26 +55,39 @@ public abstract class User
      */
     public User()
     {
-
+        isStaff = false;
     }
 
 
     /**
      * Create a new user.
      *
-     * @param name      Username.
-     * @param email     User e-mail.
-     * @param password  User password.
-     * @param kennitala User's kennitala.
-     * @param phoneNumber  User's phone number.
+     * @param name              User's name.
+     * @param email             User's e-mail.
+     * @param password          User's password.
+     * @param ssn               User's SSN.
+     * @param phoneNumber       User's phone number.
+     * @param address           Patient's address.
+     * @param isPhysiotherapist Is user a physiotherapist or a receptionist.
+     * @param specialization    Staff member's specialization.
+     * @param description       Description of staff member.
      */
-    public User(String name, String email, String password, String kennitala, String phNumber)
+    public User(String name, String email, String password, String ssn, String phoneNumber, String address, boolean isStaff,
+                boolean isPhysiotherapist, boolean isAdmin, String specialization, String description)
     {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.kennitala = kennitala;
-        this.phoneNumber = phNumber;
+        this.ssn = ssn;
+        this.phoneNumber = phoneNumber;
+
+        this.address = address;
+
+        this.isStaff = isStaff;
+        this.isPhysiotherapist = isPhysiotherapist;
+        this.isAdmin = isAdmin;
+        this.specialization = specialization;
+        this.description = description;
     }
 
 
@@ -110,18 +138,13 @@ public abstract class User
         return this.password;
     }
 
-
-    public void setKennitala(String kennitala)
-    {
-        this.kennitala = kennitala;
+    public String getSsn() {
+        return ssn;
     }
 
-
-    public String getKennitala()
-    {
-        return this.kennitala;
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
-
 
     public void setPhoneNumber(String phNumber)
     {
@@ -132,5 +155,90 @@ public abstract class User
     public String getPhoneNumber()
     {
         return this.phoneNumber;
+    }
+
+    public WaitingListRequest getWaitingListRequest() {
+        return waitingListRequest;
+    }
+
+
+    public void setWaitingListRequest(WaitingListRequest waitingListRequest) {
+        this.waitingListRequest = waitingListRequest;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public boolean isStaff() {
+        return isStaff;
+    }
+
+    public void setStaff(boolean staff) {
+        isStaff = staff;
+    }
+
+    public boolean isPhysiotherapist()
+    {
+        return isPhysiotherapist;
+    }
+
+
+    public void setPhysiotherapist(boolean physiotherapist)
+    {
+        isPhysiotherapist = physiotherapist;
+    }
+
+
+    public boolean isAdmin()
+    {
+        return isAdmin;
+    }
+
+
+    public void setAdmin(boolean admin)
+    {
+        isAdmin = admin;
+    }
+
+
+    public String getSpecialization()
+    {
+        return specialization;
+    }
+
+
+    public void setSpecialization(String specialization)
+    {
+        this.specialization = specialization;
+    }
+
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+
+    public List<WaitingListRequest> getWaitingListRequests()
+    {
+        return waitingListRequests;
+    }
+
+
+    public void setWaitingListRequests(List<WaitingListRequest> waitingListRequests)
+    {
+        this.waitingListRequests = waitingListRequests;
     }
 }

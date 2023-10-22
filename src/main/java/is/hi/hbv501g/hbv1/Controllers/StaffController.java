@@ -29,7 +29,7 @@ import java.util.List;
  * @since   2023-10-01
  * @version 1.0
  */
-@Controller
+@Deprecated
 public class StaffController
 {
     // Variables.
@@ -210,6 +210,7 @@ public class StaffController
         return "staffLogin";
       }
       Staff exists = staffService.login(staff);
+
       if(exists != null){
         session.setAttribute("LoggedInUser", exists);
         model.addAttribute("LoggedInUser", exists);

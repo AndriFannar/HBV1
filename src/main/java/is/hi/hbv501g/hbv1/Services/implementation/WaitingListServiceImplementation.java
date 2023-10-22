@@ -137,7 +137,7 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @return        WaitingListRequest with matching patient, if any.
      */
     @Override
-    public WaitingListRequest getRequestByPatient(Patient patient)
+    public WaitingListRequest getRequestByPatient(User patient)
     {
         return waitingListRepository.getWaitingListRequestByPatient(patient);
     }
@@ -150,7 +150,7 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
     @Override
-    public List<WaitingListRequest> getRequestByPhysiotherapist(Staff staff)
+    public List<WaitingListRequest> getRequestByPhysiotherapist(User staff)
     {
         return waitingListRepository.getWaitingListRequestByStaff(staff);
     }

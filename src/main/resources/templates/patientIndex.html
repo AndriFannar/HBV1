@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sjúklingur</title>
+</head>
+<body>
+
+<h1><span th:text="${LoggedInUser.name}"></span></h1>
+
+<!-- Display patient information -->
+<p><strong>Kennitala:</strong> <span th:text="${LoggedInUser.ssn}"></span></p>
+<p><strong>Heimilsifang:</strong> <span th:text="${LoggedInUser.address}"></span></p>
+<p><strong>Netfang:</strong> <span th:text="${LoggedInUser.email}"></span></p>
+<p><strong>Sími:</strong> <span th:text="${LoggedInUser.phoneNumber}"></span></p>
+
+<!-- Form to edit patient information -->
+    <form method="post" th:action="@{/edit}">
+    <input type="text" name="name" th:value="${LoggedInUser.name}" placeholder="Name" required/>
+    <input type="text" name="kennitala" th:value="${LoggedInUser.ssn}" placeholder="Kennitala" required/>
+    <input type="text" name="address" th:value="${LoggedInUser.address}" placeholder="Address" required/>
+    <input type="email" name="email" th:value="${LoggedInUser.email}" placeholder="Email" required/>
+    <input type="tel" name="phoneNumber" th:value="${LoggedInUser.phoneNumber}" placeholder="Phone Number" required/>
+        <button type="submit">Update Information</button>
+</form>
+<br>
+<br>
+<br>
+
+<section th:switch="${request}">
+    <p th:case="null"><a href="/createRequest">Senda inn beiðni</a></p>
+    <div th:case="*">
+        <h2>Beiðni:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Dagsetning</th>
+                <th>Líkamshluti</th>
+                <th>Vandamál</th>
+                <th>Sjúkraþjálfari</th>
+                <th>Staða umsóknar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <td th:text="${request.dateOfRequest}"></td>
+            <td th:text="${request.bodyPart}"></td>
+            <td th:text="${request.description}"></td>
+            <td th:text="${request.staff.name}"></td>
+            <td th:text="${request.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${request.questionnaireID != 0}"><a href="/questionnaire">Svara Spurningalista</a></p>
+    </div>
+</section>
+
+<p><a th:href="@{/logout}">Útskrá</a></p>
+</body>
+</html>

@@ -1,13 +1,11 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
-import is.hi.hbv501g.hbv1.Services.PatientService;
+import is.hi.hbv501g.hbv1.Services.UserService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
-import is.hi.hbv501g.hbv1.Services.StaffService;
-import is.hi.hbv501g.hbv1.Services.WaitingListService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,9 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
-
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -39,21 +34,22 @@ public class WaitingListController
     // Variables.
     private WaitingListService waitingListService;
     private QuestionnaireService questionnaireService;
-    private StaffService staffService;
-    private PatientService patientService;
+    private UserService userService;
 
 
     /**
      * Construct a new WaitingListController.
      *
-     * @param wS WaitingListService linked to controller.
+     * @param waitingListService   WaitingListService linked to controller.
+     * @param questionnaireService QuestionnaireService linked to controller.
+     * @param userService          UserService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService wS, QuestionnaireService qS, StaffService sS)
+    public WaitingListController(WaitingListService waitingListService, QuestionnaireService questionnaireService, UserService userService)
     {
-        this.waitingListService = wS;
-        this.questionnaireService = qS;
-        this.staffService = sS;
+        this.waitingListService = waitingListService;
+        this.questionnaireService = questionnaireService;
+        this.userService = userService;
     }
 
 
@@ -67,7 +63,7 @@ public class WaitingListController
     {
         model.addAttribute("request", new WaitingListRequest());
 
-        List<Staff> staff = staffService.findByIsPhysiotherapist(true);
+        List<User> staff = userService.findByIsPhysiotherapist(true);
         model.addAttribute("physiotherapists", staff);
 
         return "newRequest";
@@ -89,7 +85,7 @@ public class WaitingListController
         }
 
         //Get Patient that is logged in, and link to WaitingListRequest.
-        Patient patient = (Patient) session.getAttribute("LoggedInUser");
+        User patient = (User) session.getAttribute("LoggedInUser");
         waitingListRequest.setPatient(patient);
 
         // If no errors, and request does not exist, create.
@@ -113,11 +109,11 @@ public class WaitingListController
     public String viewRequest(@PathVariable("requestID") Long requestID, Model model, HttpSession session)
     {
         WaitingListRequest exists = waitingListService.getRequestByID(requestID);
-        Staff user = (Staff) session.getAttribute("LoggedInUser");
+        User user = (User) session.getAttribute("LoggedInUser");
 
         if (exists != null)
         {
-            List<Staff> staff = staffService.findByIsPhysiotherapist(true);
+            List<User> staff = userService.findByIsPhysiotherapist(true);
 
             model.addAttribute("request", exists);
             model.addAttribute("physiotherapists", staff);
@@ -155,9 +151,6 @@ public class WaitingListController
 
         waitingListService.updateRequest(requestID, updatedRequest);
 
-
-        System.out.println("Request Update:" + updatedRequest);
-
         return "redirect:/viewRequest/" + requestID;
     }
 
@@ -194,7 +187,7 @@ public class WaitingListController
         // Get all requests and display.
         List<WaitingListRequest> requests = waitingListService.getRequests();
         model.addAttribute("waitingListRequest", requests);
-        return "LoggedInUser";
+        return "patientIndex";
 
     }
 }

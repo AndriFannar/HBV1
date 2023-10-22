@@ -11,8 +11,7 @@ import jakarta.persistence.*;
  * @since   2023-09-28
  * @version 1.1
  */
-@Entity
-@Table(name="patient")
+@Deprecated
 public class Patient extends User
 {
     // Variables.
@@ -42,7 +41,7 @@ public class Patient extends User
      */
     public Patient(String name, String email, String password, String kennitala, String phoneNumber, String address)
     {
-        super(name, email, password, kennitala, phoneNumber);
+        //super(name, email, password, kennitala, phoneNumber);
 
         this.address = address;
     }

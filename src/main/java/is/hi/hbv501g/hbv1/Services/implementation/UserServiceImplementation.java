@@ -4,91 +4,92 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Repositories.PatientRepository;
-import is.hi.hbv501g.hbv1.Services.PatientService;
+import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;
+import is.hi.hbv501g.hbv1.Services.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * Service class implementation for Patient objects.
+ * Service class implementation for User objects.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  * @since   2023-09-28
- * @version 1.0
+ * @version 2.0
  */
 @Service
-public class PatientServiceImplemention implements PatientService
+public class UserServiceImplementation implements UserService
 {
     // Variables.
-    private PatientRepository patientRepository;
+    private UserRepository userRepository;
 
 
     /**
-     * Constructs a new PatientServiceImplementation.
+     * Constructs a new UserServiceImplementation.
      *
-     * @param patientRepository PatientRepository linked to service.
+     * @param userRepository UserRepository linked to service.
      */
     @Autowired
-    public PatientServiceImplemention(PatientRepository patientRepository)
+    public UserServiceImplementation(UserRepository userRepository)
     {
-        this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
     }
 
 
     /**
-     * Find all Patient objects saved to database, if any.
+     * Find all User objects saved to database, if any.
      *
-     * @return List of all Patient objects in database, if any.
+     * @return List of all User objects in database, if any.
      */
     @Override
-    public List<Patient> findAll()
+    public List<User> findAll()
     {
-        return (List<Patient>)(List<?>)patientRepository.findAll();
+        return userRepository.findAll();
     }
 
 
     /**
-     * Save a new Patient object to database.
+     * Save a new User object to database.
      *
-     * @param patient Patient object to save.
-     * @return        Saved Patient object.
+     * @param user User object to save.
+     * @return     Saved User object.
      */
     @Override
-    public Patient save(Patient patient)
+    public User save(User user)
     {
-        return patientRepository.save(patient);
+        return userRepository.save(user);
     }
 
 
     /**
-     * Delete a Patient object from database by ID.
+     * Delete a User object from database by ID.
      *
-     * @param patientID Unique ID of the Patient object to delete.
+     * @param userID Unique ID of the User object to delete.
      */
     @Override
-    public void delete(Long patientID)
+    public void delete(Long userID)
     {
-        patientRepository.deleteById(patientID);
+        userRepository.deleteById(userID);
     }
 
 
     /**
-     * Log in given Patient object.
+     * Log in given User object.
      *
-     * @param patient Patient to log in.
-     * @return        Logged in Patient.
+     * @param user User to log in.
+     * @return     Logged in User.
      */
     @Override
-    public Patient login(Patient patient)
+    public User login(User user)
     {
-        Patient doesExist = findByEmail(patient.getEmail());
+        User doesExist = findByEmail(user.getEmail());
         if(doesExist != null)
         {
-            if(doesExist.getPassword().equals(patient.getPassword()))
+            if(doesExist.getPassword().equals(user.getPassword()))
             {
                 return doesExist;
             }
@@ -99,27 +100,27 @@ public class PatientServiceImplemention implements PatientService
 
 
     /**
-     * Find Patient object by e-mail.
+     * Find User object by e-mail.
      *
-     * @param email E-mail of Patient object to find.
-     * @return      Patient object with matching e-mail, if any.
+     * @param email E-mail of User object to find.
+     * @return      User object with matching e-mail, if any.
      */
     @Override
-    public Patient findByEmail(String email)
+    public User findByEmail(String email)
     {
-        return patientRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
 
     /**
-     * Find a Patient object by unique ID.
+     * Find a User object by unique ID.
      *
-     * @param patientID Unique ID of Patient object to find.
-     * @return          Patient with corresponding ID, if any.
+     * @param userID Unique ID of User object to find.
+     * @return       User with corresponding ID, if any.
      */
-    public Patient findByID(Long patientID)
+    public User findByID(Long userID)
     {
-        return patientRepository.findPatientById(patientID);
+        return userRepository.findPatientById(userID);
     }
 
 
@@ -137,7 +138,7 @@ public class PatientServiceImplemention implements PatientService
     @Transactional
     public Patient updatePatient(Long patientID, String name, String email, String password, String phNumber, String address)
     {
-        Patient patient = patientRepository.findPatientById(patientID);
+        /*Patient patient = userRepository.findPatientById(patientID);
 
         if (patient != null) {
             if (name != null && !Objects.equals(patient.getName(), name)) patient.setName(name);
@@ -146,35 +147,51 @@ public class PatientServiceImplemention implements PatientService
             if (phNumber != null && !Objects.equals(patient.getPhoneNumber(), phNumber)) patient.setPhoneNumber(phNumber);
             if (address != null && !Objects.equals(patient.getAddress(), address)) patient.setAddress(address);
         }
-        return patient;
+        return patient;*/
+        return null;
     }
 
     /**
-     * Update Patient.
+     * Update User.
      *
-     * @param patient   Patient whose info to update.
+     * @param user User to update
      */
     @Override
-    public void updatePatient(Patient patient) {
-        patientRepository.save(patient);
+    public void updateUser(User user)
+    {
+            userRepository.save(user);
     }
 
+
+    /**
+     * Find User object by SSN.
+     *
+     * @param ssn SSN of User to find.
+     * @return    User with corresponding SSN, if any.
+     */
     @Override
-    public Patient findByKennitala(String kennitala){
-        return patientRepository.findByKennitala(kennitala);
+    public User findBySsn(String ssn)
+    {
+        return userRepository.findBySsn(ssn);
     }
 
+    /**
+     * Checks if SSN is valid.
+     *
+     * @param user User that is trying to sign up
+     * @return String with error message if SSN is invalid
+     */
     @Override
-    public String validateKennitala(Patient patient) {
+    public String validateSsn(User user) {
         String message = "";
-        String kennitala = patient.getKennitala();
-        Patient exists = findByKennitala(kennitala);
+        String kennitala = user.getSsn();
+        User exists = findBySsn(kennitala);
         if(kennitala.length() == 0){
             message += "Vantar að setja inn lykilorð";
         }
         else if(kennitala.length() != 10){
             message += "Kennitala ekki nógu löng.";
-        } else if(!checkKennitala(kennitala)){
+        } else if(!checkSsn(kennitala)){
             message += "Kennitala ólögleg.";
         } else if(exists != null){
             message += "Notandi nú þegar til með þessa kennitölu";
@@ -183,10 +200,17 @@ public class PatientServiceImplemention implements PatientService
         return message;
     }
 
-    private boolean checkKennitala(String kennitala){
+
+    /**
+     * Check if SSN is valid.
+     *
+     * @param ssn SSN to check.
+     * @return    Boolean if SSN is valid.
+     */
+    private boolean checkSsn(String ssn){
         try {  
             int sum = 0;
-            String[] stringKenni = kennitala.split("");
+            String[] stringKenni = ssn.split("");
             int[] kennitolur = new int[10];
             int[] margfeldisTala = {3, 2, 7, 6, 5, 4, 3, 2};
 
@@ -210,10 +234,16 @@ public class PatientServiceImplemention implements PatientService
         } 
     }
 
+    /**
+     * Checks if password is valid
+     *
+     * @param user User that is trying to sign up
+     * @return String with error message if password is invalid
+     */
     @Override
-    public String validatePassword(Patient patient){
+    public String validatePassword(User user){
         String message = "";
-        String password = patient.getPassword();
+        String password = user.getPassword();
         if(password.length() == 0){
             message += "Vantar lykilorð";
         } else {
@@ -223,6 +253,12 @@ public class PatientServiceImplemention implements PatientService
         return message;
     }
 
+    /**
+     * Checks the strength of a password.
+     *
+     * @param password Password to check.
+     * @return         String with error message, if any.
+     */
     private String strengthOfPassword(String password){
         boolean hasLetter = false;
         boolean hasDigit = false;
@@ -252,11 +288,19 @@ public class PatientServiceImplemention implements PatientService
         return message;
     }
 
+
+    /**
+     * Checks if e-mail is valid.
+     *
+     * @param user User that is trying to sign up.
+     * @return String with error message if e-mail is invalid
+     */
     @Override
-    public String validateEmail(Patient patient){
+    public String validateEmail(User user)
+    {
         String message = "";
-        String email = patient.getEmail();
-        Patient exists = findByEmail(email);
+        String email = user.getEmail();
+        User exists = findByEmail(email);
         if(exists != null){
             message += "Notandi þegar til";
         } else if(email.length() == 0){
@@ -267,6 +311,13 @@ public class PatientServiceImplemention implements PatientService
         return message;
     }
 
+
+    /**
+     * Checks if e-mail is valid.
+     *
+     * @param email E-mail to check.
+     * @return      Boolean if the e-mail is valid.
+     */
     private boolean validEmail(String email){
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
                             "[a-zA-Z0-9_+&*-]+)*@" + 
@@ -277,10 +328,19 @@ public class PatientServiceImplemention implements PatientService
         return pat.matcher(email).matches();
     }
 
-    public String validatePhoneNumber(Patient patient){
-        try{
+    /**
+     * Checks if phone number is valid.
+     *
+     * @param user User that is trying to sign up.
+     * @return String with error message if phone number is invalid
+     */
+    @Override
+    public String validatePhoneNumber(User user)
+    {
+        try
+        {
             String message = "";
-            String phNumber = patient.getPhoneNumber();
+            String phNumber = user.getPhoneNumber();
             if(phNumber.length() == 0){
                 message += "Vantar símanúmer";
             } 
@@ -292,5 +352,16 @@ public class PatientServiceImplemention implements PatientService
         } catch(NumberFormatException e){  
             return "Símanúmer ólöglegt" ;  
         }  
+    }
+
+    /**
+     * Finds User by isPhysiotherapist.
+     *
+     * @param physiotherapist Search for physiotherapists.
+     * @return                List of User objects with matching role, if any.
+     */
+    public List<User> findByIsPhysiotherapist(boolean physiotherapist)
+    {
+        return userRepository.findUserByIsPhysiotherapist(physiotherapist);
     }
 }
