@@ -48,10 +48,10 @@ public interface UserRepository extends JpaRepository<User, Long >
     /**
      * Find a User object by unique ID.
      *
-     * @param patientID Unique ID of User object to find.
-     * @return          User with corresponding ID, if any.
+     * @param userID Unique ID of User object to find.
+     * @return       User with corresponding ID, if any.
      */
-    User findPatientById(Long userID);
+    User findUserById(Long userID);
 
 
     /**

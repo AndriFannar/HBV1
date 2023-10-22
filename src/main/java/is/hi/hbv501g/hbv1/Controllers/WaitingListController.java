@@ -54,23 +54,6 @@ public class WaitingListController
 
 
     /**
-     * Form for creating a new registration for the basic waiting list.
-     *
-     * @return createRequest page.
-     */
-    @RequestMapping(value = "/createRequest", method = RequestMethod.GET)
-    public String waitingListForm(Model model)
-    {
-        model.addAttribute("request", new WaitingListRequest());
-
-        List<User> staff = userService.findByIsPhysiotherapist(true);
-        model.addAttribute("physiotherapists", staff);
-
-        return "newRequest";
-    }
-
-
-    /**
      * Create a new WaitingListRequest.
      *
      * @param waitingListRequest WaitingListRequest object to save.
@@ -81,7 +64,7 @@ public class WaitingListController
     {
         if(result.hasErrors())
         {
-            return "redirect:/createRequest";
+            return "redirect:/";
         }
 
         //Get Patient that is logged in, and link to WaitingListRequest.
@@ -132,9 +115,6 @@ public class WaitingListController
         return "redirect:/staffIndex";
     }
 
-
-    // **** To be enabled when HTML templates are ready **** //
-
     /**
      * Update WaitingListRequest.
      *
@@ -155,22 +135,31 @@ public class WaitingListController
     }
 
 
-    /*/**
+    /**
+     * Accept WaitingListRequest.
+     *
+     * @param requestID ID of WaitingListRequest to accept.
+     * @return          Redirect.
+     */
+    @RequestMapping(value = "/acceptRequest/{requestID}", method = RequestMethod.GET)
+    public String acceptRequest(@PathVariable("requestID") Long requestID, Model model)
+    {
+        waitingListService.acceptRequest(requestID);
+
+        return "redirect:/staffIndex";
+    }
+
+
+    /**
      * Delete WaitingListRequest.
      *
-     * @param waitingListID ID of the request to delete.
-     * @return              Redirect.
-     *
-    @RequestMapping(value = "/updateRequest", path = "{waitingListID}", method = RequestMethod.DELETE)
-    public String deleteRequest(@PathVariable("waitingListID") Long waitingListID, Model model)
+     * @param requestID ID of WaitingListRequest to delete.
+     * @return          Redirect.
+     */
+    @RequestMapping(value = "/deleteRequest/{requestID}", method = RequestMethod.GET)
+    public String deleteRequest(@PathVariable("requestID") Long requestID, Model model)
     {
-        // If request exists, delete.
-        WaitingListRequest exists = waitingListService.getRequestByID(waitingListID);
-
-        if(exists != null)
-        {
-            waitingListService.deleteRequest(waitingListID);
-        }
+        waitingListService.deleteRequest(requestID);
 
         return "redirect:/";
     }

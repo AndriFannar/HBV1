@@ -5,7 +5,7 @@
     <title>Forsíða starfsmanns</title>
 </head>
 <body>
-<section th:switch="${user}">
+<section th:switch="${users}">
     <h2 th:case="null">Engir sjúklingar</h2>
     <div th:case="*">
         <h2>Allir skráðir sjúklingar</h2>
@@ -19,20 +19,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${user}">
+            <tr th:each="user : ${users}">
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.email}"></td>
-                <td th:text="${user.kennitala}"></td>
+                <td th:text="${user.ssn}"></td>
                 <td th:text="${user.phoneNumber}"></td>
-                <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Delete</a></td>
+                <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></td>
+                <td><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></td>
+                <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/signUp">Búa til aðgang</a></p>
 </section>
 <section>
-    <p><a href="/logOutStaff">Skrá út</a></p>
+    <p><a href="/staffIndex">Til baka</a></p>
 </section>
 </body>
 </html>

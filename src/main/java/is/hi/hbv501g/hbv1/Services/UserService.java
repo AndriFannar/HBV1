@@ -5,6 +5,7 @@ import java.util.List;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -71,24 +72,23 @@ public interface UserService
 
 
     /**
-     * Update Patient.
-     *
-     * @param userID          Unique ID of Patient object to update.
-     * @param name               Updated name, if any.
-     * @param email              Updated e-mail, if any.
-     * @param password           Updated password, if any.
-     * @param phNumber           Updated phone number, if any.
-     * @param address            Updated address, if any.
-     * @return                   Updated Patient.
-     */
-    User updatePatient(Long userID, String name, String email, String password, String phNumber, String address);
-
-    /**
      * Update User.
      *
-     * @param user User to update
+     * @param userID      ID of the User to update.
+     * @param updatedUser User with updated info.
      */
-    void updateUser(User user);
+    void updateUser(Long userID, User updatedUser);
+
+
+    /**
+     * Change role of User.
+     *
+     * @param userID            ID of the User to update.
+     * @param isStaff           Is User a staff member.
+     * @param isPhysiotherapist Is User a physiotherapist.
+     * @param isAdmin           Is User an admin.
+     */
+    void changeRole(Long userID, boolean isStaff, boolean isPhysiotherapist, boolean isAdmin);
 
     /**
      * Find User object by SSN.

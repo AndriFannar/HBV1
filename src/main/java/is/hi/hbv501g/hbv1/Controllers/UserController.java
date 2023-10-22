@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import is.hi.hbv501g.hbv1.Services.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -37,20 +38,6 @@ public class UserController
     // Variables.
     private UserService userService;
     private WaitingListService waitingListService;
-    /*private boolean editingName = false;
-    private boolean editingKennitala = false;
-
-    @GetMapping("/editName")
-    public String editName() {
-        editingName = true;
-        // Redirect back to the user page.
-        return "redirect:/userPage"; }
-
-    @GetMapping("/editKennitala")
-    public String editKennitala() {
-        editingKennitala = true;
-        // Redirect back to the user page.
-        return "redirect:/userPage"; }*/
 
     /**
      * Construct a new PatientController.
@@ -104,7 +91,6 @@ public class UserController
     public String signUpForm(User user, Model model)
     {
         model.addAttribute("user", new User());
-        //model.addAttribute("waitingListRequest", new WaitingListRequest());
         return "newUser";
     }
 
@@ -127,27 +113,27 @@ public class UserController
         String errPhN = userService.validatePhoneNumber(user);
 
         if (!errKen.isEmpty()) {
-            FieldError error = new FieldError( "patient", "kennitala", errKen);
+            FieldError error = new FieldError( "user", "ssn", errKen);
             result.addError(error);
         }
         if(!errEmail.isEmpty()){
-            FieldError error = new FieldError( "patient", "email", errEmail);
+            FieldError error = new FieldError( "user", "email", errEmail);
             result.addError(error);
         }
         if(!errPass.isEmpty()){
-            FieldError error = new FieldError("patient", "password", errPass);
+            FieldError error = new FieldError("user", "password", errPass);
             result.addError(error);
         }
         if(user.getName().length() == 0){
-            FieldError error = new FieldError("patient", "name", "Vantar nafn");
+            FieldError error = new FieldError("user", "name", "Vantar nafn");
             result.addError(error);
         }
         if(user.getAddress().length() == 0){
-            FieldError error = new FieldError("patient", "address", "Vantar heimilsfang");
+            FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
             result.addError(error);
         }
         if(!errPhN.isEmpty()){
-            FieldError error = new FieldError("patient", "phoneNumber", errPhN);
+            FieldError error = new FieldError("user", "phoneNumber", errPhN);
             result.addError(error);
         }
 
@@ -165,9 +151,8 @@ public class UserController
         {
             userService.save(user);
             session.setAttribute("LoggedInUser", user);
-            model.addAttribute("LoggedInUser", user);
-            model.addAttribute("waitingListRequest", new WaitingListRequest());
-            return "patientIndex";
+
+            return "redirect:/";
         }
 
         return "newUser";
@@ -238,8 +223,15 @@ public class UserController
             WaitingListRequest request = waitingListService.getRequestByPatient(sessionUser);
             model.addAttribute("request", request);
 
+
+            model.addAttribute("newRequest", new WaitingListRequest());
+
+            List<User> staff = userService.findByIsPhysiotherapist(true);
+            model.addAttribute("physiotherapists", staff);
+
             return "patientIndex";
         }
+
         return "redirect:/";
     }
 
@@ -257,48 +249,93 @@ public class UserController
         return "redirect:/";
     }
 
-    /**
-     * Get user info update.
-     *
-     * @param model Model for page.
-     *
-     * @return LoggedInUser page.
-     */
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public String toggleUpdateForm(Model model) {
-        boolean showUpdateForm = (boolean) model.getAttribute("showUpdateForm");
-        model.addAttribute("showUpdateForm", !showUpdateForm);
-        return "patientIndex";
-    }
 
     /**
-     * Replace old user info in the database with new user info.
+     * View User.
      *
-     * @param model          Model for page.
-     * @param updatedUser    Current user.
-     * @param session        Current HttpSession.
-     *
-     * @return LoggedInUser page.
+     * @param userID ID of User to view.
+     * @return       Redirect.
      */
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editPatientInformation(@ModelAttribute("LoggedInUser") User updatedUser, Model model, HttpSession session) {
-        model.addAttribute("waitingListRequest", new WaitingListRequest());
-        // Retrieve the existing patient from the session or database
-        User existingUser = (User) session.getAttribute("LoggedInUser");
-        if (existingUser == null) {
-            // Handle the case where the patient is not in the session
-            return "redirect:/";
+    @RequestMapping(value = "/viewUser/{userID}", method = RequestMethod.GET)
+    public String viewUser(@PathVariable("userID") Long userID, Model model, HttpSession session)
+    {
+        User user = (User) session.getAttribute("LoggedInUser");
+        User viewUser = userService.findByID(userID);
+
+        if (user != null)
+        {
+            model.addAttribute("LoggedInUser", user);
+            System.out.println(user.isAdmin());
+            model.addAttribute("user", viewUser);
+
+            return "viewUser";
         }
-        // Update only the fields that have changed
-        existingUser.setName(updatedUser.getName());
-        existingUser.setSsn(updatedUser.getSsn());
-        existingUser.setAddress(updatedUser.getAddress());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
-        // Save the updated patient information back to the database
-        userService.updateUser(existingUser);
-        return "patientIndex";
+
+        return "redirect:/";
     }
+
+
+    /**
+     * Update User.
+     *
+     * @param userID      Unique ID of User to update.
+     * @param updatedUser User with updated info.
+     * @return            Redirect.
+     */
+    @RequestMapping(value = "/updateUser/{userID}", method = RequestMethod.POST)
+    public String updateRequest(@PathVariable("userID") Long userID, @ModelAttribute("user") User updatedUser, BindingResult result, HttpSession session)
+    {
+        User currentUser = (User) session.getAttribute("LoggedInUser");
+
+        if(!Objects.equals(currentUser.getEmail(), updatedUser.getEmail()))
+        {
+            String errEmail = userService.validateEmail(updatedUser);
+
+            System.out.println("Email check");
+
+            if(!errEmail.isEmpty())
+            {
+                FieldError error = new FieldError( "user", "email", errEmail);
+                result.addError(error);
+            }
+        }
+
+        String errPhN = userService.validatePhoneNumber(updatedUser);
+
+        if(updatedUser.getName().length() == 0)
+        {
+            FieldError error = new FieldError("user", "name", "Vantar nafn");
+            result.addError(error);
+            System.out.println("Name error");
+        }
+        if(updatedUser.getAddress().length() == 0)
+        {
+            FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
+            result.addError(error);
+            System.out.println("Address error");
+        }
+        if(!errPhN.isEmpty())
+        {
+            FieldError error = new FieldError("user", "phoneNumber", errPhN);
+            result.addError(error);
+            System.out.println(errPhN);
+        }
+
+        if(result.hasErrors())
+        {
+            return "redirect:/viewUser/" + userID;
+        }
+
+        System.out.println(updatedUser);
+        userService.updateUser(userID, updatedUser);
+
+        User updated = userService.findByID(userID);
+
+        session.setAttribute("LoggedInUser", updated);
+
+        return "redirect:/viewUser/" + userID;
+    }
+
 
     /**
      * For logging out the current user
@@ -351,32 +388,42 @@ public class UserController
 
 
     /**
-     * Delete WaitingListRequest.
+     * Redirects to user overview
      *
-     * @param requestID ID of WaitingListRequest to delete.
-     * @return          Redirect.
+     * @param session used to for accessing staff session data
+     * @param model   used to populate staff data for the view
+     * @return        Redirect.
      */
-    @RequestMapping(value = "/deleteRequest/{requestID}", method = RequestMethod.GET)
-    public String deleteRequest(@PathVariable("requestID") Long requestID, Model model)
+    @RequestMapping(value="/userOverview", method=RequestMethod.GET)
+    public String userOverview(HttpSession session, Model model)
     {
-        waitingListService.deleteRequest(requestID);
+        User sessionUser = (User) session.getAttribute("LoggedInUser");
 
-        return "redirect:/staffIndex";
+        if(sessionUser != null)
+        {
+            model.addAttribute("LoggedInUser", sessionUser);
+
+            List<User> users = userService.findAll();
+
+            model.addAttribute("users", users);
+
+            return "userOverview";
+        }
+        return "redirect:/";
     }
 
 
     /**
-     * Accept WaitingListRequest.
+     * Make user staff.
      *
-     * @param requestID ID of WaitingListRequest to accept.
-     * @return          Redirect.
+     * @param userID ID of User to update to delete.
+     * @return       Redirect.
      */
-    @RequestMapping(value = "/acceptRequest/{requestID}", method = RequestMethod.GET)
-    public String acceptRequest(@PathVariable("requestID") Long requestID, Model model)
+    @RequestMapping(value = "/makeStaff/{userID}", method = RequestMethod.GET)
+    public String makeStaff(@PathVariable("userID") Long userID, Model model)
     {
-        waitingListService.acceptRequest(requestID);
+        userService.changeRole(userID, true, false, false);
 
-        return "redirect:/staffIndex";
+        return "redirect:/userOverview";
     }
-
 }

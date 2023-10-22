@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,46 +121,71 @@ public class UserServiceImplementation implements UserService
      */
     public User findByID(Long userID)
     {
-        return userRepository.findPatientById(userID);
+        return userRepository.findUserById(userID);
     }
 
-
-    /**
-     * Update Patient.
-     *
-     * @param patientID           Unique ID of Staff object to update.
-     * @param name              Updated name, if any.
-     * @param email             Updated e-mail, if any.
-     * @param password          Updated password, if any.
-     * @param phNumber          Updated phone number, if any.
-     * @param address           Updated address, if any.
-     */
-    @Override
-    @Transactional
-    public Patient updatePatient(Long patientID, String name, String email, String password, String phNumber, String address)
-    {
-        /*Patient patient = userRepository.findPatientById(patientID);
-
-        if (patient != null) {
-            if (name != null && !Objects.equals(patient.getName(), name)) patient.setName(name);
-            if (email != null && !Objects.equals(patient.getEmail(), email)) patient.setEmail(email);
-            if (password != null && !Objects.equals(patient.getPassword(), password)) patient.setPassword(password);
-            if (phNumber != null && !Objects.equals(patient.getPhoneNumber(), phNumber)) patient.setPhoneNumber(phNumber);
-            if (address != null && !Objects.equals(patient.getAddress(), address)) patient.setAddress(address);
-        }
-        return patient;*/
-        return null;
-    }
 
     /**
      * Update User.
      *
-     * @param user User to update
+     * @param userID      ID of the User to update.
+     * @param updatedUser User with updated info.
      */
-    @Override
-    public void updateUser(User user)
+    @Transactional
+    public void updateUser(Long userID, User updatedUser)
     {
-            userRepository.save(user);
+        User user = userRepository.findUserById(userID);
+
+        if (user != null)
+        {
+            if (updatedUser.getName()           != null) user.setName(updatedUser.getName());
+            if (updatedUser.getEmail()          != null) user.setEmail(updatedUser.getEmail());
+            if (updatedUser.getPassword()       != null) user.setPassword(updatedUser.getPassword());
+            if (updatedUser.getSsn()            != null) user.setSsn(updatedUser.getSsn());
+            if (updatedUser.getPhoneNumber()    != null) user.setPhoneNumber(updatedUser.getPhoneNumber());
+            if (updatedUser.getAddress()        != null) user.setAddress(updatedUser.getAddress());
+            if (updatedUser.getSpecialization() != null) user.setSpecialization(updatedUser.getSpecialization());
+            if (updatedUser.getDescription()    != null) user.setDescription(updatedUser.getDescription());
+        }
+    }
+
+
+    /**
+     * Change role of User.
+     *
+     * @param userID            ID of the User to update.
+     * @param isStaff           Is User a staff member.
+     * @param isPhysiotherapist Is User a physiotherapist.
+     * @param isAdmin           Is User an admin.
+     */
+    @Transactional
+    public void changeRole(Long userID, boolean isStaff, boolean isPhysiotherapist, boolean isAdmin)
+    {
+        User user = userRepository.findUserById(userID);
+
+        if (user != null)
+        {
+            if(isAdmin)
+            {
+                user.setAdmin(true);
+                user.setStaff(true);
+            }
+            else if(isPhysiotherapist)
+            {
+                user.setPhysiotherapist(true);
+                user.setStaff(true);
+            }
+            else if(isStaff)
+            {
+                user.setStaff(true);
+            }
+            else
+            {
+                user.setStaff(false);
+                user.setPhysiotherapist(false);
+                user.setAdmin(false);
+            }
+        }
     }
 
 

@@ -241,4 +241,22 @@ public class User
     {
         this.waitingListRequests = waitingListRequests;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", ssn='" + ssn + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", isStaff=" + isStaff +
+                ", isPhysiotherapist=" + isPhysiotherapist +
+                ", isAdmin=" + isAdmin +
+                ", specialization='" + specialization + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

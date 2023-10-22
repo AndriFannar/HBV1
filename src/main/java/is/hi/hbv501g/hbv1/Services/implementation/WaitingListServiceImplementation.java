@@ -76,7 +76,6 @@ public class WaitingListServiceImplementation implements WaitingListService
 
         if(request != null)
         {
-            System.out.println("******Set to true");
             request.setStatus(true);
         }
     }
