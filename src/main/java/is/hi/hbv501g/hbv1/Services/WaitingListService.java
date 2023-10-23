@@ -1,8 +1,6 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 
 import java.util.List;
 
@@ -36,14 +34,18 @@ public interface WaitingListService
     /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param waitingListID   ID of the request to update.
-     * @param staff           Updated staff info, if any.
-     * @param bodyPart        Updated body part info, if any.
-     * @param description     Updated description, if any.
-     * @param status          Updated status, if any.
-     * @param questionnaireID Updated Questionnaire ID, if any.
+     * @param waitingListID  ID of the request to update.
+     * @param updatedRequest WaitingListRequest with updated info.
      */
-    void updateRequest(Long waitingListID, Staff staff, String bodyPart, String description, boolean status, int questionnaireID);
+    void updateRequest(Long waitingListID, WaitingListRequest updatedRequest);
+
+
+    /**
+     * Accept a WaitingListRequest.
+     *
+     * @param waitingListID ID of the WaitingListRequest to accept;
+     */
+    void acceptRequest(Long waitingListID);
 
 
     /**
@@ -69,7 +71,7 @@ public interface WaitingListService
      * @param patient Patient registered for the WaitingListRequest.
      * @return        WaitingListRequest with matching patient, if any.
      */
-    WaitingListRequest getRequestByPatient(Patient patient);
+    WaitingListRequest getRequestByPatient(User patient);
 
 
     /**
@@ -78,5 +80,5 @@ public interface WaitingListService
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getRequestByPhysiotherapist(Staff staff);
+    List<WaitingListRequest> getRequestByPhysiotherapist(User staff);
 }

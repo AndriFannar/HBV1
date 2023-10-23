@@ -1,8 +1,12 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,13 +37,13 @@ public class WaitingListRequest
 
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
-    private Patient patient;
-    @OneToOne(fetch = FetchType.LAZY)
-    private Staff staff;
+    private User patient;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User staff;
     private String bodyPart;
     private String description;
     private boolean status;
-    private LocalDateTime dateOfRequest;
+    private LocalDate dateOfRequest;
     private int questionnaireID;
     private int[] questionnaireAnswers;
     private double grade;
@@ -54,7 +58,7 @@ public class WaitingListRequest
         this.questionnaireID = 0;
         this.grade = 0;
 
-        this.dateOfRequest = LocalDateTime.now();
+        this.dateOfRequest = LocalDate.now();
     }
 
 
@@ -66,7 +70,7 @@ public class WaitingListRequest
      * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(Patient patient, Staff staff, String bodyPart, String description) {
+    public WaitingListRequest(User patient, User staff, String bodyPart, String description, Long staffID) {
         this.patient = patient;
         this.staff = staff;
         this.bodyPart = bodyPart;
@@ -76,7 +80,7 @@ public class WaitingListRequest
         this.questionnaireID = 0;
         this.grade = 0;
 
-        this.dateOfRequest = LocalDateTime.now();
+        this.dateOfRequest = LocalDate.now();
     }
 
 
@@ -95,20 +99,23 @@ public class WaitingListRequest
         return grade;
     }
 
+    public Long getId() {
+        return id;
+    }
 
-    public Patient getPatient() {
+    public User getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(User patient) {
         this.patient = patient;
     }
 
-    public Staff getStaff() {
+    public User getStaff() {
         return staff;
     }
 
-    public void setStaff(Staff staff) {
+    public void setStaff(User staff) {
         this.staff = staff;
     }
 
@@ -136,11 +143,11 @@ public class WaitingListRequest
         this.status = status;
     }
 
-    public LocalDateTime getDateOfRequest() {
+    public LocalDate getDateOfRequest() {
         return dateOfRequest;
     }
 
-    public void setDateOfRequest(LocalDateTime dateOfRequest) {
+    public void setDateOfRequest(LocalDate dateOfRequest) {
         this.dateOfRequest = dateOfRequest;
     }
 
@@ -173,7 +180,7 @@ public class WaitingListRequest
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patient +
+                ", patient=" + patient.getId() +
                 ", staff=" + staff +
                 ", bodyPart='" + bodyPart + '\'' +
                 ", description='" + description + '\'' +

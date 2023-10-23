@@ -1,9 +1,9 @@
-package is.hi.hbv501g.hbv1.Servecies.implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
+import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
-import is.hi.hbv501g.hbv1.Servecies.QuestionnaireService;
+import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +46,9 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * @return       Questionnaire that holds Question objects with corresponding list ID.
      */
     @Override
-    public Questionnaire getQuestionnaire(Integer listID)
+    public QuestionnaireForm getQuestionnaire(Integer listID)
     {
-        List<Question> qList = questionRepository.findByListIDContaining(listID.toString());
-        return new Questionnaire(qList);
+        return new QuestionnaireForm(questionRepository.findAllByListIDIs(listID));
     }
 
 
@@ -76,14 +75,15 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      */
     @Override
     @Transactional
-    public void updateQuestion(Long questionID, String questionString, double weight, int[] listID)
+    public void updateQuestion(Long questionID, String questionString, double weight,  int numberOfAnswers, List<Integer> listID)
     {
         Question question = questionRepository.getQuestionById(questionID);
         if (question != null)
         {
-            if (questionString != null && !Objects.equals(question.getQuestion(), questionString)) question.setQuestion(questionString);
+            if (questionString != null && !Objects.equals(question.getQuestionString(), questionString)) question.setQuestionString(questionString);
             if (!Objects.equals(question.getWeight(), weight)) question.setWeight(weight);
             if (listID != null && !Objects.equals(question.getListID(), listID)) question.setListID(listID);
+            if (!Objects.equals(question.getNumberOfAnswers(), numberOfAnswers)) question.setNumberOfAnswers(numberOfAnswers);
         }
     }
 

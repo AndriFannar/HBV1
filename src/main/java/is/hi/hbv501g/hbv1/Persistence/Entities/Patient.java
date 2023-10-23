@@ -11,12 +11,14 @@ import jakarta.persistence.*;
  * @since   2023-09-28
  * @version 1.1
  */
-@Entity
-@Table(name="patient")
+@Deprecated
 public class Patient extends User
 {
     // Variables.
     private String address;
+
+    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private WaitingListRequest waitingListRequest;
 
     /**
      * Create a new empty patient.
@@ -33,15 +35,25 @@ public class Patient extends User
      * @param name      Name of patient.
      * @param email     E-mail of patient.
      * @param password  Chosen password.
-     * @param kennitala Kennilata of patient.
-     * @param phNumber  Phone number of patient.
+     * @param kennitala Kennilata of patient. //******* Muna að uppfæra í SSN! *******
+     * @param phoneNumber  Phone number of patient.
      * @param address   Patient's address.
      */
-    public Patient(String name, String email, String password, String kennitala, String phNumber, String address)
+    public Patient(String name, String email, String password, String kennitala, String phoneNumber, String address)
     {
-        super(name, email, password, kennitala, phNumber);
+        //super(name, email, password, kennitala, phoneNumber);
 
         this.address = address;
+    }
+
+
+    public WaitingListRequest getWaitingListRequest() {
+        return waitingListRequest;
+    }
+
+
+    public void setWaitingListRequest(WaitingListRequest waitingListRequest) {
+        this.waitingListRequest = waitingListRequest;
     }
 
 
@@ -56,10 +68,10 @@ public class Patient extends User
 
 
     @Override
-    public String toString()
-    {
-        return super.toString() + "Patient{" +
+    public String toString() {
+        return "Patient{" +
                 "address='" + address + '\'' +
+                ", waitingListRequest=" + waitingListRequest +
                 '}';
     }
 }

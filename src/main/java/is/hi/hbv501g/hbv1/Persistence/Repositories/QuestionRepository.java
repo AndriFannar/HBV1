@@ -58,6 +58,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
      * @param listID ID of the questionnaire.
      * @return       List of Question objects that have a matching list ID.
      */
-    @Query("SELECT q FROM Question q WHERE q.listID LIKE %?1%")
-    List<Question> findByListIDContaining(String listID);
+    List<Question> findAllByListIDIs(Integer Id);
+    //findAllByListIDContains
 }

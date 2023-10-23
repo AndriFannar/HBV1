@@ -1,0 +1,61 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Yfirlit Spurninga</title>
+</head>
+<body>
+<h2>Yfirlit Spurninga</h2>
+
+<section th:switch="${questions}">
+    <h2 th:case="null">Engar spurningar eru í kerfinu.</h2>
+    <div th:case="*">
+        <h2>Allar spurningar:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Spurning</th>
+                <th>Þyngd</th>
+                <th>Fjöldi Svarmöguleika</th>
+                <th>Spurningalisti sem tilheyrir</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="question : ${questions}">
+                <td th:text="${question.questionString}"></td>
+                <td th:text="${question.weight}"></td>
+                <td th:text="${question.numberOfAnswers}"></td>
+                <td th:text="${question.listID}"></td>
+                <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<form action="#" th:action="@{/addQuestion}" th:object="${question}" method="POST">
+    <fieldset>
+        <legend>Upplýsingar</legend>
+
+        <label for="questionString">Spurning</label>
+        <input type="text" th:field="*{questionString}" id="questionString" placeholder="Spurning">
+        <span th:if="${#fields.hasErrors('questionString')}" th:errors="*{questionString}"></span>
+
+        <label for="weight">Þyngd</label>
+        <input type="number" th:field="*{weight}" id="weight"  placeholder="Þyngd">
+        <span th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></span>
+
+        <label for="numberOfAnswers">Fjöldi Svarmöguleika</label>
+        <input type="number" th:field="*{numberOfAnswers}" id="numberOfAnswers"  placeholder="Fjöldi Svarmöguleika">
+        <span th:if="${#fields.hasErrors('numberOfAnswers')}" th:errors="*{numberOfAnswers}"></span>
+
+        <label for="listID">Spurningalistar (aðskilja með kommu)</label>
+        <input type="text" th:field="*{listID}" id="listID"  placeholder="Spurningalistar">
+        <span th:if="${#fields.hasErrors('listID')}" th:errors="*{listID}"></span>
+    </fieldset>
+    <input type="submit"  value="Skrá spurningu">
+</form>
+
+<p><a href="/">Til baka</a></p>
+</body>
+</html>

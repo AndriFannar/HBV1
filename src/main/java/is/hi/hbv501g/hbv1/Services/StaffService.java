@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Servecies;
+package is.hi.hbv501g.hbv1.Services;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
  * @since   2023-10-01
  * @version 1.0
  */
+@Deprecated
 public interface StaffService
 {
     /**

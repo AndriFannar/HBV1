@@ -14,8 +14,8 @@ import java.util.List;
  * @since   2023-10-01
  * @version 1.0
  */
-@Repository
-public interface StaffRepository extends JpaRepository<Staff, Long >
+@Deprecated
+public interface StaffRepository //extends JpaRepository<Staff, Long >
 {
     /**
      * Save a Staff object to database.
