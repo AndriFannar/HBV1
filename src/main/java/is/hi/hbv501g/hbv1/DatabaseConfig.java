@@ -31,8 +31,9 @@ public class DatabaseConfig
                   "Ekkert"
           );
 
+          User user = repository.findByEmail("Jon@Jonsson.is");
 
-          repository.saveAll(List.of(jonJonsson));
+          if (user == null) repository.saveAll(List.of(jonJonsson));
       };
     };
 }

@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.Controllers;
 
 import java.util.List;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
@@ -24,6 +23,7 @@ import is.hi.hbv501g.hbv1.Services.UserService;
  * @version 1.0
  */
 @Controller
+@Deprecated
 public class HomeController
 {
     // Variables.
