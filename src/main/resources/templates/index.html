@@ -25,7 +25,7 @@
             </div>
         </section>
 
-        <section th:switch="${patient}">
+        <section th:switch="${user}">
             <h2 th:case="null">Engir sjúklingar</h2>
             <div th:case="*">
                 <h2>Allir skráðir sjúklingar</h2>
@@ -39,12 +39,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="patient : ${patient}">
-                            <td th:text="${patient.name}"></td>
-                            <td th:text="${patient.email}"></td>
-                            <td th:text="${patient.kennitala}"></td>
-                            <td th:text="${patient.phoneNumber}"></td>
-                            <td><a th:href="@{/deletePatient/{id}(id=${patient.id})}">Delete</a></td>
+                        <tr th:each="user : ${user}">
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.kennitala}"></td>
+                            <td th:text="${user.phoneNumber}"></td>
+                            <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>

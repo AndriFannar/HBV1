@@ -2,7 +2,7 @@ package is.hi.hbv501g.hbv1.Controllers;
 
 import java.util.List;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpSession;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import is.hi.hbv501g.hbv1.Services.PatientService;
+import is.hi.hbv501g.hbv1.Services.UserService;
 
 
 /**
@@ -23,10 +23,11 @@ import is.hi.hbv501g.hbv1.Services.PatientService;
  * @version 1.0
  */
 @Controller
+@Deprecated
 public class HomeController
 {
     // Variables.
-    private PatientService patientService;
+    private UserService userService;
 
     private WaitingListService waitingListService; // Is accessing other Services ok?
 
@@ -37,9 +38,9 @@ public class HomeController
      * @param wS WaitingListService linked to controller.
      */
     @Autowired
-    public HomeController(PatientService uS, WaitingListService wS)
+    public HomeController(UserService uS, WaitingListService wS)
     {
-        this.patientService = uS;
+        this.userService = uS;
         this.waitingListService = wS;
     }
 
@@ -51,12 +52,12 @@ public class HomeController
      * @param session Current HttpSession.
      * @return        Front page.
      */
-    @RequestMapping("/")
+    @RequestMapping("/index")
     public String index(Model model, HttpSession session){
-        List<Patient> allPatients = patientService.findAll();
-        model.addAttribute("patient", allPatients);
+        List<User> allPatients = userService.findAll();
+        model.addAttribute("user", allPatients);
 
-        Patient patient = (Patient) session.getAttribute("LoggedInUser");
+        User patient = (User) session.getAttribute("LoggedInUser");
         model.addAttribute("login", patient);
 
         if (patient != null)

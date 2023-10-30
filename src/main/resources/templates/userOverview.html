@@ -1,0 +1,41 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Forsíða starfsmanns</title>
+</head>
+<body>
+<section th:switch="${users}">
+    <h2 th:case="null">Engir sjúklingar</h2>
+    <div th:case="*">
+        <h2>Allir skráðir sjúklingar</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Nafn</th>
+                <th>Netfang</th>
+                <th>Kennitala</th>
+                <th>Símanúmer</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.ssn}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></td>
+                <td><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></td>
+                <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
+                <td th:if="${user.isStaff && !user.isPhysiotherapist}"><a th:href="@{/makePhysiotherapist/{id}(id=${user.id})}">Breyta í sjúkraþjálfara</a></td>
+                <td th:if="${user.isStaff && !user.isAdmin}"><a th:href="@{/makeAdmin/{id}(id=${user.id})}">Breyta í stjórnanda</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section>
+    <p><a href="/staffIndex">Til baka</a></p>
+</section>
+</body>
+</html>

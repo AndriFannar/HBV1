@@ -41,11 +41,11 @@ public interface WaitingListService
 
 
     /**
-     * Accept a WaitingListRequest.
+     * Change the status of a WaitingListRequest.
      *
-     * @param waitingListID ID of the WaitingListRequest to accept;
+     * @param waitingListID ID of the WaitingListRequest to change;
      */
-    void acceptRequest(Long waitingListID);
+    void updateRequestStatus(Long waitingListID, boolean newStatus);
 
 
     /**
@@ -71,7 +71,7 @@ public interface WaitingListService
      * @param patient Patient registered for the WaitingListRequest.
      * @return        WaitingListRequest with matching patient, if any.
      */
-    WaitingListRequest getRequestByPatient(Patient patient);
+    WaitingListRequest getRequestByPatient(User patient);
 
 
     /**
@@ -80,5 +80,5 @@ public interface WaitingListService
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getRequestByPhysiotherapist(Staff staff);
+    List<WaitingListRequest> getRequestByPhysiotherapist(User staff);
 }

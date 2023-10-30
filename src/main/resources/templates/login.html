@@ -5,8 +5,8 @@
         <title>Innskráning</title>
     </head>
     <body>
-        <h2>Patient Innskráning</h2>
-        <form th:action="@{/login}" th:object="${patient}" method="post">
+        <h2>Innskráning Notanda</h2>
+        <form th:action="@{/login}" th:object="${user}" method="post">
           <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
           <br>
           <label for="email">Netfang</label>
@@ -16,6 +16,6 @@
           <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
           <input type="submit" value="Innskráning"/>
         </form>
-        <p><a href="/"> Til baka</a></p>
+        <p><a href="/signUp">Búa til aðgang</a></p>
     </body>
 </html>

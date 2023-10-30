@@ -22,7 +22,7 @@
             <tbody>
             <tr>
                 <td th:text="${request.patient.name}"></td>
-                <td th:text="${request.patient.kennitala}"></td>
+                <td th:text="${request.patient.ssn}"></td>
                 <td th:text="${request.patient.email}"></td>
                 <td th:text="${request.patient.phoneNumber}"></td>
                 <td th:text="${request.patient.address}"></td>
@@ -58,7 +58,7 @@
                         <p th:if="${request.status == true}">Samþykkt</p>
                     </td>
 
-                    <td th:text="${request.grade}"></td>
+                    <td th:if="${LoggedInUser.isPhysiotherapist}" th:text="${request.grade}"></td>
 
                     <td th:text="${request.dateOfRequest}">
 
@@ -71,7 +71,7 @@
     </div>
 </section>
 
-<section th:if="${LoggedInUser.isPhysiotherapist}">
+<section th:if="${LoggedInUser.isPhysiotherapist || LoggedInUser.id == request.patient.id}">
     <h2>Breyta beiðni</h2>
     <form class="form-control" id="dropDownList" action="#"  th:object="${request}" th:action="@{/updateRequest/__${request.id}__}" method="POST">
         <fieldset>
@@ -82,8 +82,14 @@
                 <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}" th:selected="${stff.id == staffMember.id}"></option>
             <select/>
 
-            <label for="grade">Forgangur</label>
-            <input type="number" th:field="*{grade}" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
+            <label th:if="${LoggedInUser.id == request.patient.id}" for="bodyPart">Líkamshluti</label>
+            <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
+
+            <label th:if="${LoggedInUser.id == request.patient.id}" for="description">Lýsing á vandamáli</label>
+            <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
+
+            <label th:if="${LoggedInUser.isPhysiotherapist}" for="grade">Forgangur</label>
+            <input th:if="${LoggedInUser.isPhysiotherapist}" type="number" th:field="*{grade}" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
         </fieldset>
         <input type="submit"  value="Skrá breytingar">
     </form>
@@ -111,7 +117,7 @@
     </details>
 </section>
 <section>
-    <p><a href="/staffIndex">Til baka</a></p>
+    <p><a href="/">Til baka</a></p>
 </section>
 </body>
 </html>
