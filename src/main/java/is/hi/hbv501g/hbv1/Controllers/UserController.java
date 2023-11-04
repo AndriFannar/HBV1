@@ -54,7 +54,7 @@ public class UserController
 
 
     /**
-     * Get login page.
+     * Get login page. 
      *
      * @return Login page.
      */
