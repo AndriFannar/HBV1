@@ -43,7 +43,7 @@ public class User
     private String specialization;
     private String description;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WaitingListRequest> waitingListRequests;
 
     @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
