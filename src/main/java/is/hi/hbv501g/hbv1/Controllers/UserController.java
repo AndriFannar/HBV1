@@ -67,7 +67,6 @@ public class UserController
         if(exists != null)
         {
             session.setAttribute("LoggedInUser", exists);
-
             if(exists.isStaff())
             {
                 return "redirect:/staffIndex";
