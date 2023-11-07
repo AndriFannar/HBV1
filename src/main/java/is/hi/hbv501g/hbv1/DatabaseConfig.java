@@ -31,8 +31,7 @@ public class DatabaseConfig
                   "Ekkert",
                   "Ekkert"
           );
-
-
+        
           List<User> users = repository.findUserByIsPhysiotherapist(true);
 
           if (users.isEmpty())

@@ -1,6 +1,5 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Services.UserService;
@@ -32,9 +31,9 @@ import java.util.List;
 public class WaitingListController
 {
     // Variables.
-    private WaitingListService waitingListService;
-    private QuestionnaireService questionnaireService;
-    private UserService userService;
+    private final WaitingListService waitingListService;
+    private final QuestionnaireService questionnaireService;
+    private final UserService userService;
 
 
     /**
@@ -60,7 +59,7 @@ public class WaitingListController
      * @return                   Redirect.
      */
     @RequestMapping(value = "/createRequest", method = RequestMethod.POST)
-    public String createNewRequest(WaitingListRequest waitingListRequest, BindingResult result, Model model, HttpSession session)
+    public String createNewRequest(WaitingListRequest waitingListRequest, BindingResult result, HttpSession session)
     {
         if(result.hasErrors())
         {
@@ -112,7 +111,7 @@ public class WaitingListController
             return "viewRequest";
         }
 
-        return "redirect:/staffIndex";
+        return "redirect:/";
     }
 
     /**
@@ -122,7 +121,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/updateRequest/{requestID}", method = RequestMethod.POST)
-    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest updatedRequest, BindingResult result, Model model)
+    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest updatedRequest, BindingResult result, HttpSession session)
     {
         if(result.hasErrors())
         {
@@ -130,6 +129,10 @@ public class WaitingListController
         }
 
         waitingListService.updateRequest(requestID, updatedRequest);
+
+        User user = (User) session.getAttribute("LoggedInUser");
+
+        if (!user.isStaff()) waitingListService.updateRequestStatus(requestID, false);
 
         return "redirect:/viewRequest/" + requestID;
     }
@@ -142,11 +145,11 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/acceptRequest/{requestID}", method = RequestMethod.GET)
-    public String acceptRequest(@PathVariable("requestID") Long requestID, Model model)
+    public String acceptRequest(@PathVariable("requestID") Long requestID)
     {
-        waitingListService.acceptRequest(requestID);
+        waitingListService.updateRequestStatus(requestID, true);
 
-        return "redirect:/staffIndex";
+        return "redirect:/";
     }
 
 
@@ -157,7 +160,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/deleteRequest/{requestID}", method = RequestMethod.GET)
-    public String deleteRequest(@PathVariable("requestID") Long requestID, Model model)
+    public String deleteRequest(@PathVariable("requestID") Long requestID)
     {
         waitingListService.deleteRequest(requestID);
 

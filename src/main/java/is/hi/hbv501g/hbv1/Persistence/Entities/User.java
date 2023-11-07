@@ -97,12 +97,6 @@ public class User
     }
 
 
-    public void setId(Long id_counter)
-    {
-        this.id = id_counter;
-    }
-
-
     public String getName()
     {
         return name;

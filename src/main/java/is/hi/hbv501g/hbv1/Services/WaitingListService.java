@@ -41,11 +41,11 @@ public interface WaitingListService
 
 
     /**
-     * Accept a WaitingListRequest.
+     * Change the status of a WaitingListRequest.
      *
-     * @param waitingListID ID of the WaitingListRequest to accept;
+     * @param waitingListID ID of the WaitingListRequest to change;
      */
-    void acceptRequest(Long waitingListID);
+    void updateRequestStatus(Long waitingListID, boolean newStatus);
 
 
     /**
