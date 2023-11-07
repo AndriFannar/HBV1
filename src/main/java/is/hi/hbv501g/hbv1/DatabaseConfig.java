@@ -39,12 +39,14 @@ public class DatabaseConfig
           {
               repository.saveAll(List.of(jonJonsson));
           }
-          else
+          else if (users.size() > 1)
           {
               for(User user : users)
               {
-                  if((Objects.equals(user.getEmail(), "Jon@Jonsson.is")) && users.size() > 1) repository.deleteById(user.getId());
+                  if(Objects.equals(user.getEmail(), "Jon@Jonsson.is")) repository.deleteById(user.getId());
               }
+
+              repository.saveAll(List.of(jonJonsson));
           }
       };
     };
