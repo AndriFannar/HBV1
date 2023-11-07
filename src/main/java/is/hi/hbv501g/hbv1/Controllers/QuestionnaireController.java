@@ -43,7 +43,28 @@ public class QuestionnaireController
         this.waitingListService = wS;
     }
 
-    // **** Will be enabled when Questionnaires are implemented. **** //
+
+    /**
+     * Get a Questionnaire overview.
+     *
+     * @return Page with a list of Questionnaires in the system.
+     */
+    @RequestMapping(value = "/questionnaireOverview", method = RequestMethod.GET)
+    public String getQuestionnaireOverview(Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser.isAdmin())
+        {
+            List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
+            model.addAttribute("questionnaires", questionnaires);
+
+            return "questionnaireOverview";
+        }
+
+        return "redirect:/";
+    }
+
 
     /**
      * Form for answering a Questionnaire.
@@ -54,14 +75,14 @@ public class QuestionnaireController
     public String getQuestionnaire(WaitingListRequest waitingLR, Model model, HttpSession session)
     {
         // Get ID of questionnaire to get from request.
-        int questionnaireID = waitingLR.getQuestionnaireID();
+        Long questionnaireID = waitingLR.getQuestionnaireID();
 
         // Find and add corresponding Questionnaire to model.
-        QuestionnaireForm form = questionnaireService.getQuestionnaire(questionnaireID);
+        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
 
         model.addAttribute("questionnaire", form);
 
-        return "questionnaire";
+        return "answerQuestionnaire";
     }
 
 
@@ -71,7 +92,7 @@ public class QuestionnaireController
      * @return questionnaire page with Questionnaire object.
      */
     @RequestMapping(value = "/answerQuestionnaire", method = RequestMethod.POST)
-    public String answerQuestionnaire(QuestionnaireForm form, Model model, BindingResult result, HttpSession session)
+    public String answerQuestionnaire(Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)
     {
         if(result.hasErrors())
         {
@@ -83,89 +104,5 @@ public class QuestionnaireController
         //waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
 
         return "redirect:/";
-    }
-
-
-    /**
-     * Get all Question objects in database.
-     *
-     * @return List of all Question objects in database.
-     */
-    @RequestMapping(value = "/questionOverview", method = RequestMethod.GET)
-    public String getQuestions(Model model)
-    {
-        // Get all Question objects and display.
-        List<Question> questions = questionnaireService.getQuestions();
-        model.addAttribute("questions", questions);
-        model.addAttribute("question", new Question());
-        return "questionOverview";
-    }
-
-
-    /**
-     * Create a new Question.
-     *
-     * @param question Question object to save.
-     * @return         Redirect.
-     */
-    @RequestMapping(value = "/addQuestion", method = RequestMethod.POST)
-    public String addQuestion(Question question, BindingResult result)
-    {
-        if(result.hasErrors())
-        {
-            return "redirect:/questionOverview";
-        }
-
-        // Add Question to database if no errors.
-        questionnaireService.addQuestion(question);
-
-        return "redirect:/questionOverview";
-    }
-
-
-    /**
-     * Update Question.
-     *
-     * @param questionID     ID of Question to update.
-     * @param questionString New string of Question, if any.
-     * @param weight         New weight of Question, if any.
-     * @param listID         New list IDs, if any.
-     * @return               Redirect.
-     *
-    @RequestMapping(value = "/updateQuestion", path = "{questionID}", method = RequestMethod.PUT)
-    public String updateQuestion(@PathVariable("questionID") Long questionID, String questionString, double weight, List<Integer> listID, BindingResult result, Model model)
-    {
-        if(result.hasErrors())
-        {
-            return "redirect:/updateQuestion";
-        }
-
-        // If Question exists, update.
-        Question exists = questionnaireService.getQuestionById(questionID);
-        if(exists != null)
-        {
-            questionnaireService.updateQuestion(questionID, questionString, weight, listID);
-        }
-
-        return "redirect:/";
-    }
-
-
-    /**
-     * Delete Question.
-     *
-     * @param questionID ID of Question to delete.
-     * @return           Redirect.
-     */
-    @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.GET)
-    public String deleteQuestion(@PathVariable("questionID") Long questionID, Model model) {
-        // If Question exists, delete.
-        Question exists = questionnaireService.getQuestionById(questionID);
-
-        if (exists != null) {
-            questionnaireService.deleteQuestionById(questionID);
-        }
-
-        return "redirect:/questionOverview";
     }
 }

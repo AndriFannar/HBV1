@@ -36,8 +36,9 @@ public class Question
     private Double weight;
 
     private int numberOfAnswers;
-    @ElementCollection
-    private List<Integer> listID;
+
+    @ManyToMany
+    private List<Questionnaire> questionnaires;
 
     @Transient
     private Integer answer;
@@ -55,15 +56,15 @@ public class Question
     /**
      * Create a new question.
      *
-     * @param questionString Question.
-     * @param weight   Weight of question in score calculation.
-     * @param listID   Questionnaires this question belongs on.
+     * @param questionString   Question.
+     * @param weight           Weight of question in score calculation.
+     * @param questionnaires   Questionnaires this question belongs on.
      */
-    public Question(String questionString, Double weight, List<Integer> listID, int numberOfAnswers)
+    public Question(String questionString, Double weight, List<Questionnaire> questionnaires, int numberOfAnswers)
     {
         this.questionString = questionString;
         this.weight = weight;
-        this.listID = listID;
+        this.questionnaires = questionnaires;
     }
 
     public Long getId() {
@@ -94,25 +95,17 @@ public class Question
     }
 
 
-    public List<Integer> getListID() {
-        return listID;
+    public List<Questionnaire> getQuestionnaires() {
+        return questionnaires;
     }
 
-    public void setListID(List<Integer> listID) {
-        this.listID = listID;
+    public void setQuestionnaires(List<Questionnaire> questionnaires) {
+        this.questionnaires = questionnaires;
     }
 
-
-    public void setListID(String listID) {
-        String[] list = listID.split(",");
-        List<Integer> listIDs = new ArrayList<>();
-
-        for (String id : list)
-        {
-            listIDs.add(Integer.parseInt(id));
-        }
-
-        this.listID = listIDs;
+    public void addQuestionnaire(Questionnaire questionnaire)
+    {
+        this.questionnaires.add(questionnaire);
     }
 
     public int getNumberOfAnswers() {
@@ -139,7 +132,7 @@ public class Question
                 ", questionString='" + questionString + '\'' +
                 ", weight=" + weight +
                 ", numberOfAnswers=" + numberOfAnswers +
-                ", listID=" + listID +
+                ", questionnaires=" + questionnaires.toString() +
                 ", answer=" + answer +
                 '}';
     }

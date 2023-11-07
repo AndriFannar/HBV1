@@ -40,7 +40,7 @@ public class WaitingListRequest
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    private int questionnaireID;
+    private Long questionnaireID;
     private int[] questionnaireAnswers;
     private double grade;
 
@@ -51,7 +51,7 @@ public class WaitingListRequest
     public WaitingListRequest()
     {
         this.status = false;
-        this.questionnaireID = 0;
+        this.questionnaireID = 0L;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
@@ -73,7 +73,7 @@ public class WaitingListRequest
         this.description = description;
 
         this.status = false;
-        this.questionnaireID = 0;
+        this.questionnaireID = 0L;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
@@ -147,11 +147,11 @@ public class WaitingListRequest
         this.dateOfRequest = dateOfRequest;
     }
 
-    public int getQuestionnaireID() {
+    public Long getQuestionnaireID() {
         return questionnaireID;
     }
 
-    public void setQuestionnaireID(int questionnaireID) {
+    public void setQuestionnaireID(Long questionnaireID) {
         this.questionnaireID = questionnaireID;
     }
 

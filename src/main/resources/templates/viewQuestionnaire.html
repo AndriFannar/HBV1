@@ -5,29 +5,28 @@
     <title>Yfirlit Spurninga</title>
 </head>
 <body>
-<h2>Yfirlit Spurninga</h2>
+<h2>Breyta spurningalista</h2>
 
-<section th:switch="${questions}">
-    <h2 th:case="null">Engar spurningar eru í kerfinu.</h2>
+<section th:switch="${questionnaire}">
+    <h2 th:case="null">Enginn spurningalisti valinn.</h2>
     <div th:case="*">
-        <h2>Allar spurningar:</h2>
+        <h2>Spurningarlisti fyrir </h2> <h2> th:text="${questionnaire.name}">:</h2>
+        <h3>Spurningar í lista:</h3>
         <table>
             <thead>
-            <tr>
-                <th>Spurning</th>
-                <th>Þyngd</th>
-                <th>Fjöldi Svarmöguleika</th>
-                <th>Spurningalisti sem tilheyrir</th>
-            </tr>
+                <tr>
+                    <th>Spurning</th>
+                    <th>Þyngd</th>
+                    <th>Fjöldi Svarmöguleika</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="question : ${questions}">
-                <td th:text="${question.questionString}"></td>
-                <td th:text="${question.weight}"></td>
-                <td th:text="${question.numberOfAnswers}"></td>
-                <td th:text="${question.listID}"></td>
-                <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">Delete</a></td>
-            </tr>
+                <tr th:each="question : ${questionnaire.questions}">
+                    <td th:text="${question.questionString}"></td>
+                    <td th:text="${question.weight}"></td>
+                    <td th:text="${question.numberOfAnswers}"></td>
+                    <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">Eyða úr lista</a></td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Yfirlit Spurningalista</title>
+</head>
+<body>
+<h2>Yfirlit Spurningalista</h2>
+
+<section th:switch="${questionnaires}">
+    <h2 th:case="null">Engir spurningalistar eru í kerfinu.</h2>
+    <div th:case="*">
+        <h2>Allir spurningalistar:</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Heiti</th>
+                <th>Fjöldi spurninga</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="questionnaire : ${questionnaires}">
+                <td th:text="${questionnaire.name}"></td>
+                <td th:text="${questionnaire.questions.size}"></td>
+                <td><a th:href="@{/editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></td>
+                <td><a th:href="@{/deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <p>Búa til nýjan spurningalista</p>
+</section>
+
+<p><a href="/">Til baka</a></p>
+</body>
+</html>

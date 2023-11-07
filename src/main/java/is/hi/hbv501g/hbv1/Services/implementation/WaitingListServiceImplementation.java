@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.Services.Implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;

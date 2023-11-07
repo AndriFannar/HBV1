@@ -1,7 +1,7 @@
 package is.hi.hbv501g.hbv1.Services;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 
 import java.util.List;
 
@@ -18,53 +18,32 @@ public interface QuestionnaireService
     /**
      * Gets the Questionnaire with the corresponding ID.
      *
-     * @param listID The ID of the questionnaire to fetch.
-     * @return       Questionnaire that holds Question objects with corresponding list ID.
+     * @param questionnaireID The ID of the questionnaire to fetch.
+     * @return                Questionnaire that holds Question objects with corresponding list ID.
      */
-    QuestionnaireForm getQuestionnaire(Integer listID);
+    Questionnaire getQuestionnaire(Long questionnaireID);
 
 
     /**
      * Saves a new Question to database.
      *
      * @param question Question to save.
-     * @return         Saved Question.
      */
-    Question addQuestion(Question question);
+    void addQuestionToList(Question question, Questionnaire questionnaire);
 
 
     /**
-     * Update a matching Question.
+     * Deletes a Questionnaire with a corresponding id.
      *
-     * @param questionID      ID of the question to update.
-     * @param questionString  Updated question, if any.
-     * @param weight          Updated weight, if any.
-     * @param numberOfAnswers Updated number of answers possible, if any.
-     * @param listID          Updated Questionnaire ID, if any.
+     * @param questionnaireID ID of the Questionnaire to delete.
      */
-    void updateQuestion(Long questionID, String questionString, double weight, int numberOfAnswers, List<Integer> listID);
+    void deleteQuestionnaireById(Long questionnaireID);
 
 
     /**
-     * Deletes a Question with a corresponding id.
+     * Gets all Questionnaire objects in database.
      *
-     * @param questionID ID of the Question to delete.
+     * @return List of all Questionnaire objects in database, if any.
      */
-    void deleteQuestionById(Long questionID);
-
-
-    /**
-     * Gets all Question objects in database.
-     *
-     * @return List of all Question objects in database, if any.
-     */
-    List<Question> getQuestions();
-
-
-    /**
-     * Gets Question object with matching ID from database.
-     *
-     * @return Question object with matching ID in database, if any.
-     */
-    Question getQuestionById(Long questionID);
+    List<Questionnaire> getAllQuestionnaire();
 }

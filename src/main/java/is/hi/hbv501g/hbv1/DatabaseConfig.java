@@ -6,10 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import static java.time.Month.*;
+import java.util.Objects;
 
 @Configuration
 public class DatabaseConfig
@@ -31,9 +29,19 @@ public class DatabaseConfig
                   "Ekkert"
           );
 
-          User user = repository.findByEmail("Jon@Jonsson.is");
+          List<User> users = repository.findUserByIsPhysiotherapist(true);
 
-          if (user == null) repository.saveAll(List.of(jonJonsson));
+          if (users.isEmpty())
+          {
+              repository.saveAll(List.of(jonJonsson));
+          }
+          else
+          {
+              for(User user : users)
+              {
+                  if((Objects.equals(user.getEmail(), "Jon@Jonsson.is")) && users.size() > 1) repository.deleteById(user.getId());
+              }
+          }
       };
     };
 }

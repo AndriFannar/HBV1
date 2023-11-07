@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import is.hi.hbv501g.hbv1.Services.UserService;
 
+import java.util.List;
+
 
 /**
  * Controller for front page.
@@ -29,7 +31,7 @@ public class HomeController
     // Variables.
     private UserService userService;
 
-    private WaitingListService waitingListService; // Is accessing other Services ok?
+    private WaitingListService waitingListService;
 
 
     /**
