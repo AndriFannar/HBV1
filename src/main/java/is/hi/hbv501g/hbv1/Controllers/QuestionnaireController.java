@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.*;
+import is.hi.hbv501g.hbv1.Services.QuestionService;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
@@ -28,19 +29,23 @@ public class QuestionnaireController
 {
     // Variables.
     private QuestionnaireService questionnaireService;
+    private QuestionService questionService;
     private WaitingListService waitingListService;
 
 
     /**
      * Construct a new QuestionnaireController.
      *
-     * @param qS QuestionnaireService linked to controller.
+     * @param questionnaireService QuestionnaireService linked to controller.
+     * @param questionService      QuestionService linked to controller.
+     * @param waitingListService   WaitingListService linked to controller.
      */
     @Autowired
-    public QuestionnaireController(QuestionnaireService qS, WaitingListService wS)
+    public QuestionnaireController(QuestionnaireService questionnaireService, QuestionService questionService, WaitingListService waitingListService)
     {
-        this.questionnaireService = qS;
-        this.waitingListService = wS;
+        this.questionnaireService = questionnaireService;
+        this.questionService = questionService;
+        this.waitingListService = waitingListService;
     }
 
 
@@ -54,12 +59,89 @@ public class QuestionnaireController
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser.isAdmin())
+        if (loggedInUser != null && loggedInUser.isAdmin())
         {
             List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
             model.addAttribute("questionnaires", questionnaires);
+            model.addAttribute("questionnaire", new Questionnaire());
 
             return "questionnaireOverview";
+        }
+
+        return "redirect:/";
+    }
+
+
+    /**
+     * Create a new Questionnaire.
+     *
+     * @return Saves a new Questionnaire to the database.
+     */
+    @RequestMapping(value = "/createQuestionnaire", method = RequestMethod.POST)
+    public String createQuestionnaire(Questionnaire questionnaire, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            questionnaireService.saveQuestionnaire(questionnaire);
+
+            return "redirect:/questionnaireOverview";
+        }
+
+        return "redirect:/";
+    }
+
+
+    /**
+     * Edit an existing Questionnaire
+     *
+     * @return Page where the user can edit a Questionnaire.
+     */
+    @RequestMapping(value = "/editQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
+    public String editQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            Questionnaire questionnaire = questionnaireService.getQuestionnaire(questionnaireID);
+
+            if(questionnaire == null) return "redirect:/questionnaireOverview";
+
+            model.addAttribute("questionnaire", questionnaire);
+
+            List<Question> questions = questionService.getQuestions();
+
+            model.addAttribute("questions", questions);
+
+            model.addAttribute("question", new Question());
+
+            return "viewQuestionnaire";
+        }
+
+        return "redirect:/";
+    }
+
+
+    /**
+     * Add a Question to a Questionnaire.
+     *
+     * @return Redirect back to page.
+     */
+    @RequestMapping(value = "/addQuestion/{questionID}/{questionnaireID}", method = RequestMethod.GET)
+    public String addQuestion(@PathVariable("questionID") Long questionID ,@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            Questionnaire questionnaire = questionnaireService.getQuestionnaire(questionnaireID);
+            Question question = questionService.getQuestionById(questionID);
+
+            if(questionnaire != null && question != null) questionnaireService.addQuestionToList(question, questionnaire);
+
+            return "redirect:/editQuestionnaire/" + questionnaireID;
         }
 
         return "redirect:/";
@@ -75,12 +157,12 @@ public class QuestionnaireController
     public String getQuestionnaire(WaitingListRequest waitingLR, Model model, HttpSession session)
     {
         // Get ID of questionnaire to get from request.
-        Long questionnaireID = waitingLR.getQuestionnaireID();
+        //Long questionnaireID = waitingLR.getQuestionnaireID();
 
         // Find and add corresponding Questionnaire to model.
-        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
+        //Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
 
-        model.addAttribute("questionnaire", form);
+        //model.addAttribute("questionnaire", form);
 
         return "answerQuestionnaire";
     }

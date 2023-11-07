@@ -10,7 +10,7 @@
 <section th:switch="${questionnaire}">
     <h2 th:case="null">Enginn spurningalisti valinn.</h2>
     <div th:case="*">
-        <h2>Spurningarlisti fyrir </h2> <h2> th:text="${questionnaire.name}">:</h2>
+        <h2 th:text="${questionnaire.name}">:</h2>
         <h3>Spurningar í lista:</h3>
         <table>
             <thead>
@@ -32,6 +32,29 @@
     </div>
 </section>
 
+<section>
+    <h2>Spurningar í kerfinu</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Spurning</th>
+            <th>Þyngd</th>
+            <th>Fjöldi Svarmöguleika</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question : ${questions}">
+            <div th:if="${!question.questionnaires.contains(questionnaire)}">
+                <td th:text="${question.questionString}"></td>
+                <td th:text="${question.weight}"></td>
+                <td th:text="${question.numberOfAnswers}"></td>
+                <td><a th:href="@{/addQuestion/{id}/{qId}(id=${question.id}, qId=${questionnaire.id})}">Bæta við á lista</a></td>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
 <form action="#" th:action="@{/addQuestion}" th:object="${question}" method="POST">
     <fieldset>
         <legend>Upplýsingar</legend>
@@ -47,10 +70,6 @@
         <label for="numberOfAnswers">Fjöldi Svarmöguleika</label>
         <input type="number" th:field="*{numberOfAnswers}" id="numberOfAnswers"  placeholder="Fjöldi Svarmöguleika">
         <span th:if="${#fields.hasErrors('numberOfAnswers')}" th:errors="*{numberOfAnswers}"></span>
-
-        <label for="listID">Spurningalistar (aðskilja með kommu)</label>
-        <input type="text" th:field="*{listID}" id="listID"  placeholder="Spurningalistar">
-        <span th:if="${#fields.hasErrors('listID')}" th:errors="*{listID}"></span>
     </fieldset>
     <input type="submit"  value="Skrá spurningu">
 </form>

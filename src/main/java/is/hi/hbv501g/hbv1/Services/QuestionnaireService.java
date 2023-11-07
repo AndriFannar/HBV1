@@ -25,6 +25,15 @@ public interface QuestionnaireService
 
 
     /**
+     * Saves a new Questionnaire to the database.
+     *
+     * @param questionnaire New Questionnaire to save.
+     * @return              Saved Questionnaire.
+     */
+    Questionnaire saveQuestionnaire(Questionnaire questionnaire);
+
+
+    /**
      * Saves a new Question to database.
      *
      * @param question Question to save.

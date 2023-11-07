@@ -40,7 +40,9 @@ public class WaitingListRequest
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    private Long questionnaireID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Questionnaire questionnaire;
     private int[] questionnaireAnswers;
     private double grade;
 
@@ -51,7 +53,6 @@ public class WaitingListRequest
     public WaitingListRequest()
     {
         this.status = false;
-        this.questionnaireID = 0L;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
@@ -73,7 +74,6 @@ public class WaitingListRequest
         this.description = description;
 
         this.status = false;
-        this.questionnaireID = 0L;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
@@ -147,12 +147,12 @@ public class WaitingListRequest
         this.dateOfRequest = dateOfRequest;
     }
 
-    public Long getQuestionnaireID() {
-        return questionnaireID;
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
     }
 
-    public void setQuestionnaireID(Long questionnaireID) {
-        this.questionnaireID = questionnaireID;
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
     }
 
     public int[] getQuestionnaireAnswers() {
@@ -182,7 +182,7 @@ public class WaitingListRequest
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
-                ", questionnaireID=" + questionnaireID +
+                ", questionnaireID=" + questionnaire.getId() +
                 ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
                 ", grade=" + grade +
                 '}';

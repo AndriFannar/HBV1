@@ -37,7 +37,7 @@ public class Question
 
     private int numberOfAnswers;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "questions")
     private List<Questionnaire> questionnaires;
 
     @Transient

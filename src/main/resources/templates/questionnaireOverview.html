@@ -31,7 +31,15 @@
 </section>
 
 <section>
-    <p>Búa til nýjan spurningalista</p>
+    <h3>Búa til nýjan spurningalista</h3>
+    <form action="#" th:action="@{/createQuestionnaire}" th:object="${questionnaire}" method="POST">
+        <fieldset>
+            <legend>Upplýsingar</legend>
+                <label for="name">Nafn lista</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="Nafn lista">
+        </fieldset>
+        <input type="submit"  value="Búa til">
+    </form>
 </section>
 
 <p><a href="/">Til baka</a></p>

@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Services.UserService;
@@ -96,9 +97,11 @@ public class WaitingListController
         if (exists != null)
         {
             List<User> staff = userService.findByIsPhysiotherapist(true);
+            List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
 
             model.addAttribute("request", exists);
             model.addAttribute("physiotherapists", staff);
+            model.addAttribute("questionnaires", questionnaires);
             model.addAttribute("LoggedInUser", user);
 
             int[] answers  = exists.getQuestionnaireAnswers();
