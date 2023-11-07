@@ -68,6 +68,8 @@
 
 <section th:if="${LoggedInUser.isAdmin}">
     <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
+    <td th:if="${user.isStaff && !user.isPhysiotherapist}"><a th:href="@{/makePhysiotherapist/{id}(id=${user.id})}">Breyta í sjúkraþjálfara</a></td>
+    <td th:if="${user.isStaff && !user.isAdmin}"><a th:href="@{/makeAdmin/{id}(id=${user.id})}">Breyta í stjórnanda</a></td>
 </section>
 
 <section>

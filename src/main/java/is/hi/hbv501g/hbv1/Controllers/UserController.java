@@ -36,8 +36,8 @@ import java.util.Objects;
 public class UserController
 {
     // Variables.
-    private UserService userService;
-    private WaitingListService waitingListService;
+    private final UserService userService;
+    private final WaitingListService waitingListService;
 
     /**
      * Construct a new PatientController.
@@ -56,11 +56,10 @@ public class UserController
     /**
      * Get login page.
      *
-     * @param model Used to populate data for the view.
-     * @return      Login page.
+     * @return Login page.
      */
     @RequestMapping(value="/", method = RequestMethod.GET)
-    public String loadPages(Model model, HttpSession session)
+    public String loadPages(HttpSession session)
     {
         User exists = (User) session.getAttribute("LoggedInUser");
 
@@ -83,12 +82,11 @@ public class UserController
     /**
      * Get page with form to sign up a new User.
      *
-     * @param user  User to register.
      * @param model Used to populate data for the view.
      * @return      Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(User user, Model model)
+    public String signUpForm(Model model)
     {
         model.addAttribute("user", new User());
         return "newUser";
@@ -124,11 +122,11 @@ public class UserController
             FieldError error = new FieldError("user", "password", errPass);
             result.addError(error);
         }
-        if(user.getName().length() == 0){
+        if(user.getName().isEmpty()){
             FieldError error = new FieldError("user", "name", "Vantar nafn");
             result.addError(error);
         }
-        if(user.getAddress().length() == 0){
+        if(user.getAddress().isEmpty()){
             FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
             result.addError(error);
         }
@@ -163,12 +161,11 @@ public class UserController
      * Get login page.
      *
      * @param user  User to log in.
-     * @param model Used to populate data for the view.
      * @return      Login page.
      */
     @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginGET(User user, Model model, HttpSession session){
-        //model.addAttribute("showUpdateForm", false); // Initially hide the update form
+    public String loginGET(User user)
+    {
         return "login";
     }
 
@@ -178,12 +175,11 @@ public class UserController
      *
      * @param user    User to log in
      * @param result  captures and handles validation errors
-     * @param model   used to populate data for the view
      * @param session used to for accessing patient session data
      * @return        Redirect.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String loginPOST(User user, BindingResult result,  Model model, HttpSession session)
+    public String loginPOST(User user, BindingResult result, HttpSession session)
     {
         if(result.hasErrors())
         {
@@ -242,9 +238,14 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/deleteUser/{userID}", method = RequestMethod.GET)
-    public String deleteUser(@PathVariable("userID") Long userID, Model model)
+    public String deleteUser(@PathVariable("userID") Long userID, HttpSession session, HttpServletRequest request)
     {
         userService.delete(userID);
+
+        User user = (User) session.getAttribute("LoggedInUser");
+
+        if (Objects.equals(user.getId(), userID))
+            request.getSession().invalidate();
 
         return "redirect:/";
     }
@@ -302,13 +303,13 @@ public class UserController
 
         String errPhN = userService.validatePhoneNumber(updatedUser);
 
-        if(updatedUser.getName().length() == 0)
+        if(updatedUser.getName().isEmpty())
         {
             FieldError error = new FieldError("user", "name", "Vantar nafn");
             result.addError(error);
             System.out.println("Name error");
         }
-        if(updatedUser.getAddress().length() == 0)
+        if(updatedUser.getAddress().isEmpty())
         {
             FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
             result.addError(error);
@@ -416,13 +417,43 @@ public class UserController
     /**
      * Make user staff.
      *
-     * @param userID ID of User to update to delete.
+     * @param userID ID of User to update.
      * @return       Redirect.
      */
     @RequestMapping(value = "/makeStaff/{userID}", method = RequestMethod.GET)
-    public String makeStaff(@PathVariable("userID") Long userID, Model model)
+    public String makeStaff(@PathVariable("userID") Long userID)
     {
         userService.changeRole(userID, true, false, false);
+
+        return "redirect:/userOverview";
+    }
+
+
+    /**
+     * Make user physiotherapist.
+     *
+     * @param userID ID of User to update.
+     * @return       Redirect.
+     */
+    @RequestMapping(value = "/makePhysiotherapist/{userID}", method = RequestMethod.GET)
+    public String makePhysiotherapist(@PathVariable("userID") Long userID)
+    {
+        userService.changeRole(userID, false, true, false);
+
+        return "redirect:/userOverview";
+    }
+
+
+    /**
+     * Make user admin.
+     *
+     * @param userID ID of User to update.
+     * @return       Redirect.
+     */
+    @RequestMapping(value = "/makeAdmin/{userID}", method = RequestMethod.GET)
+    public String makeAdmin(@PathVariable("userID") Long userID)
+    {
+        userService.changeRole(userID, false, false, true);
 
         return "redirect:/userOverview";
     }

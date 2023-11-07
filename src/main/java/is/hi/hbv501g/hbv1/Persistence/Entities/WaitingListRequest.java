@@ -1,12 +1,8 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +15,7 @@ import java.util.List;
  * @version 1.0
  */
 @Entity
-@Table(name="waitingListRequest")
+@Table(name="waiting_List_Request")
 public class WaitingListRequest
 {
     // Database primary key.
@@ -70,7 +66,7 @@ public class WaitingListRequest
      * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
-    public WaitingListRequest(User patient, User staff, String bodyPart, String description, Long staffID) {
+    public WaitingListRequest(User patient, User staff, String bodyPart, String description) {
         this.patient = patient;
         this.staff = staff;
         this.bodyPart = bodyPart;

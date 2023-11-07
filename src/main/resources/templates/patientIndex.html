@@ -52,14 +52,16 @@
             </tr>
             </thead>
             <tbody>
-            <td th:text="${request.dateOfRequest}"></td>
-            <td th:text="${request.bodyPart}"></td>
-            <td th:text="${request.description}"></td>
-            <td th:text="${request.staff.name}"></td>
-            <td th:switch="${request.status}">
-                <p th:if="${request.status == false}">Í bið</p>
-                <p th:if="${request.status == true}">Samþykkt</p>
-            </td>
+                <td th:text="${request.dateOfRequest}"></td>
+                <td th:text="${request.bodyPart}"></td>
+                <td th:text="${request.description}"></td>
+                <td th:text="${request.staff.name}"></td>
+                <td th:switch="${request.status}">
+                    <p th:if="${request.status == false}">Í bið</p>
+                    <p th:if="${request.status == true}">Samþykkt</p>
+                </td>
+                <td><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></td>
+                <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
             </tr>
             </tbody>
         </table>

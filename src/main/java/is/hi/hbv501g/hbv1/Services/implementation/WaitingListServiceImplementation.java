@@ -1,16 +1,14 @@
 package is.hi.hbv501g.hbv1.Services.implementation;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.*;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -24,7 +22,7 @@ import java.util.Objects;
 public class WaitingListServiceImplementation implements WaitingListService
 {
     // Variables
-    private WaitingListRepository waitingListRepository;
+    private final WaitingListRepository waitingListRepository;
 
 
     /**
@@ -65,18 +63,18 @@ public class WaitingListServiceImplementation implements WaitingListService
 
 
     /**
-     * Accept a WaitingListRequest.
+     * Change the status of a WaitingListRequest.
      *
-     * @param waitingListID ID of the WaitingListRequest to accept;
+     * @param waitingListID ID of the WaitingListRequest to change;
      */
     @Transactional
-    public void acceptRequest(Long waitingListID)
+    public void updateRequestStatus(Long waitingListID, boolean newStatus)
     {
         WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
 
         if(request != null)
         {
-            request.setStatus(true);
+            request.setStatus(newStatus);
         }
     }
 
