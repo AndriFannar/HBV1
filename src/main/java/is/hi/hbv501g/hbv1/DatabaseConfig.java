@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static java.time.Month.*;
 
@@ -32,7 +33,19 @@ public class DatabaseConfig
           );
 
 
-          repository.saveAll(List.of(jonJonsson));
+          List<User> users = repository.findUserByIsPhysiotherapist(true);
+
+          if (users.isEmpty())
+          {
+              repository.saveAll(List.of(jonJonsson));
+          }
+          else
+          {
+              for(User user : users)
+              {
+                  if((Objects.equals(user.getEmail(), "Jon@Jonsson.is")) && users.size() > 1) repository.deleteById(user.getId());
+              }
+          }
       };
     };
 }
