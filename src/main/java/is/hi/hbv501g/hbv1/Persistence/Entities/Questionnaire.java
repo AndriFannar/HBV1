@@ -33,18 +33,22 @@ public class Questionnaire
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Question> questions;
 
+    private boolean displayOnForm;
+
     /**
      * Create a new empty questionnaire.
      */
     public Questionnaire()
     {
-        questions = new ArrayList<>();
+        this.questions = new ArrayList<>();
+        this.displayOnForm = false;
     }
 
-    public Questionnaire(String name, List<Question> questions)
+    public Questionnaire(String name, List<Question> questions, boolean displayOnForm)
     {
         this.name = name;
         this.questions = questions;
+        this.displayOnForm = displayOnForm;
     }
 
     public void setId(Long id) {
@@ -74,6 +78,14 @@ public class Questionnaire
     public void addQuestion(Question question)
     {
         this.questions.add(question);
+    }
+
+    public boolean isDisplayOnForm() {
+        return displayOnForm;
+    }
+
+    public void setDisplayOnForm(boolean displayOnForm) {
+        this.displayOnForm = displayOnForm;
     }
 
     @Override

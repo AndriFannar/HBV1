@@ -94,6 +94,27 @@ public class QuestionnaireController
 
 
     /**
+     * Add a Question to a Questionnaire.
+     *
+     * @return Redirect back to page.
+     */
+    @RequestMapping(value = "/displayOnForm/{questionnaireID}", method = RequestMethod.GET)
+    public String displayOnForm(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            questionnaireService.displayOnForm(questionnaireID, true);
+
+            return "redirect:/editQuestionnaire/" + questionnaireID;
+        }
+
+        return "redirect:/";
+    }
+
+
+    /**
      * Edit an existing Questionnaire
      *
      * @return Page where the user can edit a Questionnaire.
@@ -112,9 +133,7 @@ public class QuestionnaireController
             model.addAttribute("questionnaire", questionnaire);
 
             List<Question> questions = questionService.getQuestions();
-
             model.addAttribute("questions", questions);
-
             model.addAttribute("question", new Question());
 
             return "viewQuestionnaire";

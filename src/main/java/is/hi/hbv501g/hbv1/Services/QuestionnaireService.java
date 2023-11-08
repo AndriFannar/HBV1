@@ -42,6 +42,15 @@ public interface QuestionnaireService
 
 
     /**
+     * Display Questionnaire on registration page.
+     *
+     * @param questionnaireID ID of the Questionnaire to change.
+     * @param display         Display the Questionnaire on the registration page.
+     */
+    void displayOnForm(Long questionnaireID, boolean display);
+
+
+    /**
      * Deletes a Questionnaire with a corresponding id.
      *
      * @param questionnaireID ID of the Questionnaire to delete.
@@ -55,4 +64,12 @@ public interface QuestionnaireService
      * @return List of all Questionnaire objects in database, if any.
      */
     List<Questionnaire> getAllQuestionnaire();
+
+
+    /**
+     * Gets the Questionnaires that should display when creating a new WaitingListRequest.
+     *
+     * @return List of Questionnaires that are marked for display.
+     */
+    List<Questionnaire> getDisplayQuestionnaires();
 }

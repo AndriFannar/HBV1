@@ -55,7 +55,7 @@
     </table>
 </section>
 
-<form action="#" th:action="@{/addQuestion}" th:object="${question}" method="POST">
+<form action="#" th:action="@{{qId}/addQuestion(qId=${questionnaire.id})}" th:object="${question}" method="POST">
     <fieldset>
         <legend>Upplýsingar</legend>
 

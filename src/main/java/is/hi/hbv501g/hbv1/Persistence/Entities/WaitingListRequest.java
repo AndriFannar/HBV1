@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import is.hi.hbv501g.hbv1.Converters.IntegerListConverter;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,6 +45,7 @@ public class WaitingListRequest
     @ManyToOne(fetch = FetchType.LAZY)
     private Questionnaire questionnaire;
 
+    @Column(columnDefinition = "int[]")
     @Convert(converter = IntegerListConverter.class)
     private List<Integer> questionnaireAnswers;
     private double grade;

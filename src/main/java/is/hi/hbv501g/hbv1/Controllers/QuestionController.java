@@ -39,29 +39,13 @@ public class QuestionController
 
 
     /**
-     * Get all Question objects in database.
-     *
-     * @return List of all Question objects in database.
-     */
-    @RequestMapping(value = "/questionOverview", method = RequestMethod.GET)
-    public String getQuestions(Model model)
-    {
-        // Get all Question objects and display.
-        List<Question> questions = questionService.getQuestions();
-        model.addAttribute("questions", questions);
-        model.addAttribute("question", new Question());
-        return "viewQuestionnaire";
-    }
-
-
-    /**
      * Create a new Question.
      *
      * @param question Question object to save.
      * @return         Redirect.
      */
-    @RequestMapping(value = "/addQuestion", method = RequestMethod.POST)
-    public String saveQuestion(Question question, BindingResult result)
+    @RequestMapping(value = "/{questionnaireID}/addQuestion", method = RequestMethod.POST)
+    public String saveQuestion(@PathVariable("questionnaireID") Long questionnaireID, Question question, BindingResult result)
     {
         if(result.hasErrors())
         {
@@ -71,7 +55,7 @@ public class QuestionController
         // Add Question to database if no errors.
         questionService.saveQuestion(question);
 
-        return "redirect:/questionOverview";
+        return "redirect:/editQuestionnaire/" + questionnaireID;
     }
 
 

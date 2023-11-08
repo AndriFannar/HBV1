@@ -28,8 +28,16 @@
                     <select/>
 
                     <label for="bodyPart">Líkamshluti</label>
-                    <input type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
-                    <span th:if="${#fields.hasErrors('bodyPart')}" th:errors="*{bodyPart}"></span>
+                    <div id="bodyPart">
+                        <div th:each="questionnaire : ${questionnaires}">
+                            <p th:text="${questionnaire.name}"></p>
+                            <input type="radio" th:field="*{questionnaire}" th:value="${questionnaire.id}">
+                        </div>
+                        <div>
+                            <p>Annað</p>
+                            <input type="radio" th:field="*{questionnaire}" th:value="null">
+                        </div>
+                    </div>
 
                     <label for="description">Lýsing á vandamáli</label>
                     <input type="text" th:field="*{description}" id="description"  placeholder="Lýsing">

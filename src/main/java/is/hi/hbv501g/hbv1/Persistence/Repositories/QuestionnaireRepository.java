@@ -49,4 +49,13 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
      * @return   Questionnaire with matching id, if any.
      */
     Questionnaire getQuestionnaireById(Long id);
+
+
+    /**
+     * Finds Questionnaire by if they should be displayed on the registration form.
+     *
+     * @param displayOnForm Display on registration form.
+     * @return              List of Questionnaire that the user can choose when creating a new WaitingListRequest.
+     */
+    List<Questionnaire> getQuestionnaireByDisplayOnForm(boolean displayOnForm);
 }
