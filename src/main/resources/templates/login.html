@@ -3,19 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>Innskráning</title>
+        <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+        <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
     </head>
     <body>
-        <h2>Innskráning Notanda</h2>
-        <form th:action="@{/login}" th:object="${user}" method="post">
-          <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-          <br>
-          <label for="email">Netfang</label>
-          <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
-          <br>
-          <label for="password">Lykilorð</label>
-          <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
-          <input type="submit" value="Innskráning"/>
-        </form>
-        <p><a href="/signUp">Búa til aðgang</a></p>
+        <header class="header">
+            <h1>Nafn apps</h1>
+        </header>
+        <main class="efni">
+            <form th:action="@{/login}" th:object="${user}" method="post" class="form">
+                <fieldset>
+                    <legend>Innskráning Notanda</legend>
+                    <div>
+                        <label for="email">Netfang</label>
+                        <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                    </div>
+                    <div>
+                        <label for="password">Lykilorð</label>
+                        <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
+                    </div>
+                    <input type="submit" value="Innskráning" class="button"/>
+                </fieldset>
+            </form>
+            <p class="p_back"><a href="/signUp" class="back">Búa til aðgang</a></p>
+        </main>
     </body>
 </html>

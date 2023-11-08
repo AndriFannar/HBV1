@@ -1,0 +1,120 @@
+.header {
+    background-color: #c1d3fe;
+    display: flex;
+    justify-content: center;
+}
+
+.efni {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 90%;
+}
+
+
+.form fieldset {
+    border: 1px solid #abc4ff;
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.form fieldset div {
+    margin-bottom: 1rem;
+}
+
+.signUp .button{
+    margin: 1rem;
+    text-decoration: none;
+}
+
+.button {
+    background-color: #e2eafc;
+    border: 1px solid #e2eafc;
+    color: #000000;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    text-decoration: none;
+}
+
+.button:hover {
+    border: 2px solid #abc4ff;
+    background-color: #ffffff;
+}
+
+p .back {
+    color: #000000;
+    text-decoration: none;
+}
+
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.userInfo_change {
+    display: flex;
+    justify-content: end;
+}
+
+.requests {
+    background-color: #e2eafc;
+    border-radius: 5rem;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    padding: 2rem;
+}
+
+.request {
+    display: flex;
+    flex-direction: row;
+}
+
+.requests h2{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.requests .request_question{
+    border: 1px solid #00296b;
+    border-radius: 1rem;
+    display: flex;
+    margin: auto;
+}
+
+.request_section {
+    width: 50%;
+    padding: 0.5rem;
+}
+
+.request_section div{
+    display: flex;
+    flex-direction: row;
+}
+
+.request_section div p{
+    margin-right: 0.5rem;
+}
+
+.request_section .date {
+    font-size: 14px;
+    margin-bottom: -2%;
+}
+
+.status .true{
+    background-color: #c7f9cc;
+    padding: 0.5rem;
+}
+
+.status .false {
+    background-color: #ffadad;
+    text-align: none;
+    padding: 0.5rem;
+}
+
