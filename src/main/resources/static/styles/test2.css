@@ -157,6 +157,7 @@ p .back {
 .status .true{
     background-color: #c7f9cc;
     padding: 0.5rem;
+    display: flex;
 }
 
 .status .false {
