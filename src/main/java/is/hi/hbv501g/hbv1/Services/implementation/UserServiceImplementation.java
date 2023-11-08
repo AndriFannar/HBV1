@@ -1,15 +1,12 @@
 package is.hi.hbv501g.hbv1.Services.implementation;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;
 import is.hi.hbv501g.hbv1.Services.UserService;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImplementation implements UserService
 {
     // Variables.
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     /**
@@ -212,7 +209,7 @@ public class UserServiceImplementation implements UserService
         String message = "";
         String kennitala = user.getSsn();
         User exists = findBySsn(kennitala);
-        if(kennitala.length() == 0){
+        if(kennitala.isEmpty()){
             message += "Vantar að setja inn lykilorð";
         }
         else if(kennitala.length() != 10){
@@ -270,7 +267,7 @@ public class UserServiceImplementation implements UserService
     public String validatePassword(User user){
         String message = "";
         String password = user.getPassword();
-        if(password.length() == 0){
+        if(password.isEmpty()){
             message += "Vantar lykilorð";
         } else {
             message = strengthOfPassword(password);
@@ -329,7 +326,7 @@ public class UserServiceImplementation implements UserService
         User exists = findByEmail(email);
         if(exists != null){
             message += "Notandi þegar til";
-        } else if(email.length() == 0){
+        } else if(email.isEmpty()){
             message += "Vantar netfang";
         } else if(!validEmail(email)){
             message += "Netfang ekki netfang";
@@ -367,7 +364,7 @@ public class UserServiceImplementation implements UserService
         {
             String message = "";
             String phNumber = user.getPhoneNumber();
-            if(phNumber.length() == 0){
+            if(phNumber.isEmpty()){
                 message += "Vantar símanúmer";
             } 
             int numbers = Integer.parseInt(phNumber);

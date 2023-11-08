@@ -1,9 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
@@ -81,7 +78,7 @@ public class QuestionnaireController
             return "redirect:/questionnaire";
         }
 
-        Patient patient = (Patient) session.getAttribute("LoggedInUser");
+        User patient = (User) session.getAttribute("LoggedInUser");
 
         //waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
 

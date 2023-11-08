@@ -2,10 +2,7 @@ package is.hi.hbv501g.hbv1.Services;
 
 import java.util.List;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**

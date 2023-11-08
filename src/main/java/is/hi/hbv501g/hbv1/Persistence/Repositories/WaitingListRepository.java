@@ -1,7 +1,5 @@
 package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Patient;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Staff;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -43,7 +43,7 @@ public class User
     private String specialization;
     private String description;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WaitingListRequest> waitingListRequests;
 
     @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
@@ -94,12 +94,6 @@ public class User
     public Long getId()
     {
         return id;
-    }
-
-
-    public void setId(Long id_counter)
-    {
-        this.id = id_counter;
     }
 
 
