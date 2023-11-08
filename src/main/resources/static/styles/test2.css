@@ -11,8 +11,28 @@
     width: 90%;
 }
 
+p {
+    display: flex;
+}
+
+.p_back{
+    display: flex;
+    margin: auto;
+}
+
+.p_back a{
+    color: #000000;
+    text-decoration: none;
+}
+
+/*--------------------Form------------------------------------------*/
 .form {
-    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-bottom: 1rem;
+    width: 50%;
+    box-sizing: border-box;
 }
 
 .form fieldset {
@@ -21,12 +41,21 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
+
 
 .form fieldset div {
     margin-bottom: 1rem;
 }
 
+.form input{
+    width: 100%;
+}
+
+
+/*-------------------Button-------------------------------------------*/
 .signUp .button{
     margin: 1rem;
     text-decoration: none;
@@ -51,7 +80,25 @@ p .back {
     text-decoration: none;
 }
 
+.extraButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
+.extraButton div{
+    margin-right: 1rem;
+    border: 1px solid #abc4ff;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.extraButton div:hover{
+    background-color: #edf2fb;
+    border: 1px solid #abc4ff;
+}
+
+/*-----------------------------------------User info-----------------------------*/
 .userInfo {
     display: flex;
     flex-direction: column;
@@ -63,6 +110,8 @@ p .back {
     justify-content: end;
 }
 
+
+/*---------------------------Requests--------------------------------------------*/
 .requests {
     background-color: #edf2fb;
     display: flex;
@@ -115,20 +164,24 @@ p .back {
     padding: 0.5rem;
 }
 
-tbody tr:nth-child(odd) {
+
+/*-----------------------Table----------------------------------------*/
+
+.table {
+    margin-block-end: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+.table tbody tr:nth-child(odd) {
     background-color: #edf2fb;
-    color: #000000;
+}
+  
+.table th,
+.table td {
+    padding: calc(1rem / 2);
+    text-align: left;
 }
 
-.extraButton {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
 
-.extraButton div{
-    margin-right: 1rem;
-    border: 1px solid #abc4ff;
-    border-radius: 1rem;
-    padding: 0.5rem;
-}
+

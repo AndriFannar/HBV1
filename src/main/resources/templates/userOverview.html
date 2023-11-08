@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Forsíða starfsmanns</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test.css"/>-->
 </head>
 <body>
-<section th:switch="${users}">
-    <h2 th:case="null">Engir sjúklingar</h2>
-    <div th:case="*">
-        <h2>Allir skráðir sjúklingar</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Nafn</th>
-                <th>Netfang</th>
-                <th>Kennitala</th>
-                <th>Símanúmer</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.ssn}"></td>
-                <td th:text="${user.phoneNumber}"></td>
-                <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></td>
-                <td><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></td>
-                <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-<section>
-    <p><a href="/staffIndex">Til baka</a></p>
-</section>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+    <main class="efni">
+        <section th:switch="${users}">
+            <h2 th:case="null">Engir sjúklingar</h2>
+            <div th:case="*">
+                <h2>Allir skráðir sjúklingar</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nafn</th>
+                        <th>Netfang</th>
+                        <th>Kennitala</th>
+                        <th>Símanúmer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.ssn}"></td>
+                        <td th:text="${user.phoneNumber}"></td>
+                        <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></td>
+                        <td><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></td>
+                        <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section>
+            <p><a href="/staffIndex">Til baka</a></p>
+        </section>
+    </main>
 </body>
 </html>

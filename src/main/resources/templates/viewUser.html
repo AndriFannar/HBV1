@@ -3,79 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Skoða notanda</title>
+      <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+      <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
-<section th:switch="${user}">
-    <h2 th:case="null">Engin notandi valinn</h2>
-    <div th:case="*">
-        <h2>Upplýsingar notanda:</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Nafn</th>
-                <th>Kennitala</th>
-                <th>Netfang</th>
-                <th>Símanúmer</th>
-                <th>Heimilisfang</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.ssn}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.phoneNumber}"></td>
-                <td th:text="${user.address}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<section>
-    <form action="#"  th:object="${user}" th:action="@{/updateUser/__${user.id}__}" method="POST">
-        <fieldset>
-            <legend>Breyta upplýsingum</legend>
-
-            <div>
-                <label for="name">Name</label>
-                <input type="text" th:field="*{name}" id="name" placeholder="${user.name}">
-                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-            </div>
-
-            <div>
-                <label for="phNumber">Símanúmer</label>
-                <input type="text" th:field="*{phoneNumber}" id="phNumber" placeholder="${user.phoneNumber}">
-                <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
-            </div>
-
-
-            <div>
-                <label for="address">Heimilisfang</label>
-                <input type="text" th:field="*{address}" id="address"  placeholder="${user.address}">
-                <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
-            </div>
-
-            <div>
-                <label for="email">Netfang</label>
-                <input type="text" th:field="*{email}" id="email" placeholder="${user.email}">
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            </div>
-        </fieldset>
-        <input type="submit"  value="Skrá breytingar">
-    </form>
-</section>
-
-<section th:if="${LoggedInUser.isAdmin}">
-    <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
-</section>
-
-<section>
-    <a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a>
-</section>
-
-<section>
-    <p><a href="/">Til baka</a></p>
-</section>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+<main class="efni">
+    <section th:switch="${user}">
+        <h2 th:case="null">Engin notandi valinn</h2>
+        <div th:case="*">
+            <h2>Upplýsingar notanda:</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nafn</th>
+                    <th>Kennitala</th>
+                    <th>Netfang</th>
+                    <th>Símanúmer</th>
+                    <th>Heimilisfang</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.ssn}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.address}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section>
+        <form class="form" action="#"  th:object="${user}" th:action="@{/updateUser/__${user.id}__}" method="POST">
+            <fieldset>
+                <legend>Breyta upplýsingum</legend>
+    
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" th:field="*{name}" id="name" placeholder="${user.name}">
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+    
+                <div>
+                    <label for="phNumber">Símanúmer</label>
+                    <input type="text" th:field="*{phoneNumber}" id="phNumber" placeholder="${user.phoneNumber}">
+                    <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+                </div>
+    
+    
+                <div>
+                    <label for="address">Heimilisfang</label>
+                    <input type="text" th:field="*{address}" id="address"  placeholder="${user.address}">
+                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                </div>
+    
+                <div>
+                    <label for="email">Netfang</label>
+                    <input type="text" th:field="*{email}" id="email" placeholder="${user.email}">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+            </fieldset>
+            <input type="submit"  value="Skrá breytingar" class="button">
+        </form>
+    </section>
+    
+    <section class="extraButton">
+        <div th:if="${LoggedInUser.isAdmin}">
+            <p class="p_back" th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></p>
+        </div>
+        
+        <div>
+            <p class="p_back"><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></p>
+        </div>
+    </section>
+    
+    <section>
+        <p><a href="/" class="back">Til baka</a></p>
+    </section>
+</main>
 </body>
 </html>
