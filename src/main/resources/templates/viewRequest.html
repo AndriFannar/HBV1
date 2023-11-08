@@ -3,121 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <title>Skoða beiðni</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
-<section th:switch="${request.patient}">
-    <h2 th:case="null">Engin notandi skráður fyrir beiðni</h2>
-    <div th:case="*">
-        <h2>Sjúklingur:</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Nafn</th>
-                <th>Kennitala</th>
-                <th>Netfang</th>
-                <th>Símanúmer</th>
-                <th>Heimilisfang</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${request.patient.name}"></td>
-                <td th:text="${request.patient.ssn}"></td>
-                <td th:text="${request.patient.email}"></td>
-                <td th:text="${request.patient.phoneNumber}"></td>
-                <td th:text="${request.patient.address}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<section th:switch="${request}">
-    <h2 th:case="null">Engin beiðni valin</h2>
-    <div th:case="*">
-        <h2>Beiðni:</h2>
-        <table>
-            <thead>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+<main class="efni">
+    <section th:switch="${request.patient}">
+        <h2 th:case="null">Engin notandi skráður fyrir beiðni</h2>
+        <div th:case="*">
+            <h2>Sjúklingur:</h2>
+            <table class="table">
+                <thead>
                 <tr>
-                    <th>Skráður starfsmaður</th>
-                    <th>Líkamshluti</th>
-                    <th>Lýsing</th>
-                    <th>Staða</th>
-                    <th>Forgangur</th>
-                    <th>Dagsetning</th>
+                    <th>Nafn</th>
+                    <th>Kennitala</th>
+                    <th>Netfang</th>
+                    <th>Símanúmer</th>
+                    <th>Heimilisfang</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <tr>
-                    <td th:text="${request.staff.name}"></td>
-                    <td th:text="${request.bodyPart}"></td>
-                    <td th:text="${request.description}"></td>
-
-                    <td th:switch="${request.status}">
-                        <p th:if="${request.status == false}">Ekki Samþykkt</p>
-                        <p th:if="${request.status == true}">Samþykkt</p>
-                    </td>
-
-                    <td th:if="${LoggedInUser.isPhysiotherapist}" th:text="${request.grade}"></td>
-
-                    <td th:text="${request.dateOfRequest}">
-
-
-                    <td><p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
-                    <td><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
+                    <td th:text="${request.patient.name}"></td>
+                    <td th:text="${request.patient.ssn}"></td>
+                    <td th:text="${request.patient.email}"></td>
+                    <td th:text="${request.patient.phoneNumber}"></td>
+                    <td th:text="${request.patient.address}"></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<section th:if="${LoggedInUser.isPhysiotherapist || LoggedInUser.id == request.patient.id}">
-    <h2>Breyta beiðni</h2>
-    <form class="form-control" id="dropDownList" action="#"  th:object="${request}" th:action="@{/updateRequest/__${request.id}__}" method="POST">
-        <fieldset>
-            <legend>Upplýsingar</legend>
-
-            <label for="staff">Starfsmaður</label>
-            <select th:field="*{staff}" th:each="stff : *{staff}" id="staff">
-                <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}" th:selected="${stff.id == staffMember.id}"></option>
-            <select/>
-
-            <label th:if="${LoggedInUser.id == request.patient.id}" for="bodyPart">Líkamshluti</label>
-            <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
-
-            <label th:if="${LoggedInUser.id == request.patient.id}" for="description">Lýsing á vandamáli</label>
-            <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
-
-            <label th:if="${LoggedInUser.isPhysiotherapist}" for="grade">Forgangur</label>
-            <input th:if="${LoggedInUser.isPhysiotherapist}" type="number" th:field="*{grade}" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
-        </fieldset>
-        <input type="submit"  value="Skrá breytingar">
-    </form>
-</section>
-
-<section th:if="${LoggedInUser.isPhysiotherapist}">
-    <details th:if="${answers != null}">
-        <summary>Svör spurningalista:</summary>
-        <table>
-            <thead>
-                <tr>
-                    <th>Spurning</th>
-                    <th>Svar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="question : ${questionnaire}">
-                    <td th:text="${question.questionString}"></td>
-                </tr>
-                <tr th:each="answer : ${answers}">
-                    <td th:text="${answer}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </details>
-</section>
-<section>
-    <p><a href="/">Til baka</a></p>
-</section>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section th:switch="${request}">
+        <h2 th:case="null">Engin beiðni valin</h2>
+        <div th:case="*">
+            <h2>Beiðni:</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Skráður starfsmaður</th>
+                        <th>Líkamshluti</th>
+                        <th>Lýsing</th>
+                        <th>Staða</th>
+                        <th>Forgangur</th>
+                        <th>Dagsetning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td th:text="${request.staff.name}"></td>
+                        <td th:text="${request.bodyPart}"></td>
+                        <td th:text="${request.description}"></td>
+    
+                        <td th:switch="${request.status}">
+                            <p th:if="${request.status == false}">Ekki Samþykkt</p>
+                            <p th:if="${request.status == true}">Samþykkt</p>
+                        </td>
+    
+                        <td th:if="${LoggedInUser.isPhysiotherapist}" th:text="${request.grade}"></td>
+    
+                        <td th:text="${request.dateOfRequest}">
+    
+    
+                        <td class="staff_button">
+                            <div>
+                                <p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p>
+                                <p><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section th:if="${LoggedInUser.isPhysiotherapist || LoggedInUser.id == request.patient.id}">
+        <h2>Breyta beiðni</h2>
+        <form class="form" id="dropDownList" action="#"  th:object="${request}" th:action="@{/updateRequest/__${request.id}__}" method="POST">
+            <fieldset>
+                <legend>Upplýsingar</legend>
+    
+                <div>
+                    <label for="staff">Starfsmaður</label>
+                    <select th:field="*{staff}" th:each="stff : *{staff}" id="staff">
+                        <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}" th:selected="${stff.id == staffMember.id}"></option>
+                    </select>
+                </div>
+    
+                <div>
+                    <label th:if="${LoggedInUser.id == request.patient.id}" for="bodyPart">Líkamshluti</label>
+                    <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
+                </div>
+    
+                <div>
+                    <label th:if="${LoggedInUser.id == request.patient.id}" for="description">Lýsing á vandamáli</label>
+                    <input th:if="${LoggedInUser.id == request.patient.id}" type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
+                </div>
+    
+                <div>
+                    <label th:if="${LoggedInUser.isPhysiotherapist}" for="grade">Forgangur</label>
+                    <input th:if="${LoggedInUser.isPhysiotherapist}" type="number" th:field="*{grade}" th:value="${grade}" id="grade" th:placeholder="${request.grade}">
+                </div>
+            </fieldset>
+            <input type="submit"  value="Skrá breytingar" class="button">
+        </form>
+    </section>
+    
+    <section th:if="${LoggedInUser.isPhysiotherapist}">
+        <details th:if="${answers != null}">
+            <summary>Svör spurningalista:</summary>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Spurning</th>
+                        <th>Svar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="question : ${questionnaire}">
+                        <td th:text="${question.questionString}"></td>
+                    </tr>
+                    <tr th:each="answer : ${answers}">
+                        <td th:text="${answer}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
+    </section>
+    <section>
+        <p><a href="/" class="back">Til baka</a></p>
+    </section>
+</main>
 </body>
 </html>

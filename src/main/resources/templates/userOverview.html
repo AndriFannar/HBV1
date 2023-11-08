@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Forsíða starfsmanns</title>
     <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
-    <!--<link rel="stylesheet" href="../static/styles/test.css"/>-->
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
     <header class="header">
@@ -30,16 +30,20 @@
                         <td th:text="${user.email}"></td>
                         <td th:text="${user.ssn}"></td>
                         <td th:text="${user.phoneNumber}"></td>
-                        <td><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></td>
-                        <td><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></td>
-                        <td th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></td>
+                        <td class="staff_button">
+                            <div>
+                                <p><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></p>
+                                <p><a th:href="@{/viewUser/{id}(id=${user.id})}">Skoða</a></p>
+                                <p th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></p>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </section>
         <section>
-            <p><a href="/staffIndex">Til baka</a></p>
+            <p><a href="/staffIndex" class="back">Til baka</a></p>
         </section>
     </main>
 </body>
