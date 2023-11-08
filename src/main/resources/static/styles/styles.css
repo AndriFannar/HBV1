@@ -114,6 +114,7 @@ p .back {
 
 .status .false {
     background-color: #ffadad;
+    text-align: none;
     padding: 0.5rem;
 }
 
