@@ -65,7 +65,7 @@
             </tr>
             </tbody>
         </table>
-        <p th:if="${request.questionnaire != null}"><a href="/questionnaire">Svara Spurningalista</a></p>
+        <p th:if="${request.questionnaire != null}"><a th:href="@{/answerQuestionnaire/{id}(id=${request.questionnaire.id})}">Svara Spurningalista</a></p>
     </div>
 
 

@@ -132,7 +132,7 @@ public class Question
                 ", questionString='" + questionString + '\'' +
                 ", weight=" + weight +
                 ", numberOfAnswers=" + numberOfAnswers +
-                ", questionnaires=" + questionnaires.toString() +
+                ", questionnaires=" + questionnaires +
                 ", answer=" + answer +
                 '}';
     }

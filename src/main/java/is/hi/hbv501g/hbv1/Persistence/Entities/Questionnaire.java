@@ -75,4 +75,13 @@ public class Questionnaire
     {
         this.questions.add(question);
     }
+
+    @Override
+    public String toString() {
+        return "Questionnaire{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", questions=" + questions +
+                '}';
+    }
 }

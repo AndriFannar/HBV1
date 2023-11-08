@@ -218,6 +218,7 @@ public class UserController
 
             WaitingListRequest request = waitingListService.getRequestByPatient(sessionUser);
             model.addAttribute("request", request);
+            System.out.println(request.getQuestionnaireAnswers());
 
 
             model.addAttribute("newRequest", new WaitingListRequest());

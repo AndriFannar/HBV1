@@ -104,7 +104,7 @@ public class WaitingListController
             model.addAttribute("questionnaires", questionnaires);
             model.addAttribute("LoggedInUser", user);
 
-            int[] answers  = exists.getQuestionnaireAnswers();
+            List<Integer> answers  = exists.getQuestionnaireAnswers();
 
             if(answers != null)
             {

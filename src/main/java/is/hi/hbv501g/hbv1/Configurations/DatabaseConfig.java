@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1;
+package is.hi.hbv501g.hbv1.Configurations;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;

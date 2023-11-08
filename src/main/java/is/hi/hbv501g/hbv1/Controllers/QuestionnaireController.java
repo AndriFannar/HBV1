@@ -153,16 +153,13 @@ public class QuestionnaireController
      *
      * @return questionnaire page with Questionnaire object.
      */
-    @RequestMapping(value = "/questionnaire", method = RequestMethod.GET)
-    public String getQuestionnaire(WaitingListRequest waitingLR, Model model, HttpSession session)
+    @RequestMapping(value = "/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
+    public String getQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
     {
-        // Get ID of questionnaire to get from request.
-        //Long questionnaireID = waitingLR.getQuestionnaireID();
-
         // Find and add corresponding Questionnaire to model.
-        //Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
+        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
 
-        //model.addAttribute("questionnaire", form);
+        model.addAttribute("questionnaire", form);
 
         return "answerQuestionnaire";
     }
@@ -176,14 +173,19 @@ public class QuestionnaireController
     @RequestMapping(value = "/answerQuestionnaire", method = RequestMethod.POST)
     public String answerQuestionnaire(Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)
     {
-        if(result.hasErrors())
-        {
-            return "redirect:/questionnaire";
-        }
-
         User patient = (User) session.getAttribute("LoggedInUser");
 
-        //waitingListService.updateRequest(patient.getWaitingListRequest().getId(), null, null, null, false, null, form, null);
+        if(patient != null)
+        {
+            System.out.println("Questionnaire: " + questionnaire);
+            System.out.println("Question size: " + questionnaire.getQuestions().size());
+            if(!questionnaire.getQuestions().isEmpty()) System.out.println("Question: " + questionnaire.getQuestions().get(0).toString());
+
+            Long requestID = patient.getWaitingListRequest().getId();
+            System.out.println("Current request: " + requestID);
+
+            waitingListService.addQuestionnaireAnswers(requestID, questionnaire);
+        }
 
         return "redirect:/";
     }

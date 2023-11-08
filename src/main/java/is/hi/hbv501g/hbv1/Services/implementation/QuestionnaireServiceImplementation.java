@@ -7,6 +7,7 @@ import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,11 +52,24 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 
 
     /**
+     * Saves a new Questionnaire to the database.
+     *
+     * @param questionnaire New Questionnaire to save.
+     * @return              Saved Questionnaire.
+     */
+    public Questionnaire saveQuestionnaire(Questionnaire questionnaire)
+    {
+        return questionnaireRepository.save(questionnaire);
+    }
+
+
+    /**
      * Adds a Question to questionnaire.
      *
      * @param question Question to add.
      */
     @Override
+    @Transactional
     public void addQuestionToList(Question question, Questionnaire questionnaire)
     {
         questionnaire.addQuestion(question);

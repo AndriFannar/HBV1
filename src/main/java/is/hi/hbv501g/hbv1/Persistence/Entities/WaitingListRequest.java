@@ -1,9 +1,9 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
+import is.hi.hbv501g.hbv1.Converters.IntegerListConverter;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -43,7 +43,9 @@ public class WaitingListRequest
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Questionnaire questionnaire;
-    private int[] questionnaireAnswers;
+
+    @Convert(converter = IntegerListConverter.class)
+    private List<Integer> questionnaireAnswers;
     private double grade;
 
 
@@ -89,7 +91,7 @@ public class WaitingListRequest
     {
         for (int i = 0; i < questions.size(); i++)
         {
-            grade += questionnaireAnswers[i] * questions.get(i).getWeight();
+            grade += questionnaireAnswers.get(i) * questions.get(i).getWeight();
         }
 
         return grade;
@@ -151,16 +153,24 @@ public class WaitingListRequest
         return questionnaire;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire) {
+    public void setQuestionnaire(Questionnaire questionnaire)
+    {
         this.questionnaire = questionnaire;
+        this.questionnaireAnswers.clear();
     }
 
-    public int[] getQuestionnaireAnswers() {
+    public List<Integer> getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(int[] answers) {
-        this.questionnaireAnswers = answers;
+    public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
+    {
+        this.questionnaireAnswers = questionnaireAnswers;
+    }
+
+    public void addQuestionnaireAnswer(Integer answer)
+    {
+        this.questionnaireAnswers.add(answer);
     }
 
     public double getGrade() {
@@ -183,7 +193,7 @@ public class WaitingListRequest
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
                 ", questionnaireID=" + questionnaire.getId() +
-                ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
+                ", questionnaire=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
     }
