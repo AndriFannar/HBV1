@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -99,24 +100,25 @@ public class WaitingListController
         WaitingListRequest exists = waitingListService.getRequestByID(requestID);
         User user = (User) session.getAttribute("LoggedInUser");
 
-        if (exists != null)
+        if ((exists != null) && (user != null))
         {
-            List<User> staff = userService.findByIsPhysiotherapist(true);
-            List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
+            if((user.isStaff()) || (Objects.equals(user.getWaitingListRequest().getId(), requestID))) {
+                List<User> staff = userService.findByIsPhysiotherapist(true);
+                List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
 
-            model.addAttribute("request", exists);
-            model.addAttribute("physiotherapists", staff);
-            model.addAttribute("questionnaires", questionnaires);
-            model.addAttribute("LoggedInUser", user);
+                model.addAttribute("request", exists);
+                model.addAttribute("physiotherapists", staff);
+                model.addAttribute("questionnaires", questionnaires);
+                model.addAttribute("LoggedInUser", user);
 
-            List<Integer> answers  = exists.getQuestionnaireAnswers();
+                List<Integer> answers = exists.getQuestionnaireAnswers();
 
-            if(answers != null)
-            {
-                model.addAttribute("answers", answers);
+                if (answers != null) {
+                    model.addAttribute("answers", answers);
+                }
+
+                return "viewRequest";
             }
-
-            return "viewRequest";
         }
 
         return "redirect:/";

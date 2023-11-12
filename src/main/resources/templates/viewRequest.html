@@ -113,6 +113,10 @@
                             <input type="radio" th:if="${questionnaire.displayOnForm}" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
                         </div>
                     </div>
+                    <div>
+                        <label for="description">Lýsing á vandamáli</label>
+                        <input type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
+                    </div>
                 </div>
             </fieldset>
             <input type="submit"  value="Skrá breytingar" class="button">
@@ -120,7 +124,7 @@
     </section>
 
     <section th:if="${LoggedInUser.isPhysiotherapist}">
-        <details th:if="${answers != null}">
+        <details th:if="${(request.questionnaire != null) &&  (answers != null)}">
             <summary>Svör spurningalista:</summary>
             <table>
                 <thead>

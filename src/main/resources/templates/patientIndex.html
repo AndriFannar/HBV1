@@ -46,6 +46,7 @@
                         <label for="bodyPart">Líkamshluti</label>
                         <div id="bodyPart">
                             <input type="radio" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
+                            <input type="radio" th:field="*{questionnaire}" th:value="0" th:text="Annað">
                         </div>
                     </div>
                     <div>
@@ -93,7 +94,7 @@
                 </div>
             </div>
         </section>
-        <p th:if="${request.questionnaireID != 0}" class="request_question"><a href="/questionnaire" class="button">Svara Spurningalista</a></p>
+        <p th:if="${(request.questionnaire != null) && (request.questionnaireAnswers.size == 0)}" class="request_question"><a th:href="@{/answerQuestionnaire/{id}(id=${request.questionnaire.id})}" class="button">Svara Spurningalista</a></p>
     </div>
 
 
