@@ -1,7 +1,8 @@
 package is.hi.hbv501g.hbv1.Services;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,53 +19,67 @@ public interface QuestionnaireService
     /**
      * Gets the Questionnaire with the corresponding ID.
      *
-     * @param listID The ID of the questionnaire to fetch.
-     * @return       Questionnaire that holds Question objects with corresponding list ID.
+     * @param questionnaireID The ID of the questionnaire to fetch.
+     * @return                Questionnaire that holds Question objects with corresponding list ID.
      */
-    QuestionnaireForm getQuestionnaire(Integer listID);
+    Questionnaire getQuestionnaire(Long questionnaireID);
+
+
+    /**
+     * Saves a new Questionnaire to the database.
+     *
+     * @param questionnaire New Questionnaire to save.
+     * @return              Saved Questionnaire.
+     */
+    Questionnaire saveQuestionnaire(Questionnaire questionnaire);
 
 
     /**
      * Saves a new Question to database.
      *
-     * @param question Question to save.
-     * @return         Saved Question.
+     * @param questionID      ID of Question to save.
+     * @param questionnaireID ID of Questionnaire that Question should be added to.
      */
-    Question addQuestion(Question question);
+    void addQuestionToList(Long questionID, Long questionnaireID);
 
 
     /**
-     * Update a matching Question.
+     * Removes a Question from questionnaire.
      *
-     * @param questionID      ID of the question to update.
-     * @param questionString  Updated question, if any.
-     * @param weight          Updated weight, if any.
-     * @param numberOfAnswers Updated number of answers possible, if any.
-     * @param listID          Updated Questionnaire ID, if any.
+     * @param questionID      ID of Question to remove.
+     * @param questionnaireID ID of Questionnaire that Question should be removed from.
      */
-    void updateQuestion(Long questionID, String questionString, double weight, int numberOfAnswers, List<Integer> listID);
+    void removeQuestionFromList(Long questionID, Long questionnaireID);
 
 
     /**
-     * Deletes a Question with a corresponding id.
+     * Display Questionnaire on registration page.
      *
-     * @param questionID ID of the Question to delete.
+     * @param questionnaireID ID of the Questionnaire to change.
      */
-    void deleteQuestionById(Long questionID);
+    void displayOnForm(Long questionnaireID);
 
 
     /**
-     * Gets all Question objects in database.
+     * Deletes a Questionnaire with a corresponding id.
      *
-     * @return List of all Question objects in database, if any.
+     * @param questionnaireID ID of the Questionnaire to delete.
      */
-    List<Question> getQuestions();
+    void deleteQuestionnaireById(Long questionnaireID);
 
 
     /**
-     * Gets Question object with matching ID from database.
+     * Gets all Questionnaire objects in database.
      *
-     * @return Question object with matching ID in database, if any.
+     * @return List of all Questionnaire objects in database, if any.
      */
-    Question getQuestionById(Long questionID);
+    List<Questionnaire> getAllQuestionnaire();
+
+
+    /**
+     * Gets the Questionnaires that should display when creating a new WaitingListRequest.
+     *
+     * @return List of Questionnaires that are marked for display.
+     */
+    List<Questionnaire> getDisplayQuestionnaires();
 }

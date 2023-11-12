@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1;
+package is.hi.hbv501g.hbv1.Configurations;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;
@@ -6,11 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-
-import static java.time.Month.*;
 
 @Configuration
 public class DatabaseConfig
@@ -31,21 +28,17 @@ public class DatabaseConfig
                   "Ekkert",
                   "Ekkert"
           );
-        
+
           List<User> users = repository.findUserByIsPhysiotherapist(true);
 
           if (users.isEmpty())
           {
               repository.saveAll(List.of(jonJonsson));
           }
-          else if (users.size() > 1)
-          {
-              for(User user : users)
-              {
-                  if(Objects.equals(user.getEmail(), "Jon@Jonsson.is")) repository.deleteById(user.getId());
+          else if (users.size() > 1) {
+              for (User user : users) {
+                  if (Objects.equals(user.getEmail(), "Jon@Jonsson.is")) repository.deleteById(user.getId());
               }
-
-              repository.saveAll(List.of(jonJonsson));
           }
       };
     };

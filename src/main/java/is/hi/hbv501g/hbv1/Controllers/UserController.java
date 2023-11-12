@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +40,26 @@ public class UserController
     // Variables.
     private final UserService userService;
     private final WaitingListService waitingListService;
+    private final QuestionnaireService questionnaireService;
 
     /**
      * Construct a new PatientController.
      *
-     * @param userService        UserService linked to controller.
-     * @param waitingListService WaitingListService linked to controller.
+     * @param userService          UserService linked to controller.
+     * @param waitingListService   WaitingListService linked to controller.
+     * @param questionnaireService QuestionnaireService linked to controller.
      */
     @Autowired
-    public UserController(UserService userService, WaitingListService waitingListService)
+    public UserController(UserService userService, WaitingListService waitingListService, QuestionnaireService questionnaireService)
     {
         this.userService = userService;
         this.waitingListService = waitingListService;
+        this.questionnaireService = questionnaireService;
     }
 
 
     /**
-     * Get login page.
+     * Get login page. 
      *
      * @return Login page.
      */
@@ -66,7 +71,6 @@ public class UserController
         if(exists != null)
         {
             session.setAttribute("LoggedInUser", exists);
-
             if(exists.isStaff())
             {
                 return "redirect:/staffIndex";
@@ -219,6 +223,8 @@ public class UserController
             WaitingListRequest request = waitingListService.getRequestByPatient(sessionUser);
             model.addAttribute("request", request);
 
+            List<Questionnaire> questionnaires = questionnaireService.getDisplayQuestionnaires();
+            model.addAttribute("questionnaires", questionnaires);
 
             model.addAttribute("newRequest", new WaitingListRequest());
 
@@ -266,7 +272,6 @@ public class UserController
         if (user != null)
         {
             model.addAttribute("LoggedInUser", user);
-            System.out.println(user.isAdmin());
             model.addAttribute("user", viewUser);
 
             return "viewUser";
@@ -292,8 +297,6 @@ public class UserController
         {
             String errEmail = userService.validateEmail(updatedUser);
 
-            System.out.println("Email check");
-
             if(!errEmail.isEmpty())
             {
                 FieldError error = new FieldError( "user", "email", errEmail);
@@ -307,19 +310,16 @@ public class UserController
         {
             FieldError error = new FieldError("user", "name", "Vantar nafn");
             result.addError(error);
-            System.out.println("Name error");
         }
         if(updatedUser.getAddress().isEmpty())
         {
             FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
             result.addError(error);
-            System.out.println("Address error");
         }
         if(!errPhN.isEmpty())
         {
             FieldError error = new FieldError("user", "phoneNumber", errPhN);
             result.addError(error);
-            System.out.println(errPhN);
         }
 
         if(result.hasErrors())
@@ -327,7 +327,6 @@ public class UserController
             return "redirect:/viewUser/" + userID;
         }
 
-        System.out.println(updatedUser);
         userService.updateUser(userID, updatedUser);
 
         User updated = userService.findByID(userID);
@@ -421,11 +420,16 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makeStaff/{userID}", method = RequestMethod.GET)
-    public String makeStaff(@PathVariable("userID") Long userID)
+    public String makeStaff(@PathVariable("userID") Long userID, HttpSession session)
     {
-        userService.changeRole(userID, true, false, false);
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        return "redirect:/userOverview";
+        if (loggedInUser.isAdmin())
+        {
+            userService.changeRole(userID, true, false, false);
+        }
+
+        return "redirect:/viewUser/" + userID;
     }
 
 
@@ -436,11 +440,15 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makePhysiotherapist/{userID}", method = RequestMethod.GET)
-    public String makePhysiotherapist(@PathVariable("userID") Long userID)
+    public String makePhysiotherapist(@PathVariable("userID") Long userID, HttpSession session)
     {
-        userService.changeRole(userID, false, true, false);
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        return "redirect:/userOverview";
+        if (loggedInUser.isAdmin())
+        {
+            userService.changeRole(userID, false, true, false);
+        }
+        return "redirect:/viewUser/" + userID;
     }
 
 
@@ -451,10 +459,35 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makeAdmin/{userID}", method = RequestMethod.GET)
-    public String makeAdmin(@PathVariable("userID") Long userID)
+    public String makeAdmin(@PathVariable("userID") Long userID, HttpSession session)
     {
-        userService.changeRole(userID, false, false, true);
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        return "redirect:/userOverview";
+        if (loggedInUser.isAdmin())
+        {
+            userService.changeRole(userID, false, false, true);
+        }
+
+        return "redirect:/viewUser/" + userID;
+    }
+
+
+    /**
+     * Make user patient.
+     *
+     * @param userID ID of User to update.
+     * @return       Redirect.
+     */
+    @RequestMapping(value = "/makePatient/{userID}", method = RequestMethod.GET)
+    public String makePatient(@PathVariable("userID") Long userID, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser.isAdmin())
+        {
+            userService.changeRole(userID, false, false, false);
+        }
+
+        return "redirect:/viewUser/" + userID;
     }
 }

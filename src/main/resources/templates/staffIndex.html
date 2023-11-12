@@ -3,57 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Forsíða starfsmanns</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
-<section th:switch="${requests}">
-    <h1>Velkomin/nn</h1>
-    <h2 th:text="${LoggedInUser.name}"></h2>
-    <h2 th:case="null">Engar beiðnir í kerfinu</h2>
-    <div th:case="*">
-        <h2>Beiðnir:</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nafn</th>
-                    <th>Starfsmaður</th>
-                    <th>Líkamshluti</th>
-                    <th>Lýsing</th>
-                    <th>Staða</th>
-                    <th>Forgangur</th>
-                    <th>Dagsetning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="request : ${requests}">
-                    <td th:text="${request.patient.name}"></td>
-                    <td th:text="${request.staff.name}"></td>
-                    <td th:text="${request.bodyPart}"></td>
-                    <td th:text="${request.description}"></td>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+    <main class="efni">
+        <section th:switch="${requests}">
+            <h1>Velkomin/nn</h1>
+            <h2 th:text="${LoggedInUser.name}"></h2>
+            <h2 th:case="null">Engar beiðnir í kerfinu</h2>
+            <div th:case="*">
+                <h2>Beiðnir:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nafn</th>
+                            <th>Starfsmaður</th>
+                            <th>Líkamshluti</th>
+                            <th>Lýsing</th>
+                            <th>Staða</th>
+                            <th>Forgangur</th>
+                            <th>Dagsetning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="request : ${requests}">
+                            <td th:text="${request.patient.name}"></td>
+                            <td th:text="${request.staff.name}"></td>
+                            <td>
+                                <p th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></p>
+                                <p th:if="${request.questionnaire == null}">Ekkert merkt</p>
+                            </td>
+                            <td th:text="${request.description}"></td>
 
-                    <td th:switch="${request.status}">
-                        <p th:if="${request.status == false}">Ekki Samþykkt</p>
-                        <p th:if="${request.status == true}">Samþykkt</p>
-                    </td>
+                            <td th:switch="${request.status}">
+                                <p th:if="${request.status == false}">Ekki Samþykkt</p>
+                                <p th:if="${request.status == true}">Samþykkt</p>
+                            </td>
 
-                    <td th:text="${request.grade}"></td>
+                            <td th:text="${request.grade}"></td>
 
-                    <td th:text="${request.dateOfRequest}">
+                            <td th:text="${request.dateOfRequest}">
 
 
-                    <td><p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p></td>
-                    <td><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
-                    <td><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-<section th:if="${LoggedInUser.isAdmin}">
-    <a th:href="@{/userOverview}">Skoða notendur</a>
-    <a href="/questionOverview">Yfirlit Spurninga</a>
-</section>
-<section>
-    <p><a href="/logout">Skrá út</a></p>
-</section>
+                            <td class="staff_button">
+                                <div>
+                                    <p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja</a></p>
+                                    <p><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða</a></p>
+                                    <p><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section th:if="${LoggedInUser.isAdmin}" class="staff_index_button">
+           <div>
+                <p><a th:href="@{/userOverview}" class="button">Skoða notendur</a></p>
+                <p><a href="/questionnaireOverview" class="button">Yfirlit Spurningalista</a></p>
+           </div>
+        </section>
+        <section>
+            <p><a href="/logout" class="back">Skrá út</a></p>
+        </section>
+    </main>
+
 </body>
 </html>

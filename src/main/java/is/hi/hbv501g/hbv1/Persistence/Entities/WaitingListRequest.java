@@ -1,9 +1,11 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
+import is.hi.hbv501g.hbv1.Converters.IntegerListConverter;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,16 +34,20 @@ public class WaitingListRequest
     private Long id;
 
     // Variables.
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private User patient;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User staff;
-    private String bodyPart;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    private int questionnaireID;
-    private int[] questionnaireAnswers;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Questionnaire questionnaire;
+
+    @Column(columnDefinition = "int[]")
+    @Convert(converter = IntegerListConverter.class)
+    private List<Integer> questionnaireAnswers;
     private double grade;
 
 
@@ -51,10 +57,11 @@ public class WaitingListRequest
     public WaitingListRequest()
     {
         this.status = false;
-        this.questionnaireID = 0;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -63,20 +70,19 @@ public class WaitingListRequest
      *
      * @param patient     The patient requesting treatment.
      * @param staff       Selected physiotherapist.
-     * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
     public WaitingListRequest(User patient, User staff, String bodyPart, String description) {
         this.patient = patient;
         this.staff = staff;
-        this.bodyPart = bodyPart;
         this.description = description;
 
         this.status = false;
-        this.questionnaireID = 0;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -89,7 +95,7 @@ public class WaitingListRequest
     {
         for (int i = 0; i < questions.size(); i++)
         {
-            grade += questionnaireAnswers[i] * questions.get(i).getWeight();
+            grade += questionnaireAnswers.get(i) * questions.get(i).getWeight();
         }
 
         return grade;
@@ -113,14 +119,6 @@ public class WaitingListRequest
 
     public void setStaff(User staff) {
         this.staff = staff;
-    }
-
-    public String getBodyPart() {
-        return bodyPart;
-    }
-
-    public void setBodyPart(String bodyPart) {
-        this.bodyPart = bodyPart;
     }
 
     public String getDescription() {
@@ -147,20 +145,29 @@ public class WaitingListRequest
         this.dateOfRequest = dateOfRequest;
     }
 
-    public int getQuestionnaireID() {
-        return questionnaireID;
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
     }
 
-    public void setQuestionnaireID(int questionnaireID) {
-        this.questionnaireID = questionnaireID;
+    public void setQuestionnaire(Questionnaire questionnaire)
+    {
+        this.questionnaire = questionnaire;
+        this.questionnaireAnswers.clear();
     }
 
-    public int[] getQuestionnaireAnswers() {
+    public List<Integer> getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(int[] answers) {
-        this.questionnaireAnswers = answers;
+    public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
+    {
+        this.questionnaireAnswers = questionnaireAnswers;
+    }
+
+    public void addQuestionnaireAnswer(Integer answer)
+    {
+        this.questionnaireAnswers.add(answer);
+
     }
 
     public double getGrade() {
@@ -178,12 +185,11 @@ public class WaitingListRequest
                 "id=" + id +
                 ", patient=" + patient.getId() +
                 ", staff=" + staff +
-                ", bodyPart='" + bodyPart + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
-                ", questionnaireID=" + questionnaireID +
-                ", questionnaire=" + Arrays.toString(questionnaireAnswers) +
+                ", questionnaireID=" + questionnaire.getId() +
+                ", questionnaire=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
     }

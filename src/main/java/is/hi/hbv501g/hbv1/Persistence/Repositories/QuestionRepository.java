@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -55,9 +56,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long>
     /**
      * Returns list of Question with matching list IDs.
      *
-     * @param listID ID of the questionnaire.
-     * @return       List of Question objects that have a matching list ID.
+     * @param questionnaire Questionnaire the question belongs to.
+     * @return              List of Question objects that have a matching list ID.
      */
-    List<Question> findAllByListIDIs(Integer Id);
-    //findAllByListIDContains
+    List<Question> findAllByQuestionnaires(Questionnaire questionnaire);
 }

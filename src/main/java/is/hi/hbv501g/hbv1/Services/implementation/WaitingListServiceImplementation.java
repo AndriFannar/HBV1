@@ -1,5 +1,7 @@
 package is.hi.hbv501g.hbv1.Services.implementation;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -80,6 +83,38 @@ public class WaitingListServiceImplementation implements WaitingListService
 
 
     /**
+     * Change the status of a WaitingListRequest.
+     *
+     * @param waitingListID ID of the WaitingListRequest to change;
+     */
+    @Transactional
+    public void addQuestionnaireAnswers(Long waitingListID, Questionnaire questionnaire)
+    {
+        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
+
+        if(request != null)
+        {
+            if(!request.getQuestionnaireAnswers().isEmpty())
+            {
+                request.setQuestionnaireAnswers(new ArrayList<>());
+            }
+
+            for (Question question : questionnaire.getQuestions())
+            {
+                System.out.println("Adding answer " + question.getAnswer() + ".");
+                request.addQuestionnaireAnswer(question.getAnswer());
+            }
+
+            System.out.println("Questionnaire answers in request: " + request.getQuestionnaireAnswers());
+
+            Questionnaire requestQuestionnaire = request.getQuestionnaire();
+
+            request.calculateScore(requestQuestionnaire.getQuestions());
+        }
+    }
+
+
+    /**
      * Updates a corresponding WaitingListRequest.
      *
      * @param waitingListID  ID of the request to update.
@@ -93,10 +128,9 @@ public class WaitingListServiceImplementation implements WaitingListService
         if (waitingLR != null)
         {
             if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
-            if (updatedRequest.getBodyPart() != null) waitingLR.setBodyPart(updatedRequest.getBodyPart());
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
-            if (updatedRequest.getQuestionnaireID() != 0) waitingLR.setQuestionnaireID(updatedRequest.getQuestionnaireID());
+            if (updatedRequest.getQuestionnaire() != null) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
         }
     }
@@ -123,7 +157,19 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public WaitingListRequest getRequestByID(Long waitingListID)
     {
-        return waitingListRepository.getWaitingListRequestById(waitingListID);
+        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
+
+        if (request != null)
+        {
+            List<Integer> answers = request.getQuestionnaireAnswers();
+
+            for (int i = 0; i < request.getQuestionnaireAnswers().size(); i++)
+            {
+                request.getQuestionnaire().getQuestions().get(i).setAnswer(answers.get(i));
+            }
+        }
+
+        return request;
     }
 
 
