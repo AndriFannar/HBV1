@@ -3,77 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>Sjúklingur</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+<main class="efni">
+    <section class="userInfo">
+        <div>
+            <h2><span th:text="${LoggedInUser.name}"></span></h2>
+            <div>
+                <p><strong>Kennitala:</strong> <span th:text="${LoggedInUser.ssn}"></span></p>
+                <p><strong>Heimilsifang:</strong> <span th:text="${LoggedInUser.address}"></span></p>
+            </div>
+            <div>
+                <p><strong>Netfang:</strong> <span th:text="${LoggedInUser.email}"></span></p>
+                <p><strong>Sími:</strong> <span th:text="${LoggedInUser.phoneNumber}"></span></p>
+            </div>
+        </div>
+        <div class="userInfo_change">
+            <p><a th:href="@{/viewUser/{id}(id=${LoggedInUser.id})}" class="button">Breyta notendaupplýsingum</a></p>
+        </div>
+    </section>
 
-<h1><span th:text="${LoggedInUser.name}"></span></h1>
 
-<!-- Display patient information -->
-<p><strong>Kennitala:</strong> <span th:text="${LoggedInUser.ssn}"></span></p>
-<p><strong>Heimilsifang:</strong> <span th:text="${LoggedInUser.address}"></span></p>
-<p><strong>Netfang:</strong> <span th:text="${LoggedInUser.email}"></span></p>
-<p><strong>Sími:</strong> <span th:text="${LoggedInUser.phoneNumber}"></span></p>
 
-<p><a th:href="@{/viewUser/{id}(id=${LoggedInUser.id})}">Breyta notendaupplýsingum</a></p>
+    <section th:switch="${request}">
+        <div th:case="null">
+            <form action="#" th:action="@{/createRequest}" th:object="${newRequest}" method="POST" class="form">
+                <fieldset>
+                    <legend>Upplýsingar</legend>
 
-<section th:switch="${request}">
-    <div th:case="null">
-        <form action="#" th:action="@{/createRequest}" th:object="${newRequest}" method="POST">
-            <fieldset>
-                <legend>Upplýsingar</legend>
-
-                <label for="staff">Starfsmaður</label>
-                <select id="staff" th:field="*{staff}">
-                    <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}"></option>
-                    <select/>
-
+                    <div>
+                        <label for="staff">Starfsmaður</label>
+                        <select id="staff" th:field="*{staff}">
+                            <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}"></option>
+                        </select>
+                    </div>
                     <div th:if="${!questionnaires.isEmpty}">
                         <label for="bodyPart">Líkamshluti</label>
                         <div id="bodyPart">
                             <input type="radio" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
                         </div>
                     </div>
-
-                    <label for="description">Lýsing á vandamáli</label>
-                    <input type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
-                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-            </fieldset>
-            <input type="submit"  value="Skrá beiðni">
+                    <div>
+                        <label for="description">Lýsing á vandamáli</label>
+                        <input type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
+                        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                    </div>
+                </fieldset>
+            <input type="submit"  value="Skrá beiðni" class="button">
         </form>
     </div>
 
-    <div th:case="*">
+    <div th:case="*" class="requests" th:class="${request.status == true} ? 'status-true' : 'status-false'">
         <h2>Beiðni:</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Dagsetning</th>
-                <th th:if="${request.questionnaire != null}">Líkamshluti</th>
-                <th>Vandamál</th>
-                <th>Sjúkraþjálfari</th>
-                <th>Staða umsóknar</th>
-            </tr>
-            </thead>
-            <tbody>
-                <td th:text="${request.dateOfRequest}"></td>
-                <td th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></td>
-                <td th:text="${request.description}"></td>
-                <td th:text="${request.staff.name}"></td>
-                <td>
-                    <p th:if="${request.status == false}">Í bið</p>
-                    <p th:if="${request.status == true}">Samþykkt</p>
-                </td>
-                <td><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></td>
-                <td><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <p th:if="${request.questionnaire != null}"><a th:href="@{/answerQuestionnaire/{id}(id=${request.questionnaire.id})}">Svara Spurningalista</a></p>
+        <section class="request">
+            <div class="request_section">
+                <div class="date">
+                    <p class="label">Dagsetning</p>
+                    <p th:text="${request.dateOfRequest}"></p>
+                </div>
+                <div>
+                    <p class="label">Líkamshluti</p>
+                    <p th:if="${request.questionnaire != null}">Líkamshluti</p>
+                </div>
+                <div>
+                    <p class="label">Vandamál</p>
+                    <p th:text="${request.description}"></p>
+                </div>
+            </div>
+            <div class="request_section">
+                <div>
+                    <p class="label"> Sjúkraþjálfari</p>
+                    <p th:text="${request.staff.name}"></p>
+                </div>
+                <div class="status">
+                    <p class="label">Staða umsóknar</p>
+                    <div th:switch="${request.status}">
+                        <p th:if="${request.status == false}" >Í bið</p>
+                        <p th:if="${request.status == true}" >Samþykkt</p>
+                    </div>
+                </div>
+                <div>
+                    <p><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></p>
+                    <p><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></p>
+                </div>
+            </div>
+        </section>
+        <p th:if="${request.questionnaireID != 0}" class="request_question"><a href="/questionnaire" class="button">Svara Spurningalista</a></p>
     </div>
 
 
 </section>
 
-<p><a th:href="@{/logout}">Útskrá</a></p>
+<p class="p_back"><a th:href="@{/logout}" class="back">Útskrá</a></p>
+</main>
 </body>
 </html>

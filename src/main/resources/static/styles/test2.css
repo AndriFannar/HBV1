@@ -1,0 +1,221 @@
+.header {
+    background-color: #c1d3fe;
+    display: flex;
+    justify-content: center;
+}
+
+.efni {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 90%;
+}
+
+p {
+    display: flex;
+}
+
+.p_back{
+    display: flex;
+    margin: auto;
+}
+
+.p_back a{
+    color: #000000;
+    text-decoration: none;
+}
+
+/*--------------------Form------------------------------------------*/
+.form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-bottom: 1rem;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.form fieldset {
+    border: 1px solid #abc4ff;
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.form fieldset div {
+    margin-bottom: 1rem;
+}
+
+.form input{
+    width: 100%;
+}
+
+
+/*-------------------Button-------------------------------------------*/
+.signUp .button{
+    margin: 1rem;
+    text-decoration: none;
+}
+
+.button {
+    background-color: #edf2fb;
+    border: 1px solid #e2eafc;
+    color: #000000;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    text-decoration: none;
+}
+
+.button:hover {
+    border: 2px solid #abc4ff;
+    background-color: #ffffff;
+}
+
+p .back {
+    color: #000000;
+    text-decoration: none;
+}
+
+p .back:hover{
+    font-weight: 600;
+}
+
+.extraButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.extraButton div{
+    margin-right: 1rem;
+    border: 1px solid #abc4ff;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.extraButton div:hover{
+    background-color: #edf2fb;
+    border: 1px solid #abc4ff;
+}
+
+/*-----------------------------------------User info-----------------------------*/
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.userInfo_change {
+    display: flex;
+    justify-content: end;
+}
+
+
+/*---------------------------Requests--------------------------------------------*/
+
+.request {
+    display: flex;
+    flex-direction: row;
+}
+
+.status-true h2{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.status-false h2{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.request_question{
+    border: 1px solid #00296b;
+    border-radius: 1rem;
+    display: flex;
+    margin: auto;
+}
+
+.request_section {
+    width: 50%;
+    padding: 0.5rem;
+}
+
+.request_section div{
+    display: flex;
+    flex-direction: row;
+}
+
+.request_section div p{
+    margin-right: 0.5rem;
+}
+
+.request_section div .label {
+    font-weight: 900;
+}
+
+.status-true {
+    background-color: #c7f9cc;  
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+.status-false {
+    background-color: #ffadad;    
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+/*-----------------------Table----------------------------------------*/
+
+.table {
+    margin-block-end: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+.table tbody tr:nth-child(odd) {
+    background-color: #edf2fb;
+}
+  
+.table th,
+.table td {
+    padding: calc(1rem / 2);
+    text-align: left;
+}
+
+.table .staff_button div a:hover{
+    font-weight: 600;
+}
+
+.table .staff_button div{
+    display: flex;
+    flex-direction: column;
+}
+
+.staff_button div p{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.25rem;
+}
+
+.staff_button div p a{
+    text-decoration: none;
+    color: #000000;
+}
+
+
+

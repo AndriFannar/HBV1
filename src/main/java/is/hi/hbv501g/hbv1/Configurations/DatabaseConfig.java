@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Configurations;
+package is.hi.hbv501g.hbv1;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;
@@ -35,11 +35,9 @@ public class DatabaseConfig
           {
               repository.saveAll(List.of(jonJonsson));
           }
-          else
-          {
-              for(User user : users)
-              {
-                  if((Objects.equals(user.getEmail(), "Jon@Jonsson.is")) && users.size() > 1) repository.deleteById(user.getId());
+          else if (users.size() > 1) {
+              for (User user : users) {
+                  if (Objects.equals(user.getEmail(), "Jon@Jonsson.is")) repository.deleteById(user.getId());
               }
           }
       };

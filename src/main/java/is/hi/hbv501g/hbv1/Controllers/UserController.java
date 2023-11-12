@@ -59,7 +59,7 @@ public class UserController
 
 
     /**
-     * Get login page.
+     * Get login page. 
      *
      * @return Login page.
      */
@@ -71,7 +71,6 @@ public class UserController
         if(exists != null)
         {
             session.setAttribute("LoggedInUser", exists);
-
             if(exists.isStaff())
             {
                 return "redirect:/staffIndex";
