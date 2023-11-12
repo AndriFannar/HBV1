@@ -61,9 +61,11 @@
                 </table>
             </div>
         </section>
-        <section th:if="${LoggedInUser.isAdmin}" class="extraButton">
-            <p class="p_back"><a th:href="@{/userOverview}" class="button">Skoða notendur</a></p>
-            <p class="p_back"><a href="/questionnaireOverview" class="button">Yfirlit Spurningalista</a></p>
+        <section th:if="${LoggedInUser.isAdmin}" class="staff_index_button">
+           <div>
+                <p><a th:href="@{/userOverview}" class="button">Skoða notendur</a></p>
+                <p><a href="/questionnaireOverview" class="button">Yfirlit Spurningalista</a></p>
+           </div>
         </section>
         <section>
             <p><a href="/logout" class="back">Skrá út</a></p>

@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     margin: auto;
+    margin-bottom: 2rem;
     width: 90%;
 }
 
@@ -55,6 +56,8 @@ p {
 }
 
 
+
+
 /*-------------------Button-------------------------------------------*/
 .signUp .button{
     margin: 1rem;
@@ -84,23 +87,33 @@ p .back:hover{
     font-weight: 600;
 }
 
+.viewUser_button,
 .extraButton {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.extraButton div{
+.viewUser_button p,
+.extraButton p{
     margin-right: 1rem;
     border: 1px solid #abc4ff;
     border-radius: 1rem;
     padding: 0.5rem;
 }
 
-.extraButton div:hover{
+.viewUser_button p:hover,
+.extraButton p:hover{
     background-color: #edf2fb;
     border: 1px solid #abc4ff;
 }
+
+.viewUser_button .viewUser_staff_button {
+    display: flex;
+    flex-direction: row;
+}
+
+
 
 /*-----------------------------------------User info-----------------------------*/
 .userInfo {
@@ -122,13 +135,8 @@ p .back:hover{
     flex-direction: row;
 }
 
+.status-false h2,
 .status-true h2{
-    display: flex;
-    margin: auto;
-    margin-bottom: 0.5rem;
-}
-
-.status-false h2{
     display: flex;
     margin: auto;
     margin-bottom: 0.5rem;
@@ -151,6 +159,16 @@ p .back:hover{
     flex-direction: row;
 }
 
+.request_section .patient_buttons {
+    justify-content: space-evenly;
+}
+
+.patient_buttons p {
+    border: 1px solid #000000;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
 .request_section div p{
     margin-right: 0.5rem;
 }
@@ -159,6 +177,7 @@ p .back:hover{
     font-weight: 900;
 }
 
+.status-false,
 .status-true {
     background-color: #c7f9cc;  
     display: flex;
@@ -171,12 +190,6 @@ p .back:hover{
 
 .status-false {
     background-color: #ffadad;    
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    padding: 2rem;
 }
 
 /*-----------------------Table----------------------------------------*/
@@ -215,6 +228,76 @@ p .back:hover{
 .staff_button div p a{
     text-decoration: none;
     color: #000000;
+}
+
+.staff_index_button div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+/*----------------Questions-------------------*/
+
+.questionForm {
+    width: 100%;
+}
+
+.questionForm .questionFieldset {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.question_div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+    width: 95%;
+    padding: 1rem;
+}
+
+.question_div:nth-child(4n - 2),
+.question_div:nth-child(4n - 1) {
+    background-color: #edf2fb; 
+}
+
+.question_div div label{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    margin-left: 1rem;
+}
+
+.question_button {
+    display: flex;
+    justify-content: center;
+}
+
+.question_button p{
+    width: 20%;
+}
+
+.answer_question {
+    display: flex;
+    justify-content: center;
+} 
+
+/*--------------Login-------------------*/
+.loginError {
+    margin-bottom: 1rem;
+    color: red;
+}
+
+.bodypart_div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.bodypart_div label{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    margin-left: 1rem;
 }
 
 

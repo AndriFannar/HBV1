@@ -72,8 +72,8 @@
         </form>
     </section>
     
-    <section class="extraButton">
-        <div th:if="${LoggedInUser.isAdmin}">
+    <section class="viewUser_button">
+        <div th:if="${LoggedInUser.isAdmin}" class="viewUser_staff_button">
             <p class="p_back" th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></p>
             <p class="p_back" th:if="${user.isStaff && !user.isPhysiotherapist}"><a th:href="@{/makePhysiotherapist/{id}(id=${user.id})}">Breyta í sjúkraþjálfara</a></p>
             <p class="p_back" th:if="${user.isStaff && !user.isAdmin}"><a th:href="@{/makeAdmin/{id}(id=${user.id})}">Breyta í stjórnanda</a></p>

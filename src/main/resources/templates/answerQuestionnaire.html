@@ -3,29 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Svara Spurningalista</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
-<h1>Spurningalisti</h1>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+    <main class="efni">
+        <h1>Spurningalisti</h1>
 
-<section th:if="${not #lists.isEmpty(questionnaire.questions)}">
-    <h2>Spurningar:</h2>
-    <h3>Þar sem 0 er minnst</h3>
-    <form th:action="@{/answerQuestionnaire}" th:object="${questionnaire}" method="POST">
-        <div th:each="question, questionIndex : ${questionnaire.questions}">
-            <p th:text="${question.questionString}"></p>
-            <div th:each="answerIndex : ${#numbers.sequence(0, question.numberOfAnswers - 1)}">
-                <label>
-                    <input type="radio" th:field="*{questions[__${questionIndex.index}__].answer}" th:value="${answerIndex}" />
-                    <span th:text="${answerIndex}"></span>
-                </label>
-            </div>
-        </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    </form>
-</section>
+        <section th:if="${not #lists.isEmpty(questionnaire.questions)}">
+            <h2>Spurningar:</h2>
+            <h3>Þar sem 0 er minnst</h3>
+            <form th:action="@{/answerQuestionnaire}" th:object="${questionnaire}" method="POST" class="form questionForm">
+                <fieldset class="questionFieldset">
+                    <div th:each="question, questionIndex : ${questionnaire.questions}" class="question_div">
+                        <p th:text="${question.questionString}"></p>
+                        <div th:each="answerIndex : ${#numbers.sequence(0, question.numberOfAnswers - 1)}">
+                            <label >
+                                <input type="radio" th:field="*{questions[__${questionIndex.index}__].answer}" th:value="${answerIndex}" />
+                                <span th:text="${answerIndex}"></span>
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="question_button">
+                    <button class="button"type="submit">Submit</button>
+                </div>
+            </form>
+        </section>
 
-<p><a href="/">Til baka</a></p>
+        <p class="p_back"><a class="back" href="/">Til baka</a></p>
+    </main>
 </body>
 </html>

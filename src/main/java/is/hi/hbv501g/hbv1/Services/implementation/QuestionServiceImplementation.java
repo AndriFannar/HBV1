@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Services.Implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;

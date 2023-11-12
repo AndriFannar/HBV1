@@ -17,12 +17,12 @@
                     <div>
                         <label for="email">Netfang</label>
                         <input type="text" name="email" id="email" th:field="*{email}" placeholder="xxx@email.com"/>
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                     </div>
                     <div>
                         <label for="password">Lykilorð</label>
                         <input type="password" name="password" id="password" th:field="*{password}" placeholder=""/>
                     </div>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="loginError"></span>
                     <input type="submit" value="Innskráning" class="button"/>
                 </fieldset>
             </form>
