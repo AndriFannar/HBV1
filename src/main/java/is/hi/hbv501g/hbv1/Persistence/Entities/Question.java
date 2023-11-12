@@ -75,24 +75,20 @@ public class Question
         return questionString;
     }
 
-
     public void setQuestionString(String questionString)
     {
         this.questionString = questionString;
     }
-
 
     public Double getWeight()
     {
         return weight;
     }
 
-
     public void setWeight(Double weight)
     {
         this.weight = weight;
     }
-
 
     public List<Questionnaire> getQuestionnaires() {
         return questionnaires;

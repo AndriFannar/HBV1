@@ -223,9 +223,10 @@ public class QuestionnaireController
 
 
     /**
-     * Form for answering a Questionnaire.
+     * Result from answering a Questionnaire.
      *
-     * @return questionnaire page with Questionnaire object.
+     * @param questionnaire Questionnaire object with answers.
+     * @return Redirect.
      */
     @RequestMapping(value = "/answerQuestionnaire", method = RequestMethod.POST)
     public String answerQuestionnaire(Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)

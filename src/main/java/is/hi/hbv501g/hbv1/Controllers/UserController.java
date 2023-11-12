@@ -463,4 +463,19 @@ public class UserController
 
         return "redirect:/userOverview";
     }
+
+
+    /**
+     * Make user patient.
+     *
+     * @param userID ID of User to update.
+     * @return       Redirect.
+     */
+    @RequestMapping(value = "/makePatient/{userID}", method = RequestMethod.GET)
+    public String makePatient(@PathVariable("userID") Long userID)
+    {
+        userService.changeRole(userID, false, false, false);
+
+        return "redirect:/userOverview";
+    }
 }
