@@ -210,41 +210,33 @@ public class QuestionnaireController
      *
      * @return questionnaire page with Questionnaire object.
      */
-    @RequestMapping(value = "/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
-    public String getQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    @RequestMapping(value = "{requestId}/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
+    public String getQuestionnaire(@PathVariable("requestId") Long requestId, @PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
     {
-        User patient = (User) session.getAttribute("LoggedInUser");
+        // Find and add corresponding Questionnaire to model.
+        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
+        WaitingListRequest request = waitingListService.getRequestByID(requestId);
 
-        if (patient != null)
-        {
-            // Find and add corresponding Questionnaire to model.
-            Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
+        model.addAttribute("questionnaire", form);
+        model.addAttribute("request", request);
 
-            model.addAttribute("questionnaire", form);
-
-            return "answerQuestionnaire";
-        }
-
-        return "redirect:/";
+        return "answerQuestionnaire";
     }
 
 
     /**
-     * Result from answering a Questionnaire.
+     * Form for answering a Questionnaire.
      *
-     * @param questionnaire Questionnaire object with answers.
-     * @return Redirect.
+     * @return questionnaire page with Questionnaire object.
      */
-    @RequestMapping(value = "/answerQuestionnaire", method = RequestMethod.POST)
-    public String answerQuestionnaire(Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)
+    @RequestMapping(value = "{requestId}/answerQuestionnaire", method = RequestMethod.POST)
+    public String answerQuestionnaire(@PathVariable("requestId") Long requestId, Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)
     {
         User patient = (User) session.getAttribute("LoggedInUser");
 
         if(patient != null)
         {
-            Long requestID = patient.getWaitingListRequest().getId();
-
-            waitingListService.addQuestionnaireAnswers(requestID, questionnaire);
+            waitingListService.addQuestionnaireAnswers(requestId, questionnaire);
         }
 
         return "redirect:/";

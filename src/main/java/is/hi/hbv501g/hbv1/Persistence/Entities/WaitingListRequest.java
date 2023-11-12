@@ -34,9 +34,9 @@ public class WaitingListRequest
     private Long id;
 
     // Variables.
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private User patient;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User staff;
     private String description;
     private boolean status;

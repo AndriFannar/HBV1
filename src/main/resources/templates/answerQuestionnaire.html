@@ -16,7 +16,7 @@
         <section th:if="${not #lists.isEmpty(questionnaire.questions)}">
             <h2>Spurningar:</h2>
             <h3>Þar sem 0 er minnst</h3>
-            <form th:action="@{/answerQuestionnaire}" th:object="${questionnaire}" method="POST" class="form questionForm">
+            <form th:action="@{/{qId}/answerQuestionnaire(qId=${request.id})}" th:object="${questionnaire}" method="POST" class="form questionForm">
                 <fieldset class="questionFieldset">
                     <div th:each="question, questionIndex : ${questionnaire.questions}" class="question_div">
                         <p th:text="${question.questionString}"></p>
@@ -29,7 +29,7 @@
                     </div>
                 </fieldset>
                 <div class="question_button">
-                    <button class="button"type="submit">Submit</button>
+                    <button class="button"type="submit">Svara</button>
                 </div>
             </form>
         </section>
