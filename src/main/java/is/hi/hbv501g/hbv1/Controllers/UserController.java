@@ -272,7 +272,6 @@ public class UserController
         if (user != null)
         {
             model.addAttribute("LoggedInUser", user);
-            System.out.println(user.isAdmin());
             model.addAttribute("user", viewUser);
 
             return "viewUser";
@@ -298,8 +297,6 @@ public class UserController
         {
             String errEmail = userService.validateEmail(updatedUser);
 
-            System.out.println("Email check");
-
             if(!errEmail.isEmpty())
             {
                 FieldError error = new FieldError( "user", "email", errEmail);
@@ -313,19 +310,16 @@ public class UserController
         {
             FieldError error = new FieldError("user", "name", "Vantar nafn");
             result.addError(error);
-            System.out.println("Name error");
         }
         if(updatedUser.getAddress().isEmpty())
         {
             FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
             result.addError(error);
-            System.out.println("Address error");
         }
         if(!errPhN.isEmpty())
         {
             FieldError error = new FieldError("user", "phoneNumber", errPhN);
             result.addError(error);
-            System.out.println(errPhN);
         }
 
         if(result.hasErrors())
@@ -333,7 +327,6 @@ public class UserController
             return "redirect:/viewUser/" + userID;
         }
 
-        System.out.println(updatedUser);
         userService.updateUser(userID, updatedUser);
 
         User updated = userService.findByID(userID);

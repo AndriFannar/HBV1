@@ -166,7 +166,6 @@ public class WaitingListRequest
 
     public void addQuestionnaireAnswer(Integer answer)
     {
-        System.out.println("Adding: " + answer + " to " + this.questionnaireAnswers);
         this.questionnaireAnswers.add(answer);
 
     }
