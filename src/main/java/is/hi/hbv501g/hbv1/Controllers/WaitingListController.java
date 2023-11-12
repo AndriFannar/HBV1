@@ -63,12 +63,8 @@ public class WaitingListController
     @RequestMapping(value = "/createRequest", method = RequestMethod.POST)
     public String createNewRequest(WaitingListRequest waitingListRequest, BindingResult result, HttpSession session)
     {
-        System.out.println("Request submitted: " + waitingListRequest.getId());
-        System.out.println("Request submitted: " + waitingListRequest.getDescription());
-        System.out.println("Request submitted: " + waitingListRequest.getQuestionnaire());
         if(result.hasErrors())
         {
-            System.out.println("Error: " + result.getAllErrors());
             return "redirect:/";
         }
 
@@ -80,7 +76,6 @@ public class WaitingListController
         WaitingListRequest exists = waitingListService.getRequestByPatient(waitingListRequest.getPatient());
         if(exists == null)
         {
-            System.out.println("Does not already exist");
             waitingListService.createNewRequest(waitingListRequest);
         }
 

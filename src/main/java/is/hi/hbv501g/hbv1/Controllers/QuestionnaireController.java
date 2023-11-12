@@ -213,12 +213,19 @@ public class QuestionnaireController
     @RequestMapping(value = "/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
     public String getQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
     {
-        // Find and add corresponding Questionnaire to model.
-        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
+        User patient = (User) session.getAttribute("LoggedInUser");
 
-        model.addAttribute("questionnaire", form);
+        if (patient != null)
+        {
+            // Find and add corresponding Questionnaire to model.
+            Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
 
-        return "answerQuestionnaire";
+            model.addAttribute("questionnaire", form);
+
+            return "answerQuestionnaire";
+        }
+
+        return "redirect:/";
     }
 
 
@@ -235,12 +242,7 @@ public class QuestionnaireController
 
         if(patient != null)
         {
-            System.out.println("Questionnaire: " + questionnaire);
-            System.out.println("Question size: " + questionnaire.getQuestions().size());
-            if(!questionnaire.getQuestions().isEmpty()) System.out.println("Question: " + questionnaire.getQuestions().get(0).toString());
-
             Long requestID = patient.getWaitingListRequest().getId();
-            System.out.println("Current request: " + requestID);
 
             waitingListService.addQuestionnaireAnswers(requestID, questionnaire);
         }

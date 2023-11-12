@@ -34,9 +34,9 @@ public class WaitingListRequest
     private Long id;
 
     // Variables.
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private User patient;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User staff;
     private String description;
     private boolean status;
@@ -166,7 +166,6 @@ public class WaitingListRequest
 
     public void addQuestionnaireAnswer(Integer answer)
     {
-        System.out.println("Adding: " + answer + " to " + this.questionnaireAnswers);
         this.questionnaireAnswers.add(answer);
 
     }
