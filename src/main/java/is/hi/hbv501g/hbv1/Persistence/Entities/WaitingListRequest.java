@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,7 +38,6 @@ public class WaitingListRequest
     private User patient;
     @ManyToOne(fetch = FetchType.LAZY)
     private User staff;
-    private String bodyPart;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
@@ -60,6 +60,8 @@ public class WaitingListRequest
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -68,19 +70,19 @@ public class WaitingListRequest
      *
      * @param patient     The patient requesting treatment.
      * @param staff       Selected physiotherapist.
-     * @param bodyPart    Body part needing care.
      * @param description Description of ailment.
      */
     public WaitingListRequest(User patient, User staff, String bodyPart, String description) {
         this.patient = patient;
         this.staff = staff;
-        this.bodyPart = bodyPart;
         this.description = description;
 
         this.status = false;
         this.grade = 0;
 
         this.dateOfRequest = LocalDate.now();
+
+        this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -117,14 +119,6 @@ public class WaitingListRequest
 
     public void setStaff(User staff) {
         this.staff = staff;
-    }
-
-    public String getBodyPart() {
-        return bodyPart;
-    }
-
-    public void setBodyPart(String bodyPart) {
-        this.bodyPart = bodyPart;
     }
 
     public String getDescription() {
@@ -172,7 +166,9 @@ public class WaitingListRequest
 
     public void addQuestionnaireAnswer(Integer answer)
     {
+        System.out.println("Adding: " + answer + " to " + this.questionnaireAnswers);
         this.questionnaireAnswers.add(answer);
+
     }
 
     public double getGrade() {
@@ -190,7 +186,6 @@ public class WaitingListRequest
                 "id=" + id +
                 ", patient=" + patient.getId() +
                 ", staff=" + staff +
-                ", bodyPart='" + bodyPart + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +

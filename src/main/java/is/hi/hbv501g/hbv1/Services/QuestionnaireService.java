@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Services;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,18 +37,27 @@ public interface QuestionnaireService
     /**
      * Saves a new Question to database.
      *
-     * @param question Question to save.
+     * @param questionID      ID of Question to save.
+     * @param questionnaireID ID of Questionnaire that Question should be added to.
      */
-    void addQuestionToList(Question question, Questionnaire questionnaire);
+    void addQuestionToList(Long questionID, Long questionnaireID);
+
+
+    /**
+     * Removes a Question from questionnaire.
+     *
+     * @param questionID      ID of Question to remove.
+     * @param questionnaireID ID of Questionnaire that Question should be removed from.
+     */
+    void removeQuestionFromList(Long questionID, Long questionnaireID);
 
 
     /**
      * Display Questionnaire on registration page.
      *
      * @param questionnaireID ID of the Questionnaire to change.
-     * @param display         Display the Questionnaire on the registration page.
      */
-    void displayOnForm(Long questionnaireID, boolean display);
+    void displayOnForm(Long questionnaireID);
 
 
     /**

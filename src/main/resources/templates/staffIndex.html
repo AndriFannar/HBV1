@@ -27,10 +27,16 @@
                 <tr th:each="request : ${requests}">
                     <td th:text="${request.patient.name}"></td>
                     <td th:text="${request.staff.name}"></td>
-                    <td th:text="${request.bodyPart}"></td>
+
+                    <td>
+                        <p th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></p>
+                        <p th:if="${request.questionnaire == null}">Ekkert merkt</p>
+                    </td>
+
+
                     <td th:text="${request.description}"></td>
 
-                    <td th:switch="${request.status}">
+                    <td>
                         <p th:if="${request.status == false}">Ekki Samþykkt</p>
                         <p th:if="${request.status == true}">Samþykkt</p>
                     </td>

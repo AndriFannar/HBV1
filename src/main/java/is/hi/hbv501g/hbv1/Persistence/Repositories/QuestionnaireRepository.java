@@ -39,7 +39,7 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
      *
      * @return List of all Questionnaire objects.
      */
-    List<Questionnaire> findAll();
+    List<Questionnaire> findAllByOrderByNameAsc();
 
 
     /**

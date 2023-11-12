@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Services.QuestionService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +46,7 @@ public class QuestionController
      * @param question Question object to save.
      * @return         Redirect.
      */
-    @RequestMapping(value = "/{questionnaireID}/addQuestion", method = RequestMethod.POST)
+    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/addQuestion", method = RequestMethod.POST)
     public String saveQuestion(@PathVariable("questionnaireID") Long questionnaireID, Question question, BindingResult result)
     {
         if(result.hasErrors())
@@ -65,8 +67,8 @@ public class QuestionController
      * @param questionID ID of Question to delete.
      * @return           Redirect.
      */
-    @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.GET)
-    public String deleteQuestion(@PathVariable("questionID") Long questionID, Model model) {
+    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/deleteQuestion/{questionID}", method = RequestMethod.GET)
+    public String deleteQuestion(@PathVariable("questionnaireID") Long questionnaireID, @PathVariable("questionID") Long questionID, Model model) {
         // If Question exists, delete.
         Question exists = questionService.getQuestionById(questionID);
 
@@ -74,6 +76,6 @@ public class QuestionController
             questionService.deleteQuestionById(questionID);
         }
 
-        return "redirect:/questionOverview";
+        return "redirect:/editQuestionnaire/" + questionnaireID;
     }
 }

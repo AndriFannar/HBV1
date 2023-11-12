@@ -128,7 +128,6 @@ public class WaitingListServiceImplementation implements WaitingListService
         if (waitingLR != null)
         {
             if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
-            if (updatedRequest.getBodyPart() != null) waitingLR.setBodyPart(updatedRequest.getBodyPart());
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
             if (updatedRequest.getQuestionnaire() != null) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
@@ -158,7 +157,19 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public WaitingListRequest getRequestByID(Long waitingListID)
     {
-        return waitingListRepository.getWaitingListRequestById(waitingListID);
+        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
+
+        if (request != null)
+        {
+            List<Integer> answers = request.getQuestionnaireAnswers();
+
+            for (int i = 0; i < request.getQuestionnaireAnswers().size(); i++)
+            {
+                request.getQuestionnaire().getQuestions().get(i).setAnswer(answers.get(i));
+            }
+        }
+
+        return request;
     }
 
 

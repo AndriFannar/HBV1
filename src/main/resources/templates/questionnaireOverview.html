@@ -22,9 +22,12 @@
             <tr th:each="questionnaire : ${questionnaires}">
                 <td th:text="${questionnaire.name}"></td>
                 <td th:text="${questionnaire.questions.size}"></td>
-                <td><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></td>
-                <td><a th:href="@{/editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></td>
-                <td><a th:href="@{/deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></td>
+
+                <td th:if="${!questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></td>
+                <td th:if="${questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Taka af skráningarformi</a></td>
+
+                <td><a th:href="@{editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></td>
+                <td><a th:href="@{deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></td>
             </tr>
             </tbody>
         </table>
@@ -33,7 +36,7 @@
 
 <section>
     <h3>Búa til nýjan spurningalista</h3>
-    <form action="#" th:action="@{/createQuestionnaire}" th:object="${questionnaire}" method="POST">
+    <form action="#" th:action="@{createQuestionnaire}" th:object="${questionnaire}" method="POST">
         <fieldset>
             <legend>Upplýsingar</legend>
                 <label for="name">Nafn lista</label>

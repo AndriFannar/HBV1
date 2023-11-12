@@ -94,7 +94,7 @@ public class QuestionnaireController
 
 
     /**
-     * Add a Question to a Questionnaire.
+     * Display Questionnaire on registration form.
      *
      * @return Redirect back to page.
      */
@@ -105,9 +105,30 @@ public class QuestionnaireController
 
         if (loggedInUser != null && loggedInUser.isAdmin())
         {
-            questionnaireService.displayOnForm(questionnaireID, true);
+            questionnaireService.displayOnForm(questionnaireID);
 
-            return "redirect:/editQuestionnaire/" + questionnaireID;
+            return "redirect:/questionnaireOverview";
+        }
+
+        return "redirect:/";
+    }
+
+
+    /**
+     * Delete a Questionnaire.
+     *
+     * @return Redirect back to page.
+     */
+    @RequestMapping(value = "/deleteQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
+    public String deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            questionnaireService.deleteQuestionnaireById(questionnaireID);
+
+            return "redirect:/questionnaireOverview";
         }
 
         return "redirect:/";
@@ -148,17 +169,14 @@ public class QuestionnaireController
      *
      * @return Redirect back to page.
      */
-    @RequestMapping(value = "/addQuestion/{questionID}/{questionnaireID}", method = RequestMethod.GET)
-    public String addQuestion(@PathVariable("questionID") Long questionID ,@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.GET)
+    public String addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         if (loggedInUser != null && loggedInUser.isAdmin())
         {
-            Questionnaire questionnaire = questionnaireService.getQuestionnaire(questionnaireID);
-            Question question = questionService.getQuestionById(questionID);
-
-            if(questionnaire != null && question != null) questionnaireService.addQuestionToList(question, questionnaire);
+            questionnaireService.addQuestionToList(questionID, questionnaireID);
 
             return "redirect:/editQuestionnaire/" + questionnaireID;
         }
@@ -166,6 +184,26 @@ public class QuestionnaireController
         return "redirect:/";
     }
 
+
+    /**
+     * Remove a Question from a Questionnaire.
+     *
+     * @return Redirect back to page.
+     */
+    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/removeFromQuestionnaire/{questionID}", method = RequestMethod.GET)
+    public String removeQuestion(@PathVariable("questionID") Long questionID ,@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    {
+        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+
+        if (loggedInUser != null && loggedInUser.isAdmin())
+        {
+            questionnaireService.removeQuestionFromList(questionID, questionnaireID);
+
+            return "redirect:/editQuestionnaire/" + questionnaireID;
+        }
+
+        return "redirect:/";
+    }
 
     /**
      * Form for answering a Questionnaire.

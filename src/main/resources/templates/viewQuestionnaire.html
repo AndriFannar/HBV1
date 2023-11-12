@@ -25,7 +25,7 @@
                     <td th:text="${question.questionString}"></td>
                     <td th:text="${question.weight}"></td>
                     <td th:text="${question.numberOfAnswers}"></td>
-                    <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">Eyða úr lista</a></td>
+                    <td><a th:href="@{{qId}/removeFromQuestionnaire/{id}(id=${question.id}, qId=${questionnaire.id})}">Taka af lista</a></td>
                 </tr>
             </tbody>
         </table>
@@ -48,7 +48,8 @@
                 <td th:text="${question.questionString}"></td>
                 <td th:text="${question.weight}"></td>
                 <td th:text="${question.numberOfAnswers}"></td>
-                <td><a th:href="@{/addQuestion/{id}/{qId}(id=${question.id}, qId=${questionnaire.id})}">Bæta við á lista</a></td>
+                <td><a th:href="@{{qId}/addQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Bæta við á lista</a></td>
+                <td><a th:href="@{{qId}/deleteQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Eyða spurningu</a></td>
             </div>
         </tr>
         </tbody>

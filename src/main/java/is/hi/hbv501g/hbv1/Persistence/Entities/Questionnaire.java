@@ -30,7 +30,7 @@ public class Questionnaire
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Question> questions;
 
     private boolean displayOnForm;
@@ -80,6 +80,11 @@ public class Questionnaire
         this.questions.add(question);
     }
 
+    public void removeQuestion(Question question)
+    {
+        this.questions.remove(question);
+    }
+
     public boolean isDisplayOnForm() {
         return displayOnForm;
     }
@@ -93,7 +98,7 @@ public class Questionnaire
         return "Questionnaire{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", questions=" + questions +
+                ", questions=" + questions.size() +
                 '}';
     }
 }

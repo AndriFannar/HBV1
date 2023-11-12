@@ -40,7 +40,7 @@
             <thead>
                 <tr>
                     <th>Skráður starfsmaður</th>
-                    <th>Líkamshluti</th>
+                    <th th:if="${request.questionnaire != null}" >Líkamshluti</th>
                     <th>Lýsing</th>
                     <th>Staða</th>
                     <th>Forgangur</th>
@@ -50,10 +50,10 @@
             <tbody>
                 <tr>
                     <td th:text="${request.staff.name}"></td>
-                    <td th:text="${request.bodyPart}"></td>
+                    <td th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></td>
                     <td th:text="${request.description}"></td>
 
-                    <td th:switch="${request.status}">
+                    <td>
                         <p th:if="${request.status == false}">Ekki Samþykkt</p>
                         <p th:if="${request.status == true}">Samþykkt</p>
                     </td>
@@ -93,8 +93,12 @@
             </div>
 
             <div th:if="${LoggedInUser.id == request.patient.id}">
-                <label for="bodyPart">Líkamshluti</label>
-                <input type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
+                <div th:if="${!questionnaires.isEmpty}">
+                    <label for="bodyPart">Líkamshluti</label>
+                    <div id="bodyPart">
+                        <input type="radio" th:if="${questionnaire.displayOnForm}" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
+                    </div>
+                </div>
 
                 <label for="description">Lýsing á vandamáli</label>
                 <input type="text" th:field="*{description}" id="description"  placeholder="Lýsing">
@@ -115,11 +119,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="question : ${questionnaire}">
+                <tr th:each="question : ${request.questionnaire.questions}">
                     <td th:text="${question.questionString}"></td>
-                </tr>
-                <tr th:each="answer : ${answers}">
-                    <td th:text="${answer}"></td>
+                    <td th:text="${question.answer}"></td>
                 </tr>
             </tbody>
         </table>

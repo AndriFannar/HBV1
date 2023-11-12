@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Converters;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public class IntegerListConverter implements AttributeConverter<List<Integer>, I
     @Override
     public List<Integer> convertToEntityAttribute(Integer[] integerArray)
     {
-        return Arrays.asList(integerArray);
+        return new ArrayList<>(Arrays.asList(integerArray));
     }
 }

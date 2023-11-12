@@ -68,21 +68,18 @@ public class QuestionServiceImplementation implements QuestionService
      * Update a matching Question.
      *
      * @param questionID             ID of the question to update.
-     * @param questionString         Updated question, if any.
-     * @param weight                 Updated weight, if any.
-     * @param questionnaire          Questionnaire to add to list, if any.
+     * @param updatedQuestion        Updated question.
      */
     @Override
     @Transactional
-    public void updateQuestion(Long questionID, String questionString, double weight,  int numberOfAnswers, Questionnaire questionnaire)
+    public void updateQuestion(Long questionID, Question updatedQuestion)
     {
         Question question = questionRepository.getQuestionById(questionID);
         if (question != null)
         {
-            if (questionString != null && !Objects.equals(question.getQuestionString(), questionString)) question.setQuestionString(questionString);
-            if (!Objects.equals(question.getWeight(), weight)) question.setWeight(weight);
-            if (questionnaire != null && !Objects.equals(question.getQuestionnaires().get(0), questionnaire)) question.addQuestionnaire(questionnaire);
-            if (!Objects.equals(question.getNumberOfAnswers(), numberOfAnswers)) question.setNumberOfAnswers(numberOfAnswers);
+            if (updatedQuestion.getQuestionString() != null) question.setQuestionString(updatedQuestion.getQuestionString());
+            if (updatedQuestion.getWeight() != null) question.setWeight(updatedQuestion.getWeight());
+            if (!updatedQuestion.getQuestionnaires().isEmpty()) question.setQuestionnaires(question.getQuestionnaires());
         }
     }
 

@@ -1,7 +1,6 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,6 @@ public class Question
      */
     public Question()
     {
-
     }
 
 
@@ -65,6 +63,7 @@ public class Question
         this.questionString = questionString;
         this.weight = weight;
         this.questionnaires = questionnaires;
+        this.numberOfAnswers = numberOfAnswers;
     }
 
     public Long getId() {
@@ -108,16 +107,22 @@ public class Question
         this.questionnaires.add(questionnaire);
     }
 
+    public void setNumberOfAnswers(int numberOfAnswers)
+    {
+        this.numberOfAnswers = numberOfAnswers;
+    }
+
     public int getNumberOfAnswers() {
         return numberOfAnswers;
     }
 
-    public void setNumberOfAnswers(int numberOfAnswers) {
-        this.numberOfAnswers = numberOfAnswers;
-    }
-
     public Integer getAnswer() {
         return answer;
+    }
+
+    public void setAnswer(Integer answer)
+    {
+        this.answer = answer;
     }
 
     public void setAnswer(String answer)

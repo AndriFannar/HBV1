@@ -36,12 +36,9 @@ public interface QuestionService
      * Update a matching Question.
      *
      * @param questionID             ID of the question to update.
-     * @param questionString         Updated question, if any.
-     * @param weight                 Updated weight, if any.
-     * @param numberOfAnswers        Updated number of answers possible, if any.
-     * @param questionnaire          Questionnaire to add to list, if any.
+     * @param updatedQuestion        Updated question.
      */
-    void updateQuestion(Long questionID, String questionString, double weight,  int numberOfAnswers, Questionnaire questionnaire);
+    void updateQuestion(Long questionID, Question updatedQuestion);
 
 
     /**

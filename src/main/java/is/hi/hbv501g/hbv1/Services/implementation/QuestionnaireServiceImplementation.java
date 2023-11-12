@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Services.Implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
+import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionnaireRepository;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,17 +26,20 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 {
     // Variables.
     QuestionnaireRepository questionnaireRepository;
+    QuestionRepository questionRepository;
 
 
     /**
      * Constructs a new QuestionnaireServiceImplementation.
      *
-     * @param qR QuestionnaireRepository linked to service.
+     * @param questionnaireRepository QuestionnaireRepository linked to service.
+     * @param questionRepository      QuestionRepository linked to service.
      */
     @Autowired
-    public QuestionnaireServiceImplementation(QuestionnaireRepository qR)
+    public QuestionnaireServiceImplementation(QuestionnaireRepository questionnaireRepository, QuestionRepository questionRepository)
     {
-        this.questionnaireRepository = qR;
+        this.questionnaireRepository = questionnaireRepository;
+        this.questionRepository = questionRepository;
     }
 
 
@@ -64,15 +69,39 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 
 
     /**
-     * Adds a Question to questionnaire.
+     * Saves a new Question to database.
      *
-     * @param question Question to add.
+     * @param questionID      ID of Question to save.
+     * @param questionnaireID ID of Questionnaire that Question should be added to.
      */
     @Override
     @Transactional
-    public void addQuestionToList(Question question, Questionnaire questionnaire)
+    public void addQuestionToList(Long questionID, Long questionnaireID)
     {
-        questionnaire.addQuestion(question);
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Question question = questionRepository.getQuestionById(questionID);
+
+        if ((questionnaire != null) && (question != null)) questionnaire.addQuestion(question);
+    }
+
+
+    /**
+     * Removes a Question from questionnaire.
+     *
+     * @param questionID      ID of Question to remove.
+     * @param questionnaireID ID of Questionnaire that Question should be removed from.
+     */
+    @Override
+    @Transactional
+    public void removeQuestionFromList(Long questionID, Long questionnaireID)
+    {
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Question question = questionRepository.getQuestionById(questionID);
+
+        if ((questionnaire != null) && (question != null))
+        {
+            questionnaire.removeQuestion(question);
+        }
     }
 
 
@@ -80,17 +109,16 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * Display Questionnaire on registration page.
      *
      * @param questionnaireID ID of the Questionnaire to change.
-     * @param display         Display the Questionnaire on the registration page.
      */
     @Override
     @Transactional
-    public void displayOnForm(Long questionnaireID, boolean display)
+    public void displayOnForm(Long questionnaireID)
     {
         Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
 
         if(questionnaire != null)
         {
-            questionnaire.setDisplayOnForm(display);
+            questionnaire.setDisplayOnForm(!questionnaire.isDisplayOnForm());
         }
     }
 
@@ -101,8 +129,13 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * @param questionnaireID ID of the Questionnaire to delete.
      */
     @Override
+    @Transactional
     public void deleteQuestionnaireById(Long questionnaireID)
     {
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+
+        questionnaire.setQuestions(new ArrayList<>());
+
         questionnaireRepository.deleteById(questionnaireID);
     }
 
@@ -115,7 +148,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     @Override
     public List<Questionnaire> getAllQuestionnaire()
     {
-        return questionnaireRepository.findAll();
+        return questionnaireRepository.findAllByOrderByNameAsc();
     }
 
 
