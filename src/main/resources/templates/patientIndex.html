@@ -57,33 +57,33 @@
         </form>
     </div>
 
-    <div th:case="*" class="requests">
+    <div th:case="*" class="requests" th:class="${request.status == true} ? 'status-true' : 'status-false'">
         <h2>Beiðni:</h2>
         <section class="request">
             <div class="request_section">
                 <div class="date">
-                    <p>Dagsetning</p>
+                    <p class="label">Dagsetning</p>
                     <p th:text="${request.dateOfRequest}"></p>
                 </div>
                 <div>
-                    <p>Líkamshluti</p>
+                    <p class="label">Líkamshluti</p>
                     <p th:text="${request.bodyPart}"></p>
                 </div>
                 <div>
-                    <p>Vandamál</p>
+                    <p class="label">Vandamál</p>
                     <p th:text="${request.description}"></p>
                 </div>
             </div>
             <div class="request_section">
                 <div>
-                    <p>Sjúkraþjálfari</p>
+                    <p class="label"> Sjúkraþjálfari</p>
                     <p th:text="${request.staff.name}"></p>
                 </div>
                 <div class="status">
-                    <p>Staða umsóknar</p>
+                    <p class="label">Staða umsóknar</p>
                     <div th:switch="${request.status}">
-                        <p th:if="${request.status == false}" class="false">Í bið</p>
-                        <p th:if="${request.status == true}" class="true">Samþykkt</p>
+                        <p th:if="${request.status == false}" >Í bið</p>
+                        <p th:if="${request.status == true}" >Samþykkt</p>
                     </div>
                 </div>
             </div>

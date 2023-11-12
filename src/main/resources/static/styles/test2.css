@@ -80,6 +80,10 @@ p .back {
     text-decoration: none;
 }
 
+p .back:hover{
+    font-weight: 600;
+}
+
 .extraButton {
     display: flex;
     flex-direction: row;
@@ -112,28 +116,25 @@ p .back {
 
 
 /*---------------------------Requests--------------------------------------------*/
-.requests {
-    background-color: #edf2fb;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    padding: 2rem;
-}
 
 .request {
     display: flex;
     flex-direction: row;
 }
 
-.requests h2{
+.status-true h2{
     display: flex;
     margin: auto;
     margin-bottom: 0.5rem;
 }
 
-.requests .request_question{
+.status-false h2{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+.request_question{
     border: 1px solid #00296b;
     border-radius: 1rem;
     display: flex;
@@ -154,16 +155,29 @@ p .back {
     margin-right: 0.5rem;
 }
 
-.status .true{
-    background-color: #c7f9cc;
-    padding: 0.5rem;
+.request_section div .label {
+    font-weight: 900;
 }
 
-.status .false {
-    background-color: #ffadad;
-    padding: 0.5rem;
+.status-true {
+    background-color: #c7f9cc;  
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
 }
 
+.status-false {
+    background-color: #ffadad;    
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
 
 /*-----------------------Table----------------------------------------*/
 
@@ -181,6 +195,26 @@ p .back {
 .table td {
     padding: calc(1rem / 2);
     text-align: left;
+}
+
+.table .staff_button div a:hover{
+    font-weight: 600;
+}
+
+.table .staff_button div{
+    display: flex;
+    flex-direction: column;
+}
+
+.staff_button div p{
+    display: flex;
+    margin: auto;
+    margin-bottom: 0.25rem;
+}
+
+.staff_button div p a{
+    text-decoration: none;
+    color: #000000;
 }
 
 
