@@ -3,49 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Yfirlit Spurningalista</title>
+    <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
+    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
-<h2>Yfirlit Spurningalista</h2>
+    <header class="header">
+        <h1>Nafn apps</h1>
+    </header>
+    <main class="efni">
+        <h2>Yfirlit Spurningalista</h2>
 
-<section th:switch="${questionnaires}">
-    <h2 th:case="null">Engir spurningalistar eru í kerfinu.</h2>
-    <div th:case="*">
-        <h2>Allir spurningalistar:</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Heiti</th>
-                <th>Fjöldi spurninga</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="questionnaire : ${questionnaires}">
-                <td th:text="${questionnaire.name}"></td>
-                <td th:text="${questionnaire.questions.size}"></td>
+        <section th:switch="${questionnaires}">
+            <h2 th:case="null">Engir spurningalistar eru í kerfinu.</h2>
+            <div th:case="*">
+                <h2>Allir spurningalistar:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Heiti</th>
+                            <th>Fjöldi spurninga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="questionnaire : ${questionnaires}">
+                            <td th:text="${questionnaire.name}"></td>
+                            <td th:text="${questionnaire.questions.size}"></td>
 
-                <td th:if="${!questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></td>
-                <td th:if="${questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Taka af skráningarformi</a></td>
+                            <td class="staff_button">
+                                <div>
+                                    <p th:if="${!questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></p>
+                                    <p th:if="${questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Taka af skráningarformi</a></p>
+                                </div>
+                            </td>
 
-                <td><a th:href="@{editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></td>
-                <td><a th:href="@{deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
+                            <td class="staff_button">
+                                <div>
+                                    <p><a th:href="@{editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></p>
+                                    <p><a th:href="@{deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-<section>
-    <h3>Búa til nýjan spurningalista</h3>
-    <form action="#" th:action="@{createQuestionnaire}" th:object="${questionnaire}" method="POST">
-        <fieldset>
-            <legend>Upplýsingar</legend>
-                <label for="name">Nafn lista</label>
-                <input type="text" th:field="*{name}" id="name" placeholder="Nafn lista">
-        </fieldset>
-        <input type="submit"  value="Búa til">
-    </form>
-</section>
+        <section>
+            <h3>Búa til nýjan spurningalista</h3>
+            <form action="#" th:action="@{createQuestionnaire}" th:object="${questionnaire}" method="POST" class="form">
+                <fieldset>
+                    <legend>Upplýsingar</legend>
+                        <label for="name">Nafn lista</label>
+                        <input type="text" th:field="*{name}" id="name" placeholder="Nafn lista">
+                </fieldset>
+                <input type="submit" class="button" value="Búa til">
+            </form>
+        </section>
 
-<p><a href="/">Til baka</a></p>
+        <p class="p_back"><a  class="back" href="/">Til baka</a></p>
+    </main>
 </body>
 </html>

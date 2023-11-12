@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Services.Implementation;
+package is.hi.hbv501g.hbv1.Services.implementation;
 
 import java.util.List;
 import java.util.regex.Pattern;
