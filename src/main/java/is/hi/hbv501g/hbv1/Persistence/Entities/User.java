@@ -43,10 +43,10 @@ public class User
     private String specialization;
     private String description;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WaitingListRequest> waitingListRequests;
 
-    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL, orphanRemoval = true)
     private WaitingListRequest waitingListRequest;
 
 
@@ -251,8 +251,6 @@ public class User
                 ", isAdmin=" + isAdmin +
                 ", specialization='" + specialization + '\'' +
                 ", description='" + description + '\'' +
-                ", waitingListRequests=" + waitingListRequests +
-                ", waitingListRequest=" + this.waitingListRequest.getId() +
                 '}';
     }
 }

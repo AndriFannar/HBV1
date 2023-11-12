@@ -101,11 +101,8 @@ public class WaitingListServiceImplementation implements WaitingListService
 
             for (Question question : questionnaire.getQuestions())
             {
-                System.out.println("Adding answer " + question.getAnswer() + ".");
                 request.addQuestionnaireAnswer(question.getAnswer());
             }
-
-            System.out.println("Questionnaire answers in request: " + request.getQuestionnaireAnswers());
 
             Questionnaire requestQuestionnaire = request.getQuestionnaire();
 
@@ -130,7 +127,7 @@ public class WaitingListServiceImplementation implements WaitingListService
             if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
-            if (updatedRequest.getQuestionnaire() != null) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
+            if ((updatedRequest.getQuestionnaire() != null) && (updatedRequest.getQuestionnaire() != waitingLR.getQuestionnaire())) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
         }
     }

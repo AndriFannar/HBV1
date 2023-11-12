@@ -420,16 +420,11 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makeStaff/{userID}", method = RequestMethod.GET)
-    public String makeStaff(@PathVariable("userID") Long userID, HttpSession session)
+    public String makeStaff(@PathVariable("userID") Long userID)
     {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        userService.changeRole(userID, true, false, false);
 
-        if (loggedInUser.isAdmin())
-        {
-            userService.changeRole(userID, true, false, false);
-        }
-
-        return "redirect:/viewUser/" + userID;
+        return "redirect:/userOverview";
     }
 
 
@@ -440,15 +435,11 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makePhysiotherapist/{userID}", method = RequestMethod.GET)
-    public String makePhysiotherapist(@PathVariable("userID") Long userID, HttpSession session)
+    public String makePhysiotherapist(@PathVariable("userID") Long userID)
     {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        userService.changeRole(userID, false, true, false);
 
-        if (loggedInUser.isAdmin())
-        {
-            userService.changeRole(userID, false, true, false);
-        }
-        return "redirect:/viewUser/" + userID;
+        return "redirect:/userOverview";
     }
 
 
@@ -459,35 +450,10 @@ public class UserController
      * @return       Redirect.
      */
     @RequestMapping(value = "/makeAdmin/{userID}", method = RequestMethod.GET)
-    public String makeAdmin(@PathVariable("userID") Long userID, HttpSession session)
+    public String makeAdmin(@PathVariable("userID") Long userID)
     {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        userService.changeRole(userID, false, false, true);
 
-        if (loggedInUser.isAdmin())
-        {
-            userService.changeRole(userID, false, false, true);
-        }
-
-        return "redirect:/viewUser/" + userID;
-    }
-
-
-    /**
-     * Make user patient.
-     *
-     * @param userID ID of User to update.
-     * @return       Redirect.
-     */
-    @RequestMapping(value = "/makePatient/{userID}", method = RequestMethod.GET)
-    public String makePatient(@PathVariable("userID") Long userID, HttpSession session)
-    {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
-
-        if (loggedInUser.isAdmin())
-        {
-            userService.changeRole(userID, false, false, false);
-        }
-
-        return "redirect:/viewUser/" + userID;
+        return "redirect:/userOverview";
     }
 }
