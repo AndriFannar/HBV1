@@ -1,0 +1,80 @@
+<!DOCTYPE html >
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Yfirlit Spurninga</title>
+</head>
+<body>
+<h2>Breyta spurningalista</h2>
+
+<section th:switch="${questionnaire}">
+    <h2 th:case="null">Enginn spurningalisti valinn.</h2>
+    <div th:case="*">
+        <h2 th:text="${questionnaire.name}">:</h2>
+        <h3>Spurningar í lista:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Spurning</th>
+                    <th>Þyngd</th>
+                    <th>Fjöldi Svarmöguleika</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="question : ${questionnaire.questions}">
+                    <td th:text="${question.questionString}"></td>
+                    <td th:text="${question.weight}"></td>
+                    <td th:text="${question.numberOfAnswers}"></td>
+                    <td><a th:href="@{{qId}/removeFromQuestionnaire/{id}(id=${question.id}, qId=${questionnaire.id})}">Taka af lista</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2>Spurningar í kerfinu</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Spurning</th>
+            <th>Þyngd</th>
+            <th>Fjöldi Svarmöguleika</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question : ${questions}">
+            <div th:if="${!question.questionnaires.contains(questionnaire)}">
+                <td th:text="${question.questionString}"></td>
+                <td th:text="${question.weight}"></td>
+                <td th:text="${question.numberOfAnswers}"></td>
+                <td><a th:href="@{{qId}/addQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Bæta við á lista</a></td>
+                <td><a th:href="@{{qId}/deleteQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Eyða spurningu</a></td>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<form action="#" th:action="@{{qId}/addQuestion(qId=${questionnaire.id})}" th:object="${question}" method="POST">
+    <fieldset>
+        <legend>Upplýsingar</legend>
+
+        <label for="questionString">Spurning</label>
+        <input type="text" th:field="*{questionString}" id="questionString" placeholder="Spurning">
+        <span th:if="${#fields.hasErrors('questionString')}" th:errors="*{questionString}"></span>
+
+        <label for="weight">Þyngd</label>
+        <input type="number" th:field="*{weight}" id="weight"  placeholder="Þyngd">
+        <span th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></span>
+
+        <label for="numberOfAnswers">Fjöldi Svarmöguleika</label>
+        <input type="number" th:field="*{numberOfAnswers}" id="numberOfAnswers"  placeholder="Fjöldi Svarmöguleika">
+        <span th:if="${#fields.hasErrors('numberOfAnswers')}" th:errors="*{numberOfAnswers}"></span>
+    </fieldset>
+    <input type="submit"  value="Skrá spurningu">
+</form>
+
+<p><a href="/questionnaireOverview">Til baka</a></p>
+</body>
+</html>

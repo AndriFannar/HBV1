@@ -33,19 +33,22 @@
                         <tr th:each="request : ${requests}">
                             <td th:text="${request.patient.name}"></td>
                             <td th:text="${request.staff.name}"></td>
-                            <td th:text="${request.bodyPart}"></td>
+                            <td>
+                                <p th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></p>
+                                <p th:if="${request.questionnaire == null}">Ekkert merkt</p>
+                            </td>
                             <td th:text="${request.description}"></td>
-        
+
                             <td th:switch="${request.status}">
                                 <p th:if="${request.status == false}">Ekki Samþykkt</p>
                                 <p th:if="${request.status == true}">Samþykkt</p>
                             </td>
-        
+
                             <td th:text="${request.grade}"></td>
-        
+
                             <td th:text="${request.dateOfRequest}">
-        
-        
+
+
                             <td class="staff_button">
                                 <div>
                                     <p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja</a></p>
@@ -60,7 +63,7 @@
         </section>
         <section th:if="${LoggedInUser.isAdmin}" class="extraButton">
             <p class="p_back"><a th:href="@{/userOverview}" class="button">Skoða notendur</a></p>
-            <p class="p_back"><a href="/questionOverview" class="button">Yfirlit Spurninga</a></p>
+            <p class="p_back"><a href="/questionnaireOverview" class="button">Yfirlit Spurningalista</a></p>
         </section>
         <section>
             <p><a href="/logout" class="back">Skrá út</a></p>

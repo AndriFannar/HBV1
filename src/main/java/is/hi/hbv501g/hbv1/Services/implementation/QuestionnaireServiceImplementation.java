@@ -1,16 +1,17 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.Services.Implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.QuestionnaireForm;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
+import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionnaireRepository;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -24,101 +25,141 @@ import java.util.Objects;
 public class QuestionnaireServiceImplementation implements QuestionnaireService
 {
     // Variables.
+    QuestionnaireRepository questionnaireRepository;
     QuestionRepository questionRepository;
 
 
     /**
      * Constructs a new QuestionnaireServiceImplementation.
      *
-     * @param qR QuestionRepository linked to service.
+     * @param questionnaireRepository QuestionnaireRepository linked to service.
+     * @param questionRepository      QuestionRepository linked to service.
      */
     @Autowired
-    public QuestionnaireServiceImplementation(QuestionRepository qR)
+    public QuestionnaireServiceImplementation(QuestionnaireRepository questionnaireRepository, QuestionRepository questionRepository)
     {
-        this.questionRepository = qR;
+        this.questionnaireRepository = questionnaireRepository;
+        this.questionRepository = questionRepository;
     }
 
 
     /**
-     * Get a Questionnaire object.
+     * Gets the Questionnaire with the corresponding ID.
      *
-     * @param listID The ID of the questionnaire to fetch.
-     * @return       Questionnaire that holds Question objects with corresponding list ID.
+     * @param questionnaireID The ID of the questionnaire to fetch.
+     * @return                Questionnaire that holds Question objects with corresponding list ID.
      */
     @Override
-    public QuestionnaireForm getQuestionnaire(Integer listID)
+    public Questionnaire getQuestionnaire(Long questionnaireID)
     {
-        return new QuestionnaireForm(questionRepository.findAllByListIDIs(listID));
+        return questionnaireRepository.getQuestionnaireById(questionnaireID);
+    }
+
+
+    /**
+     * Saves a new Questionnaire to the database.
+     *
+     * @param questionnaire New Questionnaire to save.
+     * @return              Saved Questionnaire.
+     */
+    public Questionnaire saveQuestionnaire(Questionnaire questionnaire)
+    {
+        return questionnaireRepository.save(questionnaire);
     }
 
 
     /**
      * Saves a new Question to database.
      *
-     * @param question Question to save.
-     * @return         Saved Question.
+     * @param questionID      ID of Question to save.
+     * @param questionnaireID ID of Questionnaire that Question should be added to.
      */
     @Override
-    public Question addQuestion(Question question)
+    @Transactional
+    public void addQuestionToList(Long questionID, Long questionnaireID)
     {
-        return questionRepository.save(question);
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Question question = questionRepository.getQuestionById(questionID);
+
+        if ((questionnaire != null) && (question != null)) questionnaire.addQuestion(question);
     }
 
 
     /**
-     * Update a matching Question.
+     * Removes a Question from questionnaire.
      *
-     * @param questionID     ID of the question to update.
-     * @param questionString Updated question, if any.
-     * @param weight         Updated weight, if any.
-     * @param listID         Updated Questionnaire ID, if any.
+     * @param questionID      ID of Question to remove.
+     * @param questionnaireID ID of Questionnaire that Question should be removed from.
      */
     @Override
     @Transactional
-    public void updateQuestion(Long questionID, String questionString, double weight,  int numberOfAnswers, List<Integer> listID)
+    public void removeQuestionFromList(Long questionID, Long questionnaireID)
     {
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
         Question question = questionRepository.getQuestionById(questionID);
-        if (question != null)
+
+        if ((questionnaire != null) && (question != null))
         {
-            if (questionString != null && !Objects.equals(question.getQuestionString(), questionString)) question.setQuestionString(questionString);
-            if (!Objects.equals(question.getWeight(), weight)) question.setWeight(weight);
-            if (listID != null && !Objects.equals(question.getListID(), listID)) question.setListID(listID);
-            if (!Objects.equals(question.getNumberOfAnswers(), numberOfAnswers)) question.setNumberOfAnswers(numberOfAnswers);
+            questionnaire.removeQuestion(question);
         }
     }
 
 
     /**
-     * Deletes a Question with a corresponding id.
+     * Display Questionnaire on registration page.
      *
-     * @param questionID ID of the Question to delete.
+     * @param questionnaireID ID of the Questionnaire to change.
      */
     @Override
-    public void deleteQuestionById(Long questionID)
+    @Transactional
+    public void displayOnForm(Long questionnaireID)
     {
-        questionRepository.deleteById(questionID);
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+
+        if(questionnaire != null)
+        {
+            questionnaire.setDisplayOnForm(!questionnaire.isDisplayOnForm());
+        }
     }
 
 
     /**
-     * Gets all Question objects in database.
+     * Deletes a Questionnaire with a corresponding id.
      *
-     * @return List of all Question objects in database, if any.
+     * @param questionnaireID ID of the Questionnaire to delete.
      */
     @Override
-    public List<Question> getQuestions()
+    @Transactional
+    public void deleteQuestionnaireById(Long questionnaireID)
     {
-        return questionRepository.findAll();
+        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+
+        questionnaire.setQuestions(new ArrayList<>());
+
+        questionnaireRepository.deleteById(questionnaireID);
     }
 
 
     /**
-     * Gets Question object with matching ID from database.
+     * Gets all Questionnaire objects in database.
      *
-     * @return Question object with matching ID in database, if any.
+     * @return List of all Questionnaire objects in database, if any.
      */
-    public Question getQuestionById(Long questionID)
+    @Override
+    public List<Questionnaire> getAllQuestionnaire()
     {
-        return questionRepository.getQuestionById(questionID);
+        return questionnaireRepository.findAllByOrderByNameAsc();
+    }
+
+
+    /**
+     * Gets the Questionnaires that should display when creating a new WaitingListRequest.
+     *
+     * @return List of Questionnaires that are marked for display.
+     */
+    @Override
+    public List<Questionnaire> getDisplayQuestionnaires()
+    {
+        return questionnaireRepository.getQuestionnaireByDisplayOnForm(true);
     }
 }

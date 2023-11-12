@@ -35,17 +35,19 @@
             <form action="#" th:action="@{/createRequest}" th:object="${newRequest}" method="POST" class="form">
                 <fieldset>
                     <legend>Upplýsingar</legend>
-                    
+
                     <div>
                         <label for="staff">Starfsmaður</label>
                         <select id="staff" th:field="*{staff}">
                             <option th:each="staffMember : ${physiotherapists}" th:value="${staffMember.id}" th:text="${staffMember.name}"></option>
                         </select>
                     </div>
-                    <div>
+                    <div th:if="${!questionnaires.isEmpty}">
                         <label for="bodyPart">Líkamshluti</label>
-                        <input type="text" th:field="*{bodyPart}" id="bodyPart" placeholder="Líkamshluti">
-                        <span th:if="${#fields.hasErrors('bodyPart')}" th:errors="*{bodyPart}"></span>
+                        <div id="bodyPart">
+                            <input type="radio" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
+                            <input type="radio" th:field="*{questionnaire}" th:value="0" th:text="Annað">
+                        </div>
                     </div>
                     <div>
                         <label for="description">Lýsing á vandamáli</label>
@@ -67,7 +69,7 @@
                 </div>
                 <div>
                     <p class="label">Líkamshluti</p>
-                    <p th:text="${request.bodyPart}"></p>
+                    <p th:if="${request.questionnaire != null}">Líkamshluti</p>
                 </div>
                 <div>
                     <p class="label">Vandamál</p>
@@ -86,10 +88,14 @@
                         <p th:if="${request.status == true}" >Samþykkt</p>
                     </div>
                 </div>
+                <div>
+                    <p><a th:href="@{/viewRequest/{id}(id=${request.id})}">Skoða</a></p>
+                    <p><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></p>
+                </div>
             </div>
         </section>
-        <p th:if="${request.questionnaireID != 0}" class="request_question"><a href="/questionnaire" class="button">Svara Spurningalista</a></p>
-    </div>   
+        <p th:if="${(request.questionnaire != null) && (request.questionnaireAnswers.size == 0)}" class="request_question"><a th:href="@{/answerQuestionnaire/{id}(id=${request.questionnaire.id})}" class="button">Svara Spurningalista</a></p>
+    </div>
 
 
 </section>

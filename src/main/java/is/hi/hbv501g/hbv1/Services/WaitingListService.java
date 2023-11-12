@@ -31,6 +31,9 @@ public interface WaitingListService
     void deleteRequest(Long waitingListID);
 
 
+    void addQuestionnaireAnswers(Long waitingListID, Questionnaire questionnaire);
+
+
     /**
      * Updates a corresponding WaitingListRequest.
      *

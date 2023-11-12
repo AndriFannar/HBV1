@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,18 +40,21 @@ public class UserController
     // Variables.
     private final UserService userService;
     private final WaitingListService waitingListService;
+    private final QuestionnaireService questionnaireService;
 
     /**
      * Construct a new PatientController.
      *
-     * @param userService        UserService linked to controller.
-     * @param waitingListService WaitingListService linked to controller.
+     * @param userService          UserService linked to controller.
+     * @param waitingListService   WaitingListService linked to controller.
+     * @param questionnaireService QuestionnaireService linked to controller.
      */
     @Autowired
-    public UserController(UserService userService, WaitingListService waitingListService)
+    public UserController(UserService userService, WaitingListService waitingListService, QuestionnaireService questionnaireService)
     {
         this.userService = userService;
         this.waitingListService = waitingListService;
+        this.questionnaireService = questionnaireService;
     }
 
 
@@ -218,6 +223,8 @@ public class UserController
             WaitingListRequest request = waitingListService.getRequestByPatient(sessionUser);
             model.addAttribute("request", request);
 
+            List<Questionnaire> questionnaires = questionnaireService.getDisplayQuestionnaires();
+            model.addAttribute("questionnaires", questionnaires);
 
             model.addAttribute("newRequest", new WaitingListRequest());
 
