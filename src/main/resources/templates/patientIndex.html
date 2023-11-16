@@ -71,7 +71,7 @@
                 </div>
                 <div>
                     <p class="label">Líkamshluti</p>
-                    <p th:if="${request.questionnaire != null}">Líkamshluti</p>
+                    <p th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></p>
                 </div>
                 <div>
                     <p class="label">Vandamál</p>
