@@ -257,7 +257,7 @@ p .back:hover{
 
 .question_div:nth-child(4n - 2),
 .question_div:nth-child(4n - 1) {
-    background-color: #edf2fb; 
+    background-color: #edf2fb;
 }
 
 .question_div div label{
@@ -279,7 +279,7 @@ p .back:hover{
 .answer_question {
     display: flex;
     justify-content: center;
-} 
+}
 
 /*--------------Login-------------------*/
 .loginError {
