@@ -77,6 +77,9 @@ public class WaitingListController
         if(exists == null)
         {
             waitingListService.createNewRequest(waitingListRequest);
+
+            // Uppfæra notanda.
+            session.setAttribute("LoggedInUser", userService.findByID(patient.getId()));
         }
 
         return "redirect:/";
