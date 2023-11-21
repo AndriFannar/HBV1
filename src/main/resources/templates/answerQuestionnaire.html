@@ -6,35 +6,35 @@
     <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
 </head>
 <body>
-<header class="header">
-    <h1>Biðlisti</h1>
-</header>
-<main class="efni">
-    <h1>Spurningalisti</h1>
+    <header class="header">
+        <h1>Biðlisti</h1>
+    </header>
+    <main class="efni">
+        <h1>Spurningalisti</h1>
 
-    <section th:if="${not #lists.isEmpty(questionnaire.questions)}">
-        <h4>Hér eru nokkrar spurningar sem þú þarft að svara. Þessi spurningalisti er saminn til þess að fá
-            upplýsingar um hvernig óþægindi eða verkir hafa áhrif á daglegt líf þitt.</h4>
-        <h4>Vinsamlega merktu við það svar sem lýsir vandamáli þínu best þar sem 0 er minnst eða engin áhrif.</h4>
-        <form th:action="@{/answerQuestionnaire}" th:object="${questionnaire}" method="POST" class="form questionForm">
-            <fieldset class="questionFieldset">
-                <div th:each="question, questionIndex : ${questionnaire.questions}" class="question_div">
-                    <p th:text="${question.questionString}"></p>
-                    <div th:each="answerIndex : ${#numbers.sequence(0, question.numberOfAnswers - 1)}">
-                        <label >
-                            <input type="radio" th:field="*{questions[__${questionIndex.index}__].answer}" th:value="${answerIndex}" />
-                            <span th:text="${answerIndex}"></span>
-                        </label>
+        <section th:if="${not #lists.isEmpty(questionnaire.questions)}">
+            <h4>Hér eru nokkrar spurningar sem þú þarft að svara. Þessi spurningalisti er saminn til þess að fá
+                upplýsingar um hvernig óþægindi eða verkir hafa áhrif á daglegt líf þitt.</h4>
+            <h4>Vinsamlega merktu við það svar sem lýsir vandamáli þínu best þar sem 0 er minnst eða engin áhrif.</h4>
+            <form th:action="@{/answerQuestionnaire}" th:object="${questionnaire}" method="POST" class="form questionForm">
+                <fieldset class="questionFieldset">
+                    <div th:each="question, questionIndex : ${questionnaire.questions}" class="question_div">
+                        <p th:text="${question.questionString}"></p>
+                        <div th:each="answerIndex : ${#numbers.sequence(0, question.numberOfAnswers - 1)}">
+                            <label >
+                                <input type="radio" th:field="*{questions[__${questionIndex.index}__].answer}" th:value="${answerIndex}" />
+                                <span th:text="${answerIndex}"></span>
+                            </label>
+                        </div>
                     </div>
+                </fieldset>
+                <div class="question_button">
+                    <button class="button"type="submit">Staðfesta</button>
                 </div>
-            </fieldset>
-            <div class="question_button">
-                <button class="button"type="submit">Staðfesta</button>
-            </div>
-        </form>
-    </section>
+            </form>
+        </section>
 
-    <p class="p_back"><a class="back" href="/">Til baka</a></p>
-</main>
+        <p class="p_back"><a class="back" href="/">Til baka</a></p>
+    </main>
 </body>
 </html>
