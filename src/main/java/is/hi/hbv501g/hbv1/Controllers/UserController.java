@@ -198,7 +198,7 @@ public class UserController
             return "redirect:/";
         }
 
-      FieldError error = new FieldError("user", "email", "Vitlaust netfang eða lykilorð");
+      FieldError error = new FieldError("user", "email", "Rangt netfang eða lykilorð");
       result.addError(error);
       return "login";
     }
