@@ -96,7 +96,7 @@
                 </div>
             </div>
         </section>
-        <p th:if="${(request.questionnaire != null) && (request.questionnaireAnswers.size == 0)}" class="request_question"><a th:href="@{{requestID}/answerQuestionnaire/{id}(requestID=${request.id}, id=${request.questionnaire.id})}" class="button">Svara Spurningalista</a></p>
+        <p th:if="${(request.questionnaire != null) && (request.questionnaireAnswers.size == 0) && !(request.questionnaire.questions.isEmpty)}" class="request_question"><a th:href="@{{requestID}/answerQuestionnaire/{id}(requestID=${request.id}, id=${request.questionnaire.id})}" class="button">Svara Spurningalista</a></p>
         <p class="answer_question" th:if="${(request.questionnaireAnswers.size != 0)}">Búið að svara spurningarlista</p>
     </div>
 
