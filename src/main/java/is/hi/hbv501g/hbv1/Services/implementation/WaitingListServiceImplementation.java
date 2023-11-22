@@ -43,93 +43,13 @@ public class WaitingListServiceImplementation implements WaitingListService
     /**
      * Saves a new WaitingListRequest in database.
      *
-     * @param waitingLR WaitingListRequest to save.
-     * @return          Saved WaitingListRequest.
+     * @param request WaitingListRequest to save.
+     * @return        Saved WaitingListRequest.
      */
     @Override
-    public WaitingListRequest createNewRequest(WaitingListRequest waitingLR)
+    public WaitingListRequest saveNewWaitingListRequest(WaitingListRequest request)
     {
-        return waitingListRepository.save(waitingLR);
-    }
-
-
-    /**
-     * Deletes a WaitingListRequest with a corresponding id.
-     *
-     * @param waitingListID ID of the WaitingListRequest to delete.
-     */
-    @Override
-    public void deleteRequest(Long waitingListID)
-    {
-        waitingListRepository.deleteById(waitingListID);
-    }
-
-
-    /**
-     * Change the status of a WaitingListRequest.
-     *
-     * @param waitingListID ID of the WaitingListRequest to change;
-     */
-    @Transactional
-    public void updateRequestStatus(Long waitingListID, boolean newStatus)
-    {
-        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
-
-        if(request != null)
-        {
-            request.setStatus(newStatus);
-        }
-    }
-
-
-    /**
-     * Change the status of a WaitingListRequest.
-     *
-     * @param waitingListID ID of the WaitingListRequest to change;
-     */
-    @Transactional
-    public void addQuestionnaireAnswers(Long waitingListID, Questionnaire questionnaire)
-    {
-        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
-
-        if(request != null)
-        {
-            if(!request.getQuestionnaireAnswers().isEmpty())
-            {
-                request.setQuestionnaireAnswers(new ArrayList<>());
-            }
-
-            for (Question question : questionnaire.getQuestions())
-            {
-                request.addQuestionnaireAnswer(question.getAnswer());
-            }
-
-            Questionnaire requestQuestionnaire = request.getQuestionnaire();
-
-            request.calculateScore(requestQuestionnaire.getQuestions());
-        }
-    }
-
-
-    /**
-     * Updates a corresponding WaitingListRequest.
-     *
-     * @param waitingListID  ID of the request to update.
-     * @param updatedRequest WaitingListRequest with updated info.
-     */
-    @Transactional
-    public void updateRequest(Long waitingListID, WaitingListRequest updatedRequest)
-    {
-        WaitingListRequest waitingLR = waitingListRepository.getWaitingListRequestById(waitingListID);
-
-        if (waitingLR != null)
-        {
-            if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
-            if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
-            if (updatedRequest.isStatus()) waitingLR.setStatus(true);
-            if ((updatedRequest.getQuestionnaire() != null) && (updatedRequest.getQuestionnaire() != waitingLR.getQuestionnaire())) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
-            if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
-        }
+        return waitingListRepository.save(request);
     }
 
 
@@ -139,22 +59,22 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @return List of all WaitingListRequest objects, if any.
      */
     @Override
-    public List<WaitingListRequest> getRequests()
+    public List<WaitingListRequest> getAllWaitingListRequests()
     {
-        return waitingListRepository.findAllByOrderByGradeDescPatientNameAsc();
+        return waitingListRepository.getAllByOrderByGradeDescPatientNameAsc();
     }
 
 
     /**
      * Gets a WaitingListRequest with matching unique ID.
      *
-     * @param waitingListID Unique ID of the WaitingListRequest object to find.
-     * @return              WaitingListRequest with a matching ID, if any.
+     * @param requestID Unique ID of the WaitingListRequest object to find.
+     * @return          WaitingListRequest with a matching ID, if any.
      */
     @Override
-    public WaitingListRequest getRequestByID(Long waitingListID)
+    public WaitingListRequest getWaitingListRequestByID(Long requestID)
     {
-        WaitingListRequest request = waitingListRepository.getWaitingListRequestById(waitingListID);
+        WaitingListRequest request = waitingListRepository.getById(requestID);
 
         if (request != null)
         {
@@ -177,21 +97,102 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @return        WaitingListRequest with matching patient, if any.
      */
     @Override
-    public WaitingListRequest getRequestByPatient(User patient)
+    public WaitingListRequest getWaitingListRequestByPatient(User patient)
     {
-        return waitingListRepository.getWaitingListRequestByPatient(patient);
+        return waitingListRepository.getByPatient(patient);
     }
 
-    
+
     /**
-     * Finds WaitingListRequest by staff (physiotherapist).
+     * Finds WaitingListRequest by physiotherapist.
      *
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
     @Override
-    public List<WaitingListRequest> getRequestByPhysiotherapist(User staff)
+    public List<WaitingListRequest> getWaitingListRequestByPhysiotherapist(User staff)
     {
-        return waitingListRepository.getWaitingListRequestByStaff(staff);
+        return waitingListRepository.getByStaff(staff);
+    }
+
+
+    /**
+     * Updates a corresponding WaitingListRequest.
+     *
+     * @param requestID  ID of the request to update.
+     * @param updatedRequest WaitingListRequest with updated info.
+     */
+    @Transactional
+    public void updateWaitingListRequest(Long requestID, WaitingListRequest updatedRequest)
+    {
+        WaitingListRequest waitingLR = waitingListRepository.getById(requestID);
+
+        if (waitingLR != null)
+        {
+            if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
+            if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
+            if (updatedRequest.isStatus()) waitingLR.setStatus(true);
+            if ((updatedRequest.getQuestionnaire() != null) && (updatedRequest.getQuestionnaire() != waitingLR.getQuestionnaire())) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
+            if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
+        }
+    }
+
+
+    /**
+     * Change the status of a WaitingListRequest.
+     *
+     * @param requestID ID of the WaitingListRequest to change;
+     */
+    @Transactional
+    public void updateWaitingListRequestStatus(Long requestID, boolean newStatus)
+    {
+        WaitingListRequest request = waitingListRepository.getById(requestID);
+
+        if(request != null)
+        {
+            request.setStatus(newStatus);
+        }
+    }
+
+
+    /**
+     * Adds answers from Questionnaire to WaitingListRequest.
+     *
+     * @param requestID     WaitingListRequest that the answers belong to.
+     * @param questionnaire Questionnaire that has the answers.
+     */
+    @Transactional
+    public void updateQuestionnaireAnswers(Long requestID, Questionnaire questionnaire)
+    {
+        WaitingListRequest request = waitingListRepository.getById(requestID);
+
+        if(request != null)
+        {
+            if(!request.getQuestionnaireAnswers().isEmpty())
+            {
+                request.setQuestionnaireAnswers(new ArrayList<>());
+            }
+
+            for (Question question : questionnaire.getQuestions())
+            {
+                request.addQuestionnaireAnswer(question.getAnswer());
+            }
+
+            Questionnaire requestQuestionnaire = request.getQuestionnaire();
+
+            request.calculateScore(requestQuestionnaire.getQuestions());
+        }
+    }
+
+
+    /**
+     * Deletes a WaitingListRequest with a corresponding id.
+     *
+     * @param requestID ID of the WaitingListRequest to delete.
+     */
+    @Override
+    public void deleteRequest(Long requestID)
+    {
+        waitingListRepository.deleteById(requestID);
     }
 }

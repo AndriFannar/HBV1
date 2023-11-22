@@ -8,7 +8,7 @@
 </head>
 <body>
     <header class="header">
-        <h1>Nafn apps</h1>
+        <h1>Biðlisti</h1>
     </header>
     <main class="efni">
         <h2>Breyta spurningalista</h2>
@@ -63,6 +63,10 @@
                                     <p><a th:href="@{{qId}/addQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Bæta við á lista</a></p>
                                     <p><a th:href="@{{qId}/deleteQuestion/{id}(id=${question.id}, qId=${questionnaire.id})}">Eyða spurningu</a></p>
                                 </div>
+                            </td>
+                            <td th:if="${question.id == questionError}">
+                                <p>Ekki hægt að eyða; Spurning er á eftirfarandi listum:</p>
+                                <p th:each="questionnaireInQuestion : ${question.questionnaires}" th:text="${questionnaireInQuestion.name}"></p>
                             </td>
                         </div>
                     </tr>

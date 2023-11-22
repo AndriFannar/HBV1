@@ -8,7 +8,7 @@
 </head>
 <body>
     <header class="header">
-        <h1>Nafn apps</h1>
+        <h1>Biðlisti</h1>
     </header>
 <main class="efni">
     <section th:switch="${request.patient}">
@@ -49,7 +49,7 @@
                         <th th:if="${request.questionnaire != null}" >Líkamshluti</th>
                         <th>Lýsing</th>
                         <th>Staða</th>
-                        <th>Forgangur</th>
+                        <th th:if="${LoggedInUser.isElevatedUser}">Forgangur</th>
                         <th>Dagsetning</th>
                     </tr>
                 </thead>
@@ -64,15 +64,14 @@
                             <p th:if="${request.status == true}">Samþykkt</p>
                         </td>
 
-                        <td th:if="${LoggedInUser.isPhysiotherapist}" th:text="${request.grade}"></td>
+                        <td th:if="${LoggedInUser.isElevatedUser}" th:text="${request.grade}"></td>
 
                         <td th:text="${request.dateOfRequest}">
 
-
                         <td class="staff_button">
                             <div>
-                                <p th:if="${request.status == false && LoggedInUser.isPhysiotherapist}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p>
-                                <p><a th:if="${LoggedInUser.isPhysiotherapist}" th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></p>
+                                <p th:if="${request.status == false && LoggedInUser.isElevatedUser}"><a th:href="@{/acceptRequest/{id}(id=${request.id})}">Samþykkja Beiðni</a></p>
+                                <p><a th:href="@{/deleteRequest/{id}(id=${request.id})}">Eyða Beiðni</a></p>
                             </div>
                         </td>
                     </tr>
@@ -81,13 +80,13 @@
         </div>
     </section>
 
-    <section th:if="${LoggedInUser.isPhysiotherapist || LoggedInUser.id == request.patient.id}">
+    <section th:if="${LoggedInUser.isElevatedUser || LoggedInUser.id == request.patient.id}">
         <h2>Breyta beiðni</h2>
         <form class="form" id="dropDownList" action="#"  th:object="${request}" th:action="@{/updateRequest/__${request.id}__}" method="POST">
             <fieldset>
                 <legend>Upplýsingar</legend>
 
-                <div th:if="${LoggedInUser.isPhysiotherapist}">
+                <div th:if="${LoggedInUser.isElevatedUser}">
                     <div>
                         <label for="staff">Starfsmaður</label>
                         <select th:field="*{staff}" th:each="stff : *{staff}" id="staff">
@@ -123,10 +122,8 @@
             </fieldset>
             <input type="submit"  value="Skrá breytingar" class="button">
         </form>
-    </section>
 
-    <section th:if="${LoggedInUser.isPhysiotherapist}">
-        <details th:if="${(request.questionnaire != null) &&  (answers != null)}">
+        <details th:if="${(request.questionnaire != null) && !(request.questionnaireAnswers.isEmpty)}">
             <summary>Svör spurningalista:</summary>
             <table class="table">
                 <thead>

@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,9 +27,9 @@ import java.util.List;
 public class QuestionnaireController
 {
     // Variables.
-    private QuestionnaireService questionnaireService;
-    private QuestionService questionService;
-    private WaitingListService waitingListService;
+    private final QuestionnaireService questionnaireService;
+    private final QuestionService questionService;
+    private final WaitingListService waitingListService;
 
 
     /**
@@ -52,18 +51,24 @@ public class QuestionnaireController
     /**
      * Get a Questionnaire overview.
      *
-     * @return Page with a list of Questionnaires in the system.
+     * @param model   Page model.
+     * @param session Current HttpSession.
+     * @return        Page with a list of Questionnaires in the system.
      */
     @RequestMapping(value = "/questionnaireOverview", method = RequestMethod.GET)
     public String getQuestionnaireOverview(Model model, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only display page if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaire();
+            List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
             model.addAttribute("questionnaires", questionnaires);
             model.addAttribute("questionnaire", new Questionnaire());
+
+            model.addAttribute("questionnaireError", session.getAttribute("questionnaireError"));
+            session.removeAttribute("questionnaireError");
 
             return "questionnaireOverview";
         }
@@ -75,16 +80,19 @@ public class QuestionnaireController
     /**
      * Create a new Questionnaire.
      *
-     * @return Saves a new Questionnaire to the database.
+     * @param questionnaire New Questionnaire.
+     * @param session       Current HttpSession.
+     * @return              Saves a new Questionnaire to the database.
      */
     @RequestMapping(value = "/createQuestionnaire", method = RequestMethod.POST)
-    public String createQuestionnaire(Questionnaire questionnaire, Model model, HttpSession session)
+    public String createQuestionnaire(Questionnaire questionnaire, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only create if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            questionnaireService.saveQuestionnaire(questionnaire);
+            questionnaireService.saveNewQuestionnaire(questionnaire);
 
             return "redirect:/questionnaireOverview";
         }
@@ -94,18 +102,21 @@ public class QuestionnaireController
 
 
     /**
-     * Display Questionnaire on registration form.
+     * Toggle display Questionnaire on registration form.
      *
-     * @return Redirect back to page.
+     * @param questionnaireID ID of Questionnaire to toggle
+     * @param session         Current HttpSession
+     * @return                Redirect back to page.
      */
-    @RequestMapping(value = "/displayOnForm/{questionnaireID}", method = RequestMethod.GET)
-    public String displayOnForm(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    @RequestMapping(value = "/toggleDisplayOnForm/{questionnaireID}", method = RequestMethod.GET)
+    public String toggleDisplayOnForm(@PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only toggle if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            questionnaireService.displayOnForm(questionnaireID);
+            questionnaireService.toggleDisplayQuestionnaireOnForm(questionnaireID);
 
             return "redirect:/questionnaireOverview";
         }
@@ -117,16 +128,29 @@ public class QuestionnaireController
     /**
      * Delete a Questionnaire.
      *
-     * @return Redirect back to page.
+     * @param questionnaireID ID of Questionnaire to delete.
+     * @param session         Current HttpSession.
+     * @return                Redirect back to page.
      */
     @RequestMapping(value = "/deleteQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
-    public String deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    public String deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only delete if User is admin.
+        if (questionnaire != null && loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            questionnaireService.deleteQuestionnaireById(questionnaireID);
+            // If Questionnaire has no connected WaitingListRequests, then delete.
+            if(questionnaire.getWaitingListRequests().isEmpty())
+            {
+                questionnaireService.deleteQuestionnaireById(questionnaireID);
+            }
+            // Else add the QuestionnaireID to the session to display a message on questionnaireOverview page.
+            else
+            {
+                session.setAttribute("questionnaireError", questionnaireID);
+            }
 
             return "redirect:/questionnaireOverview";
         }
@@ -136,26 +160,39 @@ public class QuestionnaireController
 
 
     /**
-     * Edit an existing Questionnaire
+     * Get a page for editing an existing Questionnaire
      *
-     * @return Page where the user can edit a Questionnaire.
+     * @param questionnaireID ID of Questionnaire to edit.
+     * @param model           Page model.
+     * @param session         Current HttpSession.
+     * @return                Page where the user can edit a Questionnaire.
      */
     @RequestMapping(value = "/editQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
     public String editQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only allow edit if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            Questionnaire questionnaire = questionnaireService.getQuestionnaire(questionnaireID);
+            Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
+            // If Questionnaire does not exist, redirect back.
             if(questionnaire == null) return "redirect:/questionnaireOverview";
 
+            // Add Questionnaire to model.
             model.addAttribute("questionnaire", questionnaire);
 
-            List<Question> questions = questionService.getQuestions();
+            // Get all Questions in database to display.
+            List<Question> questions = questionService.getAllQuestions();
             model.addAttribute("questions", questions);
+
+            // Create a new Question if the User wants to add one.
             model.addAttribute("question", new Question());
+
+            // If Question could not be deleted, show a message on page.
+            model.addAttribute("questionError", session.getAttribute("questionError"));
+            session.removeAttribute("questionError");
 
             return "viewQuestionnaire";
         }
@@ -167,16 +204,20 @@ public class QuestionnaireController
     /**
      * Add a Question to a Questionnaire.
      *
-     * @return Redirect back to page.
+     * @param questionID      ID of Question to add to Questionnaire.
+     * @param questionnaireID ID of Questionnaire to add Question to.
+     * @param session         Current HttpSession.
+     * @return                Redirect back to page.
      */
     @RequestMapping(value = "editQuestionnaire/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.GET)
-    public String addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    public String addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only add question if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            questionnaireService.addQuestionToList(questionID, questionnaireID);
+            questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
 
             return "redirect:/editQuestionnaire/" + questionnaireID;
         }
@@ -188,16 +229,20 @@ public class QuestionnaireController
     /**
      * Remove a Question from a Questionnaire.
      *
-     * @return Redirect back to page.
+     * @param questionID      ID of Question to remove from Questionnaire.
+     * @param questionnaireID ID of Questionnaire to remove Question from.
+     * @param session         Current HttpSession.
+     * @return                Redirect back to page.
      */
     @RequestMapping(value = "editQuestionnaire/{questionnaireID}/removeFromQuestionnaire/{questionID}", method = RequestMethod.GET)
-    public String removeQuestion(@PathVariable("questionID") Long questionID ,@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    public String removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
     {
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
-        if (loggedInUser != null && loggedInUser.isAdmin())
+        // Only remove Question if User is admin.
+        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
         {
-            questionnaireService.removeQuestionFromList(questionID, questionnaireID);
+            questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
 
             return "redirect:/editQuestionnaire/" + questionnaireID;
         }
@@ -205,17 +250,20 @@ public class QuestionnaireController
         return "redirect:/";
     }
 
+
     /**
      * Form for answering a Questionnaire.
      *
+     * @param requestID ID of WaitingListRequest that the Questionnaire is from.
+     * @param questionnaireID ID of Questionnaire to answer.
      * @return questionnaire page with Questionnaire object.
      */
-    @RequestMapping(value = "{requestId}/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
-    public String getQuestionnaire(@PathVariable("requestId") Long requestId, @PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
+    @RequestMapping(value = "{requestID}/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
+    public String getQuestionnaire(@PathVariable("requestID") Long requestID, @PathVariable("questionnaireID") Long questionnaireID, Model model)
     {
         // Find and add corresponding Questionnaire to model.
-        Questionnaire form = questionnaireService.getQuestionnaire(questionnaireID);
-        WaitingListRequest request = waitingListService.getRequestByID(requestId);
+        Questionnaire form = questionnaireService.getQuestionnaireByID(questionnaireID);
+        WaitingListRequest request = waitingListService.getWaitingListRequestByID(requestID);
 
         model.addAttribute("questionnaire", form);
         model.addAttribute("request", request);
@@ -227,16 +275,19 @@ public class QuestionnaireController
     /**
      * Form for answering a Questionnaire.
      *
-     * @return questionnaire page with Questionnaire object.
+     * @param requestID     ID of WaitingListRequest the answers belong to.
+     * @param questionnaire Questionnaire with answers.
+     * @param session       Current HttpSession.
+     * @return              Redirect.
      */
-    @RequestMapping(value = "{requestId}/answerQuestionnaire", method = RequestMethod.POST)
-    public String answerQuestionnaire(@PathVariable("requestId") Long requestId, Questionnaire questionnaire, Model model, BindingResult result, HttpSession session)
+    @RequestMapping(value = "{requestID}/answerQuestionnaire", method = RequestMethod.POST)
+    public String answerQuestionnaire(@PathVariable("requestID") Long requestID, Questionnaire questionnaire, HttpSession session)
     {
         User patient = (User) session.getAttribute("LoggedInUser");
 
         if(patient != null)
         {
-            waitingListService.addQuestionnaireAnswers(requestId, questionnaire);
+            waitingListService.updateQuestionnaireAnswers(requestID, questionnaire);
         }
 
         return "redirect:/";

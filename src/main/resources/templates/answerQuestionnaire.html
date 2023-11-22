@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <title>Svara Spurningalista</title>
     <link rel="stylesheet" th:href="@{/styles/test2.css}"/>
-    <!--<link rel="stylesheet" href="../static/styles/test2.css"/>-->
 </head>
 <body>
     <header class="header">
-        <h1>Nafn apps</h1>
+        <h1>Biðlisti</h1>
     </header>
     <main class="efni">
         <h1>Spurningalisti</h1>
 
         <section th:if="${not #lists.isEmpty(questionnaire.questions)}">
-            <h2>Spurningar:</h2>
-            <h3>Þar sem 0 er minnst</h3>
+            <h4>Hér eru nokkrar spurningar sem þú þarft að svara. Þessi spurningalisti er saminn til þess að fá
+                upplýsingar um hvernig óþægindi eða verkir hafa áhrif á daglegt líf þitt.</h4>
+            <h4>Vinsamlega merktu við það svar sem lýsir vandamáli þínu best þar sem 0 er minnst eða engin áhrif.</h4>
             <form th:action="@{/{qId}/answerQuestionnaire(qId=${request.id})}" th:object="${questionnaire}" method="POST" class="form questionForm">
                 <fieldset class="questionFieldset">
                     <div th:each="question, questionIndex : ${questionnaire.questions}" class="question_div">

@@ -41,7 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long >
      * @param email E-mail of User to find.
      * @return      User with matching e-mail, if any.
      */
-    User findByEmail(String email);
+    User getByEmail(String email);
 
 
     /**
@@ -50,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, Long >
      * @param userID Unique ID of User object to find.
      * @return       User with corresponding ID, if any.
      */
-    User findUserById(Long userID);
+    User getById(Long userID);
 
 
     /**
@@ -58,16 +58,25 @@ public interface UserRepository extends JpaRepository<User, Long >
      *
      * @return List of all User objects in database, if any.
      */
-    List<User> findAll();
+    List<User> getAllByOrderByRoleDescNameAsc();
 
 
     /**
-     * Finds User by physiotherapist.
+     * Finds User by role.
      *
-     * @param physiotherapist Search for physiotherapists or general staff.
-     * @return                User objects with matching role, if any.
+     * @param role Search for User by UserRole.
+     * @return     User objects with matching role, if any.
      */
-    List<User> findUserByIsPhysiotherapist(boolean physiotherapist);
+    List<User> getByRole(User.UserRole role);
+
+
+    /**
+     * Finds User by role.
+     *
+     * @param role Search for User that has at least UserRole.
+     * @return     User objects with matching role or above, if any.
+     */
+    List<User> getByRoleGreaterThanEqual(User.UserRole role);
 
 
     /**
@@ -76,5 +85,5 @@ public interface UserRepository extends JpaRepository<User, Long >
      * @param ssn SSN of User to find.
      * @return    User object with matching SSN, if any.
      */
-    User findBySsn(String ssn);
+    User getBySsn(String ssn);
 }

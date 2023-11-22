@@ -1,7 +1,6 @@
 package is.hi.hbv501g.hbv1.Services.implementation;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.Services.QuestionService;
 import jakarta.transaction.Transactional;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -29,25 +27,12 @@ public class QuestionServiceImplementation implements QuestionService
     /**
      * Constructs a new QuestionnaireServiceImplementation.
      *
-     * @param qR QuestionRepository linked to service.
+     * @param questionRepository QuestionRepository linked to service.
      */
     @Autowired
-    public QuestionServiceImplementation(QuestionRepository qR)
+    public QuestionServiceImplementation(QuestionRepository questionRepository)
     {
-        this.questionRepository = qR;
-    }
-
-
-    /**
-     * Gets the Questionnaire with the corresponding ID.
-     *
-     * @param questionID The ID of the question to fetch.
-     * @return           Question with corresponding question ID.
-     */
-    @Override
-    public Question getQuestionById(Long questionID)
-    {
-        return questionRepository.getQuestionById(questionID);
+        this.questionRepository = questionRepository;
     }
 
 
@@ -58,9 +43,34 @@ public class QuestionServiceImplementation implements QuestionService
      * @return         Saved Question.
      */
     @Override
-    public Question saveQuestion(Question question)
+    public Question saveNewQuestion(Question question)
     {
         return questionRepository.save(question);
+    }
+
+
+    /**
+     * Gets all Question objects in database.
+     *
+     * @return List of all Question objects in database, if any.
+     */
+    @Override
+    public List<Question> getAllQuestions()
+    {
+        return questionRepository.getAllByOrderByQuestionStringAsc();
+    }
+
+
+    /**
+     * Gets the Question with the corresponding ID.
+     *
+     * @param questionID The ID of the question to fetch.
+     * @return           Question with corresponding question ID.
+     */
+    @Override
+    public Question getQuestionById(Long questionID)
+    {
+        return questionRepository.getQuestionById(questionID);
     }
 
 
@@ -85,7 +95,7 @@ public class QuestionServiceImplementation implements QuestionService
 
 
     /**
-     * Deletes a Question with a corresponding id.
+     * Deletes a Question with a corresponding ID.
      *
      * @param questionID ID of the Question to delete.
      */
@@ -93,17 +103,5 @@ public class QuestionServiceImplementation implements QuestionService
     public void deleteQuestionById(Long questionID)
     {
         questionRepository.deleteById(questionID);
-    }
-
-
-    /**
-     * Gets all Question objects in database.
-     *
-     * @return List of all Question objects in database, if any.
-     */
-    @Override
-    public List<Question> getQuestions()
-    {
-        return questionRepository.findAll();
     }
 }

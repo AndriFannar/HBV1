@@ -17,38 +17,10 @@ public interface WaitingListService
     /**
      * Saves a new WaitingListRequest in database.
      *
-     * @param waitingLR WaitingListRequest to save.
-     * @return          Saved WaitingListRequest.
+     * @param request WaitingListRequest to save.
+     * @return                   Saved WaitingListRequest.
      */
-    WaitingListRequest createNewRequest(WaitingListRequest waitingLR);
-
-
-    /**
-     * Deletes a WaitingListRequest with a corresponding id.
-     *
-     * @param waitingListID ID of the WaitingListRequest to delete.
-     */
-    void deleteRequest(Long waitingListID);
-
-
-    void addQuestionnaireAnswers(Long waitingListID, Questionnaire questionnaire);
-
-
-    /**
-     * Updates a corresponding WaitingListRequest.
-     *
-     * @param waitingListID  ID of the request to update.
-     * @param updatedRequest WaitingListRequest with updated info.
-     */
-    void updateRequest(Long waitingListID, WaitingListRequest updatedRequest);
-
-
-    /**
-     * Change the status of a WaitingListRequest.
-     *
-     * @param waitingListID ID of the WaitingListRequest to change;
-     */
-    void updateRequestStatus(Long waitingListID, boolean newStatus);
+    WaitingListRequest saveNewWaitingListRequest(WaitingListRequest request);
 
 
     /**
@@ -56,16 +28,16 @@ public interface WaitingListService
      *
      * @return List of all WaitingListRequest objects, if any.
      */
-    List<WaitingListRequest> getRequests();
+    List<WaitingListRequest> getAllWaitingListRequests();
 
 
     /**
      * Gets a WaitingListRequest with matching unique ID.
      *
-     * @param waitingListID Unique ID of the WaitingListRequest object to find.
-     * @return              WaitingListRequest with a matching ID, if any.
+     * @param requestID Unique ID of the WaitingListRequest object to find.
+     * @return          WaitingListRequest with a matching ID, if any.
      */
-    WaitingListRequest getRequestByID(Long waitingListID);
+    WaitingListRequest getWaitingListRequestByID(Long requestID);
 
 
     /**
@@ -74,14 +46,48 @@ public interface WaitingListService
      * @param patient Patient registered for the WaitingListRequest.
      * @return        WaitingListRequest with matching patient, if any.
      */
-    WaitingListRequest getRequestByPatient(User patient);
+    WaitingListRequest getWaitingListRequestByPatient(User patient);
 
 
     /**
-     * Finds WaitingListRequest by staff (physiotherapist).
+     * Finds WaitingListRequest by physiotherapist.
      *
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getRequestByPhysiotherapist(User staff);
+    List<WaitingListRequest> getWaitingListRequestByPhysiotherapist(User staff);
+
+
+    /**
+     * Updates a corresponding WaitingListRequest.
+     *
+     * @param requestID      ID of the request to update.
+     * @param updatedRequest WaitingListRequest with updated info.
+     */
+    void updateWaitingListRequest(Long requestID, WaitingListRequest updatedRequest);
+
+
+    /**
+     * Change the status of a WaitingListRequest.
+     *
+     * @param requestID ID of the WaitingListRequest to change;
+     */
+    void updateWaitingListRequestStatus(Long requestID, boolean newStatus);
+
+
+    /**
+     * Adds answers from Questionnaire to WaitingListRequest.
+     *
+     * @param requestID     WaitingListRequest that the answers belong to.
+     * @param questionnaire Questionnaire that has the answers.
+     */
+    void updateQuestionnaireAnswers(Long requestID, Questionnaire questionnaire);
+
+
+    /**
+     * Deletes a WaitingListRequest with a corresponding id.
+     *
+     * @param requestID ID of the WaitingListRequest to delete.
+     */
+    void deleteRequest(Long requestID);
 }

@@ -8,7 +8,7 @@
 </head>
 <body>
     <header class="header">
-        <h1>Nafn apps</h1>
+        <h1>Biðlisti</h1>
     </header>
     <main class="efni">
         <h2>Yfirlit Spurningalista</h2>
@@ -31,8 +31,8 @@
 
                             <td class="staff_button">
                                 <div>
-                                    <p th:if="${!questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></p>
-                                    <p th:if="${questionnaire.displayOnForm}"><a th:href="@{/displayOnForm/{id}(id=${questionnaire.id})}">Taka af skráningarformi</a></p>
+                                    <p th:if="${!questionnaire.displayOnForm}"><a th:href="@{/toggleDisplayOnForm/{id}(id=${questionnaire.id})}">Sýna á skráningarformi</a></p>
+                                    <p th:if="${questionnaire.displayOnForm}"><a th:href="@{/toggleDisplayOnForm/{id}(id=${questionnaire.id})}">Taka af skráningarformi</a></p>
                                 </div>
                             </td>
 
@@ -41,6 +41,11 @@
                                     <p><a th:href="@{editQuestionnaire/{id}(id=${questionnaire.id})}">Breyta</a></p>
                                     <p><a th:href="@{deleteQuestionnaire/{id}(id=${questionnaire.id})}">Eyða</a></p>
                                 </div>
+                            </td>
+
+                            <td th:if="${questionnaire.id == questionnaireError}">
+                                <p>Listinn er tengdur við beiðnir hjá eftirfarandi notendum:</p>
+                                <p th:each="request : ${questionnaire.waitingListRequests}" th:text="${request.patient.name}"></p>
                             </td>
                         </tr>
                     </tbody>

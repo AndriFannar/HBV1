@@ -1,7 +1,6 @@
 package is.hi.hbv501g.hbv1.Services;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 
 import java.util.List;
 
@@ -16,21 +15,30 @@ import java.util.List;
 public interface QuestionService
 {
     /**
-     * Gets the Questionnaire with the corresponding ID.
+     * Saves a new Question to database.
+     *
+     * @param question Question to save.
+     * @return         Saved Question.
+     */
+    Question saveNewQuestion(Question question);
+
+
+    /**
+     * Gets all Question objects in database.
+     *
+     * @return List of all Question objects in database, if any.
+     */
+    List<Question> getAllQuestions();
+
+
+    /**
+     * Gets the Question with the corresponding ID.
      *
      * @param questionID The ID of the question to fetch.
      * @return           Question with corresponding question ID.
      */
     Question getQuestionById(Long questionID);
 
-
-    /**
-     * Saves a new Question to database.
-     *
-     * @param question Question to save.
-     * @return         Saved Question.
-     */
-    Question saveQuestion(Question question);
 
     /**
      * Update a matching Question.
@@ -42,17 +50,9 @@ public interface QuestionService
 
 
     /**
-     * Deletes a Question with a corresponding id.
+     * Deletes a Question with a corresponding ID.
      *
      * @param questionID ID of the Question to delete.
      */
     void deleteQuestionById(Long questionID);
-
-
-    /**
-     * Gets all Question objects in database.
-     *
-     * @return List of all Question objects in database, if any.
-     */
-    List<Question> getQuestions();
 }

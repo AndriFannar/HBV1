@@ -39,7 +39,7 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
      *
      * @return List of all Questionnaire objects.
      */
-    List<Questionnaire> findAllByOrderByNameAsc();
+    List<Questionnaire> getAllByOrderByNameAsc();
 
 
     /**
@@ -48,7 +48,7 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
      * @param id Unique ID of the Questionnaire.
      * @return   Questionnaire with matching id, if any.
      */
-    Questionnaire getQuestionnaireById(Long id);
+    Questionnaire getById(Long id);
 
 
     /**
@@ -57,5 +57,5 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
      * @param displayOnForm Display on registration form.
      * @return              List of Questionnaire that the user can choose when creating a new WaitingListRequest.
      */
-    List<Questionnaire> getQuestionnaireByDisplayOnForm(boolean displayOnForm);
+    List<Questionnaire> getByDisplayOnForm(boolean displayOnForm);
 }
