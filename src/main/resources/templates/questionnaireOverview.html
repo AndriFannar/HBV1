@@ -44,7 +44,7 @@
                             </td>
 
                             <td th:if="${questionnaire.id == questionnaireError}">
-                                <p>Listinn er tengur við beiðnir hjá eftirfarandi notendum:</p>
+                                <p>Listinn er tengdur við beiðnir hjá eftirfarandi notendum:</p>
                                 <p th:each="request : ${questionnaire.waitingListRequests}" th:text="${request.patient.name}"></p>
                             </td>
                         </tr>
