@@ -113,13 +113,13 @@ public class WaitingListController
         User user = (User) session.getAttribute("LoggedInUser");
 
         // Both Request and User must exist, and User must have a valid role.
-        if ((exists != null) && (user != null) && (user.getRole() != null))
+        if ((exists != null) && (user != null))
         {
             // User must be either a member of staff or the User to which the Request belongs.
-            if((user.getRole() != User.UserRole.USER) || (Objects.equals(user.getWaitingListRequest().getId(), requestID)))
+            if((user.isStaffMember()) || (Objects.equals(user.getWaitingListRequest().getId(), requestID)))
             {
                 // Get all Users with Physiotherapist role and all questionnaires to display on update form.
-                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST);
+                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST, true);
                 List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
 
                 // Add everything to page model.

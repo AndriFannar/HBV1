@@ -68,7 +68,7 @@
                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 </div>
 
-                <div th:if="${user.role == T(is.hi.hbv501g.hbv1.Persistence.Entities.User.UserRole).PHYSIOTHERAPIST}">
+                <div th:if="${user.isElevatedUser}">
                     <label for="specialization">Sérhæfing</label>
                     <input type="text" th:field="*{specialization}" id="specialization" th:placeholder="${user.specialization}">
                     <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></span>

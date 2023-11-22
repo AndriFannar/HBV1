@@ -74,7 +74,7 @@ public class UserController
         if(exists != null)
         {
             // If role of User is not user then go to StaffIndex.
-            if(exists.getRole() != User.UserRole.USER)
+            if(exists.isStaffMember())
             {
                 return "redirect:/staffIndex";
             }
@@ -238,7 +238,7 @@ public class UserController
                 model.addAttribute("questionnaires", questionnaires);
 
                 // Get Physiotherapists to display on form.
-                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST);
+                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST, true);
                 model.addAttribute("physiotherapists", staff);
 
                 model.addAttribute("newRequest", new WaitingListRequest());

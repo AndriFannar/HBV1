@@ -62,12 +62,21 @@ public interface UserRepository extends JpaRepository<User, Long >
 
 
     /**
-     * Finds User by physiotherapist.
+     * Finds User by role.
      *
      * @param role Search for User by UserRole.
      * @return     User objects with matching role, if any.
      */
     List<User> getByRole(User.UserRole role);
+
+
+    /**
+     * Finds User by role.
+     *
+     * @param role Search for User that has at least UserRole.
+     * @return     User objects with matching role or above, if any.
+     */
+    List<User> getByRoleGreaterThanEqual(User.UserRole role);
 
 
     /**
