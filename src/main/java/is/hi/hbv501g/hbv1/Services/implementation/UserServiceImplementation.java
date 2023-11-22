@@ -186,7 +186,7 @@ public class UserServiceImplementation implements UserService
         String kennitala = user.getSsn();
         User exists = getUserBySSN(kennitala);
         if(kennitala.isEmpty()){
-            message += "Vantar að setja inn lykilorð";
+            message += "Vantar að setja inn kennitölu";
         }
         else if(kennitala.length() != 10){
             message += "Kennitala ekki nógu löng.";
