@@ -39,7 +39,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      *
      * @return List of all WaitingListRequest objects in database, if any.
      */
-    List<WaitingListRequest> findAllByOrderByGradeDescPatientNameAsc();
+    List<WaitingListRequest> getAllByOrderByGradeDescPatientNameAsc();
 
 
     /**
@@ -48,7 +48,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param id Unique id of WaitingListRequest.
      * @return   WaitingListRequest with matching id, if any.
      */
-    WaitingListRequest getWaitingListRequestById(Long id);
+    WaitingListRequest getById(Long id);
 
 
     /**
@@ -57,7 +57,7 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param patient Patient registered for the WaitingListRequest.
      * @return        WaitingListRequest with matching patient, if any.
      */
-    WaitingListRequest getWaitingListRequestByPatient(User patient);
+    WaitingListRequest getByPatient(User patient);
 
     
     /**
@@ -66,5 +66,5 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getWaitingListRequestByStaff(User staff);
+    List<WaitingListRequest> getByStaff(User staff);
 }

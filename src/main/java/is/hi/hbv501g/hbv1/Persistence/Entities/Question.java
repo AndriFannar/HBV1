@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +29,7 @@ public class Question
     )
     private Long id;
 
+
     // Variables.
     private String questionString;
     private Double weight;
@@ -54,9 +54,9 @@ public class Question
     /**
      * Create a new question.
      *
-     * @param questionString   Question.
-     * @param weight           Weight of question in score calculation.
-     * @param questionnaires   Questionnaires this question belongs on.
+     * @param questionString Question.
+     * @param weight         Weight of question in score calculation.
+     * @param questionnaires Questionnaires this question belongs on.
      */
     public Question(String questionString, Double weight, List<Questionnaire> questionnaires, int numberOfAnswers)
     {
@@ -75,24 +75,20 @@ public class Question
         return questionString;
     }
 
-
     public void setQuestionString(String questionString)
     {
         this.questionString = questionString;
     }
-
 
     public Double getWeight()
     {
         return weight;
     }
 
-
     public void setWeight(Double weight)
     {
         this.weight = weight;
     }
-
 
     public List<Questionnaire> getQuestionnaires() {
         return questionnaires;

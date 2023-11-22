@@ -31,6 +31,7 @@ import java.util.Objects;
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  * @author  Ástríður Haraldsdóttir Passauer, ahp9@hi.is.
  * @author  Sigurður Örn Gunnarsson, sog6@hi.is.
+ * @author  Friðrik Þór Ólafsson, fto2@hi.is.
  * @since   2023-09-27
  * @version 2.0
  */
@@ -61,24 +62,28 @@ public class UserController
     /**
      * Get login page. 
      *
-     * @return Login page.
+     * @param session Current HttpSession.
+     * @return        Login page.
      */
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String loadPages(HttpSession session)
     {
         User exists = (User) session.getAttribute("LoggedInUser");
 
+        // Check if User is logged in.
         if(exists != null)
         {
-            session.setAttribute("LoggedInUser", exists);
-            if(exists.isStaff())
+            // If role of User is not user then go to StaffIndex.
+            if(exists.getRole() != User.UserRole.USER)
             {
                 return "redirect:/staffIndex";
             }
 
+            // Else go to patientIndex.
             return "redirect:/patientIndex";
         }
 
+        // If User is not logged in go to login page.
         return "redirect:/login";
     }
 
@@ -109,7 +114,7 @@ public class UserController
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
     public String signUp(@Validated User user, BindingResult result,  Model model, HttpSession session)
     {
-        String errKen = userService.validateSsn(user);
+        String errKen = userService.validateSSN(user);
         String errPass = userService.validatePassword(user);
         String errEmail = userService.validateEmail(user);
         String errPhN = userService.validatePhoneNumber(user);
@@ -146,12 +151,12 @@ public class UserController
             return "newUser";
         }
 
-        User exists = userService.findByEmail(user.getEmail());
+        User exists = userService.getUserByEmail(user.getEmail());
 
         // If no errors, and Patient does not exist, save.
         if(exists == null)
         {
-            userService.save(user);
+            userService.saveNewUser(user);
             session.setAttribute("LoggedInUser", user);
 
             return "redirect:/";
@@ -164,22 +169,22 @@ public class UserController
     /**
      * Get login page.
      *
-     * @param user  User to log in.
-     * @return      Login page.
+     * @param user User object to hold login info.
+     * @return     Login page.
      */
     @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginGET(User user)
+    public String loginGET(@ModelAttribute("user") User user)
     {
         return "login";
     }
 
 
     /**
-     * Logs in patient
+     * Logs in patient.
      *
-     * @param user    User to log in
-     * @param result  captures and handles validation errors
-     * @param session used to for accessing patient session data
+     * @param user    User to log in.
+     * @param result  captures and handles validation errors.
+     * @param session used to for accessing patient session data.
      * @return        Redirect.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
@@ -190,7 +195,7 @@ public class UserController
         return "login";
         }
 
-        User exists = userService.login(user);
+        User exists = userService.logInUser(user);
 
         if(exists != null)
         {
@@ -216,20 +221,28 @@ public class UserController
     {
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
-        if (sessionUser != null)
+        // Makes sure user is logged in and has User role.
+        if (sessionUser != null && sessionUser.getRole() == User.UserRole.USER)
         {
             model.addAttribute("LoggedInUser", sessionUser);
 
-            WaitingListRequest request = waitingListService.getRequestByPatient(sessionUser);
+            // Get user's WaitingListRequest.
+            WaitingListRequest request = waitingListService.getWaitingListRequestByPatient(sessionUser);
             model.addAttribute("request", request);
 
-            List<Questionnaire> questionnaires = questionnaireService.getDisplayQuestionnaires();
-            model.addAttribute("questionnaires", questionnaires);
+            // If Request does not exist, get data to populate form.
+            if(request == null)
+            {
+                // Get Questionnaires to display on form.
+                List<Questionnaire> questionnaires = questionnaireService.getQuestionnairesOnForm();
+                model.addAttribute("questionnaires", questionnaires);
 
-            model.addAttribute("newRequest", new WaitingListRequest());
+                // Get Physiotherapists to display on form.
+                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST);
+                model.addAttribute("physiotherapists", staff);
 
-            List<User> staff = userService.findByIsPhysiotherapist(true);
-            model.addAttribute("physiotherapists", staff);
+                model.addAttribute("newRequest", new WaitingListRequest());
+            }
 
             return "patientIndex";
         }
@@ -237,44 +250,66 @@ public class UserController
         return "redirect:/";
     }
 
+
     /**
      * Delete User.
      *
-     * @param userID ID of User to delete.
-     * @return       Redirect.
+     * @param userID  ID of User to delete.
+     * @param session Current HttpSession.
+     * @param request Current ServletRequest.
+     * @return        Redirect.
      */
     @RequestMapping(value = "/deleteUser/{userID}", method = RequestMethod.GET)
     public String deleteUser(@PathVariable("userID") Long userID, HttpSession session, HttpServletRequest request)
     {
-        userService.delete(userID);
-
         User user = (User) session.getAttribute("LoggedInUser");
 
-        if (Objects.equals(user.getId(), userID))
-            request.getSession().invalidate();
+        if (user != null)
+        {
+            // If User that is logged in and User to delete are the same, then invalidate login.
+            if (Objects.equals(user.getId(), userID))
+            {
+                userService.deleteUserByID(userID);
+                request.getSession().invalidate();
+            }
+            // If User is Admin (and is not deleting himself), then don't invalidate login and return to userOverview page.
+            else if (user.getRole() == User.UserRole.ADMIN)
+            {
+                userService.deleteUserByID(userID);
 
+                return "redirect:/userOverview";
+            }
+
+        }
         return "redirect:/";
     }
 
 
     /**
-     * View User.
+     * View User page.
      *
-     * @param userID ID of User to view.
-     * @return       Redirect.
+     * @param userID  ID of User to view.
+     * @param model   Page model.
+     * @param session Current HttpSession.
+     * @return        Redirect.
      */
     @RequestMapping(value = "/viewUser/{userID}", method = RequestMethod.GET)
     public String viewUser(@PathVariable("userID") Long userID, Model model, HttpSession session)
     {
+        // Get logged in User and User to view.
         User user = (User) session.getAttribute("LoggedInUser");
-        User viewUser = userService.findByID(userID);
+        User viewUser = userService.getUserByID(userID);
 
         if (user != null)
         {
-            model.addAttribute("LoggedInUser", user);
-            model.addAttribute("user", viewUser);
+            // Only display page if User that is logged in is either same as the User to view or is admin.
+            if (user.getRole() == User.UserRole.ADMIN || Objects.equals(user.getId(), userID))
+            {
+                model.addAttribute("LoggedInUser", user);
+                model.addAttribute("user", viewUser);
 
-            return "viewUser";
+                return "viewUser";
+            }
         }
 
         return "redirect:/";
@@ -284,16 +319,19 @@ public class UserController
     /**
      * Update User.
      *
-     * @param userID      Unique ID of User to update.
+     * @param userID      ID of User to update.
      * @param updatedUser User with updated info.
+     * @param result      BindingResult of form.
+     * @param session     Current HttpSession.
      * @return            Redirect.
      */
     @RequestMapping(value = "/updateUser/{userID}", method = RequestMethod.POST)
     public String updateRequest(@PathVariable("userID") Long userID, @ModelAttribute("user") User updatedUser, BindingResult result, HttpSession session)
     {
-        User currentUser = (User) session.getAttribute("LoggedInUser");
+        User userToUpdate = userService.getUserByID(userID);
 
-        if(!Objects.equals(currentUser.getEmail(), updatedUser.getEmail()))
+        // Validate inputted info.
+        if(!Objects.equals(userToUpdate.getEmail(), updatedUser.getEmail()))
         {
             String errEmail = userService.validateEmail(updatedUser);
 
@@ -327,36 +365,53 @@ public class UserController
             return "redirect:/viewUser/" + userID;
         }
 
-        userService.updateUser(userID, updatedUser);
+        User sessionUser = (User) session.getAttribute("LoggedInUser");
 
-        User updated = userService.findByID(userID);
+        // If User that is doing the update is admin, then update.
+        if (sessionUser.getRole() == User.UserRole.ADMIN)
+        {
+            userService.updateUser(userID, updatedUser);
 
-        session.setAttribute("LoggedInUser", updated);
+        }
+
+        // If user that is doing the update is not admin and is updating himself.
+        if(Objects.equals(sessionUser.getId(), userID))
+        {
+            // Make sure that the role is not updated (only admin can update role).
+            updatedUser.setRole(null);
+            userService.updateUser(userID, updatedUser);
+
+            // After updating, update User in current HttpSession (since the sessionUser is updating himself).
+            User updated = userService.getUserByID(userID);
+            session.setAttribute("LoggedInUser", updated);
+        }
 
         return "redirect:/viewUser/" + userID;
     }
 
 
     /**
-     * For logging out the current user
+     * Log out current User.
      *
-     * @param request HttpServletRequest
-     * @return        Home page
+     * @param request Current HttpServletRequest
+     * @return        Redirect.
      */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request)
     {
-        // Invalidate the user's session
+        // Invalidate the user's session.
         request.getSession().invalidate();
-        // Redirect to the login page
+
+        // Redirect to start page.
         return "redirect:/";
     }
 
+
     /**
-     * Redirects to the homepage of staff members
+     * Gets the homepage of staff members.
      *
-     * @param session used to for accessing staff session data
-     * @param model   used to populate staff data for the view
+     * @param session Used to for accessing staff session data.
+     * @param model   Used to populate staff data for the view.
      * @return        Redirect.
      */
     @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
@@ -364,34 +419,41 @@ public class UserController
     {
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
-        if(sessionUser != null)
+        // Make sure User is logged in and that the User has a valid role.
+        if(sessionUser != null && sessionUser.getRole() != null)
         {
-            model.addAttribute("LoggedInUser", sessionUser);
-
-            List<WaitingListRequest> requests;
-
-            if(sessionUser.isAdmin() || !sessionUser.isPhysiotherapist())
+            // Only display page if User's role is not user.
+            if (sessionUser.getRole() != User.UserRole.USER)
             {
-                requests = waitingListService.getRequests();
-            }
-            else
-            {
-                requests = waitingListService.getRequestByPhysiotherapist(sessionUser);
-            }
+                model.addAttribute("LoggedInUser", sessionUser);
 
-            model.addAttribute("requests", requests);
+                List<WaitingListRequest> requests;
 
-            return "staffIndex";
+                // If User is physiotherapist, then only get WaitingListRequests associated with that physiotherapist.
+                if(sessionUser.getRole() == User.UserRole.PHYSIOTHERAPIST)
+                {
+                    requests = waitingListService.getWaitingListRequestByPhysiotherapist(sessionUser);
+                }
+                // Else, get all WaitingListRequests.
+                else
+                {
+                    requests = waitingListService.getAllWaitingListRequests();
+                }
+
+                model.addAttribute("requests", requests);
+
+                return "staffIndex";
+            }
         }
         return "redirect:/";
     }
 
 
     /**
-     * Redirects to user overview
+     * Redirects to user overview page.
      *
-     * @param session used to for accessing staff session data
-     * @param model   used to populate staff data for the view
+     * @param session Used to for accessing staff session data
+     * @param model   Used to populate staff data for the view
      * @return        Redirect.
      */
     @RequestMapping(value="/userOverview", method=RequestMethod.GET)
@@ -399,61 +461,19 @@ public class UserController
     {
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
-        if(sessionUser != null)
+        // Make sure User is admin.
+        if(sessionUser != null && sessionUser.getRole() == User.UserRole.ADMIN)
         {
             model.addAttribute("LoggedInUser", sessionUser);
 
-            List<User> users = userService.findAll();
+            // Get all Users and display.
+            List<User> users = userService.getAllUsers();
 
             model.addAttribute("users", users);
 
             return "userOverview";
         }
+
         return "redirect:/";
-    }
-
-
-    /**
-     * Make user staff.
-     *
-     * @param userID ID of User to update.
-     * @return       Redirect.
-     */
-    @RequestMapping(value = "/makeStaff/{userID}", method = RequestMethod.GET)
-    public String makeStaff(@PathVariable("userID") Long userID)
-    {
-        userService.changeRole(userID, true, false, false);
-
-        return "redirect:/userOverview";
-    }
-
-
-    /**
-     * Make user physiotherapist.
-     *
-     * @param userID ID of User to update.
-     * @return       Redirect.
-     */
-    @RequestMapping(value = "/makePhysiotherapist/{userID}", method = RequestMethod.GET)
-    public String makePhysiotherapist(@PathVariable("userID") Long userID)
-    {
-        userService.changeRole(userID, false, true, false);
-
-        return "redirect:/userOverview";
-    }
-
-
-    /**
-     * Make user admin.
-     *
-     * @param userID ID of User to update.
-     * @return       Redirect.
-     */
-    @RequestMapping(value = "/makeAdmin/{userID}", method = RequestMethod.GET)
-    public String makeAdmin(@PathVariable("userID") Long userID)
-    {
-        userService.changeRole(userID, false, false, true);
-
-        return "redirect:/userOverview";
     }
 }

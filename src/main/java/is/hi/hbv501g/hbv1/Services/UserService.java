@@ -16,37 +16,20 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 public interface UserService
 {
     /**
-     * Find all User objects saved to database, if any.
-     *
-     * @return List of all User objects in database, if any.
-     */
-    List<User> findAll();
-
-
-    /**
      * Save a new User object to database.
      *
      * @param user User object to save.
      * @return     Saved User object.
      */
-    User save(User user);
+    User saveNewUser(User user);
 
 
     /**
-     * Delete a User object from database by ID.
+     * Find all User objects saved to database, if any.
      *
-     * @param userID Unique ID of the User object to delete.
+     * @return List of all User objects in database, if any.
      */
-    void delete(Long userID);
-
-
-    /**
-     * Find User object by e-mail.
-     *
-     * @param email E-mail of User object to find.
-     * @return      User object with matching e-mail, if any.
-     */
-    User findByEmail(String email);
+    List<User> getAllUsers();
 
 
     /**
@@ -55,17 +38,34 @@ public interface UserService
      * @param userID Unique ID of User object to find.
      * @return       User with corresponding ID, if any.
      */
-    User findByID(Long userID);
+    User getUserByID(Long userID);
 
 
     /**
-     * Log in given User object.
+     * Find User object by e-mail.
      *
-     * @param user User to log in.
-     * @return     Logged in User.
+     * @param email E-mail of User object to find.
+     * @return      User object with matching e-mail, if any.
      */
-    User login(User user);
+    User getUserByEmail(String email);
 
+
+    /**
+     * Find User object by SSN.
+     *
+     * @param ssn SSN of User to find.
+     * @return    User with corresponding SSN, if any.
+     */
+    User getUserBySSN(String ssn);
+
+
+    /**
+     * Finds User by current UserRole.
+     *
+     * @param role Search for User with matching UserRole.
+     * @return     List of User objects with matching role, if any.
+     */
+    public List<User> getUserByRole(User.UserRole role);
 
 
     /**
@@ -78,60 +78,54 @@ public interface UserService
 
 
     /**
-     * Change role of User.
+     * Delete a User object from database by ID.
      *
-     * @param userID            ID of the User to update.
-     * @param isStaff           Is User a staff member.
-     * @param isPhysiotherapist Is User a physiotherapist.
-     * @param isAdmin           Is User an admin.
+     * @param userID Unique ID of the User object to delete.
      */
-    void changeRole(Long userID, boolean isStaff, boolean isPhysiotherapist, boolean isAdmin);
+    void deleteUserByID(Long userID);
+
 
     /**
-     * Find User object by SSN.
+     * Log in given User object.
      *
-     * @param ssn SSN of User to find.
-     * @return    User with corresponding SSN, if any.
+     * @param user User to log in.
+     * @return     Logged in User.
      */
-    User findBySsn(String ssn);
+    User logInUser(User user);
+
 
     /**
      * Checks if SSN is valid.
      *
      * @param user User that is trying to sign up
-     * @return String with error message if SSN is invalid
+     * @return     String with error message if SSN is invalid
      */
-    String validateSsn(User user);
+    String validateSSN(User user);
+
 
     /**
      * Checks if password is valid
      *
      * @param user User that is trying to sign up
-     * @return String with error message if password is invalid
+     * @return     String with error message if password is invalid
      */
     String validatePassword(User user);
+
 
     /**
      * Checks if e-mail is valid.
      *
      * @param user User that is trying to sign up.
-     * @return @return String with error message if e-mail is invalid
+     * @return     String with error message if e-mail is invalid
      */
     String validateEmail(User user);
+
 
     /**
      * Checks if phone number is valid.
      *
      * @param user User that is trying to sign up.
-     * @return String with error message if phone number is invalid
+     * @return     String with error message if phone number is invalid
      */
     String validatePhoneNumber(User user);
-
-    /**
-     * Finds User by isPhysiotherapist.
-     *
-     * @param physiotherapist Search for physiotherapists.
-     * @return                List of User objects with matching role, if any.
-     */
-    List<User> findByIsPhysiotherapist(boolean physiotherapist);
 }
