@@ -19,19 +19,23 @@
                 <thead>
                 <tr>
                     <th>Nafn</th>
+                    <th th:if="${user.specialization != null}">Sérhæfing</th>
                     <th>Kennitala</th>
                     <th>Netfang</th>
                     <th>Símanúmer</th>
                     <th>Heimilisfang</th>
+                    <th th:if="${LoggedInUser.role == T(is.hi.hbv501g.hbv1.Persistence.Entities.User.UserRole).ADMIN}">Tegund Notanda</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td th:text="${user.name}"></td>
+                    <td th:if="${user.specialization != null}" th:text="${user.specialization}"></td>
                     <td th:text="${user.ssn}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.phoneNumber}"></td>
                     <td th:text="${user.address}"></td>
+                    <td th:if="${LoggedInUser.role == T(is.hi.hbv501g.hbv1.Persistence.Entities.User.UserRole).ADMIN}" th:text="${user.role.displayString}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -67,24 +71,32 @@
                     <input type="text" th:field="*{email}" id="email" placeholder="${user.email}">
                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 </div>
+
+                <div th:if="${user.isElevatedUser}">
+                    <label for="specialization">Sérhæfing</label>
+                    <input type="text" th:field="*{specialization}" id="specialization" th:placeholder="${user.specialization}">
+                    <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></span>
+                </div>
+
+                <div th:if="${LoggedInUser.role == T(is.hi.hbv501g.hbv1.Persistence.Entities.User.UserRole).ADMIN}">
+                    <label for="role">Tegund Notanda</label>
+                    <select th:field="${user.role}" id="role">
+                        <option th:each="roleOpt : ${T(is.hi.hbv501g.hbv1.Persistence.Entities.User.UserRole).values()}" th:value="${roleOpt}" th:text="${roleOpt.displayString}"></option>
+                    </select>
+                </div>
             </fieldset>
             <input type="submit"  value="Skrá breytingar" class="button">
         </form>
     </section>
     
     <section class="viewUser_button">
-        <div th:if="${LoggedInUser.isAdmin}" class="viewUser_staff_button">
-            <p class="p_back" th:if="${!user.isStaff}"><a th:href="@{/makeStaff/{id}(id=${user.id})}">Breyta í starfsmann</a></p>
-            <p class="p_back" th:if="${user.isStaff && !user.isPhysiotherapist}"><a th:href="@{/makePhysiotherapist/{id}(id=${user.id})}">Breyta í sjúkraþjálfara</a></p>
-            <p class="p_back" th:if="${user.isStaff && !user.isAdmin}"><a th:href="@{/makeAdmin/{id}(id=${user.id})}">Breyta í stjórnanda</a></p>
-        </div>        
         <div>
             <p class="p_back"><a th:href="@{/deleteUser/{id}(id=${user.id})}">Eyða aðgangi</a></p>
         </div>
     </section>
     
     <section>
-        <p><a href="/" class="back">Til baka</a></p>
+        <p><a href="/userOverview" class="back">Til baka</a></p>
     </section>
 </main>
 </body>

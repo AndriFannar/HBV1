@@ -28,12 +28,18 @@ public class Questionnaire
     )
     private Long id;
 
+
+    // Variables
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Question> questions;
 
     private boolean displayOnForm;
+
+    @OneToMany(mappedBy = "questionnaire", fetch = FetchType.LAZY)
+    private List<WaitingListRequest> waitingListRequests;
+
 
     /**
      * Create a new empty questionnaire.
@@ -91,6 +97,14 @@ public class Questionnaire
 
     public void setDisplayOnForm(boolean displayOnForm) {
         this.displayOnForm = displayOnForm;
+    }
+
+    public List<WaitingListRequest> getWaitingListRequests() {
+        return waitingListRequests;
+    }
+
+    public void setWaitingListRequests(List<WaitingListRequest> waitingListRequests) {
+        this.waitingListRequests = waitingListRequests;
     }
 
     @Override

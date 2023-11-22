@@ -30,6 +30,7 @@ public class User
     )
     private Long id;
 
+
     // Variables.
     private String name;
     private String email;
@@ -37,11 +38,44 @@ public class User
     private String ssn;
     private String phoneNumber;
     private String address;
-    private boolean isStaff;
-    private boolean isPhysiotherapist;
-    private boolean isAdmin;
     private String specialization;
-    private String description;
+
+    private UserRole role;
+
+
+    public enum UserRole {
+        USER("Notandi", false, false),
+        STAFF("Starfsfólk", true, false),
+        PHYSIOTHERAPIST("Sjúkraþjálfari", true, true),
+        ADMIN("Kerfisstjóri", true, true);
+
+        private final String displayString;
+        private final boolean staffMember;
+        private final boolean elevatedUser;
+
+        UserRole(String displayString, boolean staffMember, boolean elevatedUser)
+        {
+            this.displayString = displayString;
+            this.staffMember = staffMember;
+            this.elevatedUser = elevatedUser;
+        }
+
+        public String getDisplayString()
+        {
+            return this.displayString;
+        }
+
+        public boolean isStaffMember()
+        {
+            return this.staffMember;
+        }
+
+        public boolean isElevatedUser()
+        {
+            return this.elevatedUser;
+        }
+    }
+
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WaitingListRequest> waitingListRequests;
@@ -55,7 +89,7 @@ public class User
      */
     public User()
     {
-        isStaff = false;
+        role = UserRole.USER;
     }
 
 
@@ -67,13 +101,12 @@ public class User
      * @param password          User's password.
      * @param ssn               User's SSN.
      * @param phoneNumber       User's phone number.
-     * @param address           Patient's address.
-     * @param isPhysiotherapist Is user a physiotherapist or a receptionist.
-     * @param specialization    Staff member's specialization.
-     * @param description       Description of staff member.
+     * @param address           User's address.
+     * @param role              User's role.
+     * @param specialization    User's member's specialization.
      */
-    public User(String name, String email, String password, String ssn, String phoneNumber, String address, boolean isStaff,
-                boolean isPhysiotherapist, boolean isAdmin, String specialization, String description)
+    public User(String name, String email, String password, String ssn, String phoneNumber, String address,
+                UserRole role, String specialization)
     {
         this.name = name;
         this.email = email;
@@ -82,12 +115,7 @@ public class User
         this.phoneNumber = phoneNumber;
 
         this.address = address;
-
-        this.isStaff = isStaff;
-        this.isPhysiotherapist = isPhysiotherapist;
-        this.isAdmin = isAdmin;
         this.specialization = specialization;
-        this.description = description;
     }
 
 
@@ -96,36 +124,30 @@ public class User
         return id;
     }
 
-
     public String getName()
     {
         return name;
     }
-
 
     public void setName(String name)
     {
         this.name = name;
     }
 
-
     public String getEmail()
     {
         return email;
     }
-
 
     public void setEmail(String email)
     {
         this.email = email;
     }
 
-
     public void setPassword(String password)
     {
         this.password = password;
     }
-
 
     public String getPassword()
     {
@@ -145,7 +167,6 @@ public class User
         this.phoneNumber = phNumber;
     }
 
-
     public String getPhoneNumber()
     {
         return this.phoneNumber;
@@ -155,7 +176,6 @@ public class User
         return waitingListRequest;
     }
 
-
     public void setWaitingListRequest(WaitingListRequest waitingListRequest) {
         this.waitingListRequest = waitingListRequest;
     }
@@ -164,72 +184,44 @@ public class User
         return address;
     }
 
-
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public boolean isStaff() {
-        return isStaff;
-    }
-
-    public void setStaff(boolean staff) {
-        isStaff = staff;
-    }
-
-    public boolean isPhysiotherapist()
+    public void setRole(UserRole role)
     {
-        return isPhysiotherapist;
+        this.role = role;
     }
 
-
-    public void setPhysiotherapist(boolean physiotherapist)
+    public UserRole getRole()
     {
-        isPhysiotherapist = physiotherapist;
+        return this.role;
     }
 
-
-    public boolean isAdmin()
+    public boolean isStaffMember()
     {
-        return isAdmin;
+        return this.role.isStaffMember();
     }
 
-
-    public void setAdmin(boolean admin)
+    public boolean isElevatedUser()
     {
-        isAdmin = admin;
+        return this.role.elevatedUser;
     }
-
 
     public String getSpecialization()
     {
         return specialization;
     }
 
-
     public void setSpecialization(String specialization)
     {
         this.specialization = specialization;
     }
 
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-
     public List<WaitingListRequest> getWaitingListRequests()
     {
         return waitingListRequests;
     }
-
 
     public void setWaitingListRequests(List<WaitingListRequest> waitingListRequests)
     {
@@ -246,11 +238,8 @@ public class User
                 ", ssn='" + ssn + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", address='" + address + '\'' +
-                ", isStaff=" + isStaff +
-                ", isPhysiotherapist=" + isPhysiotherapist +
-                ", isAdmin=" + isAdmin +
+                ", userRole=" + role +
                 ", specialization='" + specialization + '\'' +
-                ", description='" + description + '\'' +
                 '}';
     }
 }

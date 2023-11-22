@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import is.hi.hbv501g.hbv1.Converters.IntegerListConverter;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ public class WaitingListRequest
     )
     private Long id;
 
+
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
     private User patient;
@@ -41,10 +41,8 @@ public class WaitingListRequest
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Questionnaire questionnaire;
-
     @Column(columnDefinition = "int[]")
     @Convert(converter = IntegerListConverter.class)
     private List<Integer> questionnaireAnswers;

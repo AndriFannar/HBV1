@@ -44,41 +44,65 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 
 
     /**
-     * Gets the Questionnaire with the corresponding ID.
-     *
-     * @param questionnaireID The ID of the questionnaire to fetch.
-     * @return                Questionnaire that holds Question objects with corresponding list ID.
-     */
-    @Override
-    public Questionnaire getQuestionnaire(Long questionnaireID)
-    {
-        return questionnaireRepository.getQuestionnaireById(questionnaireID);
-    }
-
-
-    /**
      * Saves a new Questionnaire to the database.
      *
      * @param questionnaire New Questionnaire to save.
      * @return              Saved Questionnaire.
      */
-    public Questionnaire saveQuestionnaire(Questionnaire questionnaire)
+    public Questionnaire saveNewQuestionnaire(Questionnaire questionnaire)
     {
         return questionnaireRepository.save(questionnaire);
     }
 
 
     /**
-     * Saves a new Question to database.
+     * Gets all Questionnaire objects in database.
      *
-     * @param questionID      ID of Question to save.
+     * @return List of all Questionnaire objects in database, if any.
+     */
+    @Override
+    public List<Questionnaire> getAllQuestionnaires()
+    {
+        return questionnaireRepository.getAllByOrderByNameAsc();
+    }
+
+
+    /**
+     * Gets the Questionnaire with the corresponding ID.
+     *
+     * @param questionnaireID The ID of the questionnaire to fetch.
+     * @return                Questionnaire that holds Question objects with corresponding list ID.
+     */
+    @Override
+    public Questionnaire getQuestionnaireByID(Long questionnaireID)
+    {
+        return questionnaireRepository.getById(questionnaireID);
+    }
+
+
+    /**
+     * Gets the Questionnaires that should display when creating a new WaitingListRequest.
+     *
+     * @return List of Questionnaires that are marked for display.
+     */
+    @Override
+    public List<Questionnaire> getQuestionnairesOnForm()
+    {
+        return questionnaireRepository.getByDisplayOnForm(true);
+    }
+
+
+    /**
+     * Adds a Question to Questionnaire.
+     *
+     * @param questionID      ID of Question to add.
      * @param questionnaireID ID of Questionnaire that Question should be added to.
      */
     @Override
     @Transactional
-    public void addQuestionToList(Long questionID, Long questionnaireID)
+    public void addQuestionToQuestionnaire(Long questionID, Long questionnaireID)
     {
-        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
         Question question = questionRepository.getQuestionById(questionID);
 
         if ((questionnaire != null) && (question != null)) questionnaire.addQuestion(question);
@@ -93,9 +117,9 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      */
     @Override
     @Transactional
-    public void removeQuestionFromList(Long questionID, Long questionnaireID)
+    public void removeQuestionFromQuestionnaire(Long questionID, Long questionnaireID)
     {
-        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
         Question question = questionRepository.getQuestionById(questionID);
 
         if ((questionnaire != null) && (question != null))
@@ -106,15 +130,15 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 
 
     /**
-     * Display Questionnaire on registration page.
+     * Toggles whether to display Questionnaire on registration page or not.
      *
      * @param questionnaireID ID of the Questionnaire to change.
      */
     @Override
     @Transactional
-    public void displayOnForm(Long questionnaireID)
+    public void toggleDisplayQuestionnaireOnForm(Long questionnaireID)
     {
-        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
 
         if(questionnaire != null)
         {
@@ -132,34 +156,10 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
     @Transactional
     public void deleteQuestionnaireById(Long questionnaireID)
     {
-        Questionnaire questionnaire = questionnaireRepository.getQuestionnaireById(questionnaireID);
+        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
 
         questionnaire.setQuestions(new ArrayList<>());
 
         questionnaireRepository.deleteById(questionnaireID);
-    }
-
-
-    /**
-     * Gets all Questionnaire objects in database.
-     *
-     * @return List of all Questionnaire objects in database, if any.
-     */
-    @Override
-    public List<Questionnaire> getAllQuestionnaire()
-    {
-        return questionnaireRepository.findAllByOrderByNameAsc();
-    }
-
-
-    /**
-     * Gets the Questionnaires that should display when creating a new WaitingListRequest.
-     *
-     * @return List of Questionnaires that are marked for display.
-     */
-    @Override
-    public List<Questionnaire> getDisplayQuestionnaires()
-    {
-        return questionnaireRepository.getQuestionnaireByDisplayOnForm(true);
     }
 }
