@@ -104,12 +104,14 @@ public class UserServiceImplementation implements UserService
     /**
      * Finds User by current UserRole.
      *
-     * @param role Search for User with matching UserRole.
-     * @return     List of User objects with matching role, if any.
+     * @param role            Search for User with matching UserRole.
+     * @param includeElevated Include Users with a higher role.
+     * @return                List of User objects with matching role, if any.
      */
-    public List<User> getUserByRole(User.UserRole role)
+    public List<User> getUserByRole(User.UserRole role, boolean includeElevated)
     {
-        return userRepository.getByRole(role);
+        if (includeElevated) return userRepository.getByRoleGreaterThanEqual(role);
+        else return userRepository.getByRole(role);
     }
 
 
