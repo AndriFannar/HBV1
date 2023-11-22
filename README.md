@@ -2,7 +2,7 @@
 # Sjúkraþjálfurnar biðlista app
 
 ### Hýst útgáfa
-Hægt er að fara á vefsíðuna hér: https://hbv1application.onrender.com/login;jsessionid=739CE21211D0EE1D490A90EA216FE9EA
+Hægt er að fara á vefsíðuna hér: https://hbv1application.onrender.com/
 (Það gæti tekið smá tíma fyrir hana að hlaðast inn)
 
 ### Keyrsla á tölvu
