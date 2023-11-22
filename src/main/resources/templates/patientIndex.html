@@ -69,9 +69,9 @@
                     <p class="label">Dagsetning</p>
                     <p th:text="${request.dateOfRequest}"></p>
                 </div>
-                <div>
+                <div th:if="${request.questionnaire != null}">
                     <p class="label">Líkamshluti</p>
-                    <p th:if="${request.questionnaire != null}" th:text="${request.questionnaire.name}"></p>
+                    <p th:text="${request.questionnaire.name}"></p>
                 </div>
                 <div>
                     <p class="label">Vandamál</p>
