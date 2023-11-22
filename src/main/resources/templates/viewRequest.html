@@ -111,7 +111,6 @@
                         <div id="bodyPart" class="bodypart_div">
                             <label>
                                 <input type="radio" th:if="${questionnaire.displayOnForm}" th:each="questionnaire : ${questionnaires}" th:field="*{questionnaire}" th:value="${questionnaire.id}" th:text="${questionnaire.name}">
-                                <input type="radio" th:field="*{questionnaire}" th:value="0" th:text="Annað">
                             </label>
                         </div>
                     </div>
