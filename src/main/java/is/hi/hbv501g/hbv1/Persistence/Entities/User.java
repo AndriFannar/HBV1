@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;

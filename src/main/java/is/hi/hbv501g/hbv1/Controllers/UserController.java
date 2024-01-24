@@ -1,18 +1,20 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
-import is.hi.hbv501g.hbv1.Persistence.Entities.User;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,7 +37,8 @@ import java.util.Objects;
  * @since   2023-09-27
  * @version 2.0
  */
-@Controller
+@RestController
+@RequestMapping(path = "api/v1/user")
 public class UserController
 {
     // Variables.
@@ -60,49 +63,6 @@ public class UserController
 
 
     /**
-     * Get login page. 
-     *
-     * @param session Current HttpSession.
-     * @return        Login page.
-     */
-    @RequestMapping(value="/", method = RequestMethod.GET)
-    public String loadPages(HttpSession session)
-    {
-        User exists = (User) session.getAttribute("LoggedInUser");
-
-        // Check if User is logged in.
-        if(exists != null)
-        {
-            // If role of User is not user then go to StaffIndex.
-            if(exists.isStaffMember())
-            {
-                return "redirect:/staffIndex";
-            }
-
-            // Else go to patientIndex.
-            return "redirect:/patientIndex";
-        }
-
-        // If User is not logged in go to login page.
-        return "redirect:/login";
-    }
-
-
-    /**
-     * Get page with form to sign up a new User.
-     *
-     * @param model Used to populate data for the view.
-     * @return      Redirect.
-     */
-    @RequestMapping(value="/signUp", method = RequestMethod.GET)
-    public String signUpForm(Model model)
-    {
-        model.addAttribute("user", new User());
-        return "newUser";
-    }
-
-
-    /**
      * Sign up a new Patient.
      *
      * @param user    Patient to register.
@@ -112,7 +72,7 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public String signUp(@Validated User user, BindingResult result,  Model model, HttpSession session)
+    public ResponseEntity<User> signUp(@RequestBody User user, BindingResult result,  Model model, HttpSession session)
     {
         String errKen = userService.validateSSN(user);
         String errPass = userService.validatePassword(user);
@@ -148,7 +108,7 @@ public class UserController
         if(result.hasErrors())
         {
             model.addAttribute("user", user);
-            return "newUser";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         User exists = userService.getUserByEmail(user.getEmail());
@@ -159,23 +119,10 @@ public class UserController
             userService.saveNewUser(user);
             session.setAttribute("LoggedInUser", user);
 
-            return "redirect:/";
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return "newUser";
-    }
-
-
-    /**
-     * Get login page.
-     *
-     * @param user User object to hold login info.
-     * @return     Login page.
-     */
-    @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String loginGET(@ModelAttribute("user") User user)
-    {
-        return "login";
+        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
 
 
@@ -188,26 +135,22 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String loginPOST(User user, BindingResult result, HttpSession session)
+    public ResponseEntity<String> loginPOST(/*@RequestBody LoginDTO loginDTO*/)
     {
-        if(result.hasErrors())
-        {
-        return "login";
-        }
+        return new ResponseEntity<>("User logged in successfully!", HttpStatus.OK);
 
-        User exists = userService.logInUser(user);
+        /*User exists = userService.logInUser(user);
 
         if(exists != null)
         {
             session.setAttribute("LoggedInUser", exists);
-            return "redirect:/";
+            return new ResponseEntity<>(exists, HttpStatus.OK);
         }
 
       FieldError error = new FieldError("user", "email", "Rangt netfang eða lykilorð");
       result.addError(error);
-      return "login";
+      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);*/
     }
-
 
     /**
      * Redirects to the homepage of the patient.
@@ -293,26 +236,18 @@ public class UserController
      * @param session Current HttpSession.
      * @return        Redirect.
      */
-    @RequestMapping(value = "/viewUser/{userID}", method = RequestMethod.GET)
-    public String viewUser(@PathVariable("userID") Long userID, Model model, HttpSession session)
+    @RequestMapping(value = "viewUser/{userID}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<UserDTO> viewUser(@PathVariable("userID") Long userID, Model model, HttpSession session)
     {
         // Get logged in User and User to view.
-        User user = (User) session.getAttribute("LoggedInUser");
         User viewUser = userService.getUserByID(userID);
 
-        if (user != null)
+        if (viewUser != null)
         {
-            // Only display page if User that is logged in is either same as the User to view or is admin.
-            if (user.getRole() == User.UserRole.ADMIN || Objects.equals(user.getId(), userID))
-            {
-                model.addAttribute("LoggedInUser", user);
-                model.addAttribute("user", viewUser);
-
-                return "viewUser";
-            }
+            UserDTO user = new UserDTO(viewUser);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
-
-        return "redirect:/";
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
