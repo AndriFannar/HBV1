@@ -1,4 +1,6 @@
-package is.hi.hbv501g.hbv1.Persistence.Entities;
+package is.hi.hbv501g.hbv1.Persistence.Entities.DTOs;
+
+import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 
 public class UserDTO
 {

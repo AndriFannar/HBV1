@@ -1,16 +1,15 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.*;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.SignUpDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 
 import is.hi.hbv501g.hbv1.Services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,54 +72,37 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public ResponseEntity<User> signUp(@RequestBody User user, BindingResult result,  Model model, HttpSession session)
+    public ResponseEntity<User> signUp(@RequestBody SignUpDTO signUpDTO)
     {
-        String errKen = userService.validateSSN(user);
-        String errPass = userService.validatePassword(user);
-        String errEmail = userService.validateEmail(user);
-        String errPhN = userService.validatePhoneNumber(user);
+        List<String> errors = new ArrayList<>();
 
-        if (!errKen.isEmpty()) {
-            FieldError error = new FieldError( "user", "ssn", errKen);
-            result.addError(error);
+        errors.add(userService.validateSSN(signUpDTO.getSsn()));
+        errors.add(userService.validatePassword(signUpDTO.getPassword()));
+        errors.add(userService.validateEmail(signUpDTO.getEmail()));
+        errors.add(userService.validatePhoneNumber(signUpDTO.getPhoneNumber()));
+
+        if(signUpDTO.getName().isEmpty()){
+            errors.add("Vantar nafn");
         }
-        if(!errEmail.isEmpty()){
-            FieldError error = new FieldError( "user", "email", errEmail);
-            result.addError(error);
-        }
-        if(!errPass.isEmpty()){
-            FieldError error = new FieldError("user", "password", errPass);
-            result.addError(error);
-        }
-        if(user.getName().isEmpty()){
-            FieldError error = new FieldError("user", "name", "Vantar nafn");
-            result.addError(error);
-        }
-        if(user.getAddress().isEmpty()){
-            FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
-            result.addError(error);
-        }
-        if(!errPhN.isEmpty()){
-            FieldError error = new FieldError("user", "phoneNumber", errPhN);
-            result.addError(error);
+        if(signUpDTO.getAddress().isEmpty()){
+            errors.add("Vantar heimilsfang");
         }
 
 
-        if(result.hasErrors())
+        if(errors.isEmpty())
         {
-            model.addAttribute("user", user);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            System.out.println(errors);
+            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User exists = userService.getUserByEmail(user.getEmail());
+        User exists = userService.getUserByEmail(signUpDTO.getEmail());
 
         // If no errors, and Patient does not exist, save.
         if(exists == null)
         {
+            User user = new User(signUpDTO);
             userService.saveNewUser(user);
-            session.setAttribute("LoggedInUser", user);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
@@ -135,21 +118,16 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public ResponseEntity<String> loginPOST(/*@RequestBody LoginDTO loginDTO*/)
+    public ResponseEntity<User> loginPOST(@RequestBody LoginDTO loginDTO)
     {
-        return new ResponseEntity<>("User logged in successfully!", HttpStatus.OK);
-
-        /*User exists = userService.logInUser(user);
+        User exists = userService.logInUser(loginDTO);
 
         if(exists != null)
         {
-            session.setAttribute("LoggedInUser", exists);
             return new ResponseEntity<>(exists, HttpStatus.OK);
         }
 
-      FieldError error = new FieldError("user", "email", "Rangt netfang eða lykilorð");
-      result.addError(error);
-      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);*/
+      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
 
     /**
@@ -268,7 +246,7 @@ public class UserController
         // Validate inputted info.
         if(!Objects.equals(userToUpdate.getEmail(), updatedUser.getEmail()))
         {
-            String errEmail = userService.validateEmail(updatedUser);
+            String errEmail = userService.validateEmail(updatedUser.getEmail());
 
             if(!errEmail.isEmpty())
             {
@@ -277,7 +255,7 @@ public class UserController
             }
         }
 
-        String errPhN = userService.validatePhoneNumber(updatedUser);
+        String errPhN = userService.validatePhoneNumber(updatedUser.getPhoneNumber());
 
         if(updatedUser.getName().isEmpty())
         {

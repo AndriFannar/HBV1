@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.Services;
 
 import java.util.List;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 
 
@@ -87,46 +88,46 @@ public interface UserService
 
 
     /**
-     * Log in given User object.
+     * Log in given User.
      *
-     * @param user User to log in.
-     * @return     Logged in User.
+     * @param loginDTO Log in info.
+     * @return         Logged in User.
      */
-    User logInUser(User user);
+    User logInUser(LoginDTO loginDTO);
 
 
     /**
      * Checks if SSN is valid.
      *
-     * @param user User that is trying to sign up
-     * @return     String with error message if SSN is invalid
+     * @param ssn Social Security Number that is used to sign up
+     * @return    String with error message if SSN is invalid
      */
-    String validateSSN(User user);
+    String validateSSN(String ssn);
 
 
     /**
      * Checks if password is valid
      *
-     * @param user User that is trying to sign up
-     * @return     String with error message if password is invalid
+     * @param password Password that is used to sign up
+     * @return         String with error message if password is invalid
      */
-    String validatePassword(User user);
+    String validatePassword(String password);
 
 
     /**
      * Checks if e-mail is valid.
      *
-     * @param user User that is trying to sign up.
-     * @return     String with error message if e-mail is invalid
+     * @param email Email that is used to sign up.
+     * @return      String with error message if e-mail is invalid
      */
-    String validateEmail(User user);
+    String validateEmail(String email);
 
 
     /**
      * Checks if phone number is valid.
      *
-     * @param user User that is trying to sign up.
-     * @return     String with error message if phone number is invalid
+     * @param phoneNumber Phone number that is used to sign up.
+     * @return            String with error message if phone number is invalid
      */
-    String validatePhoneNumber(User user);
+    String validatePhoneNumber(String phoneNumber);
 }

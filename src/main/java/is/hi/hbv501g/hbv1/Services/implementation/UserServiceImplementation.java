@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Services.implementation;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -153,18 +154,18 @@ public class UserServiceImplementation implements UserService
 
 
     /**
-     * Log in given User object.
+     * Log in given User.
      *
-     * @param user User to log in.
-     * @return     Logged in User.
+     * @param loginDTO Log in info.
+     * @return         Logged in User.
      */
     @Override
-    public User logInUser(User user)
+    public User logInUser(LoginDTO loginDTO)
     {
-        User doesExist = getUserByEmail(user.getEmail());
+        User doesExist = getUserByEmail(loginDTO.getUsername());
         if(doesExist != null)
         {
-            if(doesExist.getPassword().equals(user.getPassword()))
+            if(doesExist.getPassword().equals(loginDTO.getPassword()))
             {
                 return doesExist;
             }
@@ -177,20 +178,19 @@ public class UserServiceImplementation implements UserService
     /**
      * Checks if SSN is valid.
      *
-     * @param user User that is trying to sign up
-     * @return     String with error message if SSN is invalid
+     * @param ssn Social Security Number that is used to sign up
+     * @return    String with error message if SSN is invalid
      */
     @Override
-    public String validateSSN(User user) {
+    public String validateSSN(String ssn) {
         String message = "";
-        String kennitala = user.getSsn();
-        User exists = getUserBySSN(kennitala);
-        if(kennitala.isEmpty()){
+        User exists = getUserBySSN(ssn);
+        if(ssn.isEmpty()){
             message += "Vantar að setja inn kennitölu";
         }
-        else if(kennitala.length() != 10){
+        else if(ssn.length() != 10){
             message += "Kennitala ekki nógu löng.";
-        } else if(!checkSSN(kennitala)){
+        } else if(!checkSSN(ssn)){
             message += "Kennitala ólögleg.";
         } else if(exists != null){
             message += "Notandi nú þegar til með þessa kennitölu";
@@ -237,13 +237,12 @@ public class UserServiceImplementation implements UserService
     /**
      * Checks if password is valid
      *
-     * @param user User that is trying to sign up
-     * @return     String with error message if password is invalid
+     * @param password Password that is used to sign up
+     * @return         String with error message if password is invalid
      */
     @Override
-    public String validatePassword(User user){
+    public String validatePassword(String password){
         String message = "";
-        String password = user.getPassword();
         if(password.isEmpty()){
             message += "Vantar lykilorð";
         } else {
@@ -293,14 +292,13 @@ public class UserServiceImplementation implements UserService
     /**
      * Checks if e-mail is valid.
      *
-     * @param user User that is trying to sign up.
-     * @return     String with error message if e-mail is invalid
+     * @param email Email that is used to sign up.
+     * @return      String with error message if e-mail is invalid
      */
     @Override
-    public String validateEmail(User user)
+    public String validateEmail(String email)
     {
         String message = "";
-        String email = user.getEmail();
         User exists = getUserByEmail(email);
         if(exists != null){
             message += "Notandi þegar til";
@@ -332,20 +330,19 @@ public class UserServiceImplementation implements UserService
     /**
      * Checks if phone number is valid.
      *
-     * @param user User that is trying to sign up.
-     * @return     String with error message if phone number is invalid
+     * @param phoneNumber Phone number that is used to sign up.
+     * @return            String with error message if phone number is invalid
      */
     @Override
-    public String validatePhoneNumber(User user)
+    public String validatePhoneNumber(String phoneNumber)
     {
         try
         {
             String message = "";
-            String phNumber = user.getPhoneNumber();
-            if(phNumber.isEmpty()){
+            if(phoneNumber.isEmpty()){
                 message += "Vantar símanúmer";
             } 
-            int numbers = Integer.parseInt(phNumber);
+            int numbers = Integer.parseInt(phoneNumber);
             if(Integer.toString(numbers).length() != 7){
                 message += "Símanúmer ekki 7 stafir";
             }

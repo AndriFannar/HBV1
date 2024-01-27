@@ -1,4 +1,4 @@
-package is.hi.hbv501g.hbv1.Persistence.Entities;
+package is.hi.hbv501g.hbv1.Persistence.Entities.DTOs;
 
 public class LoginDTO
 {

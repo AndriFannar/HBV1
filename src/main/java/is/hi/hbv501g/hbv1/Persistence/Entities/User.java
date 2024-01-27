@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.SignUpDTO;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -90,6 +91,24 @@ public class User
      */
     public User()
     {
+        role = UserRole.USER;
+    }
+
+    /**
+     * Create a new user.
+     *
+     * @param signUpDTO Signup information.
+     */
+
+    public User(SignUpDTO signUpDTO)
+    {
+        this.name = signUpDTO.getName();
+        this.email = signUpDTO.getEmail();
+        this.ssn = signUpDTO.getSsn();
+        this.address = signUpDTO.getAddress();
+        this.phoneNumber = signUpDTO.getPhoneNumber();
+        this.password = signUpDTO.getPassword();
+
         role = UserRole.USER;
     }
 
