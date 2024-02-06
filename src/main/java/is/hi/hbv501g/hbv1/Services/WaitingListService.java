@@ -89,5 +89,5 @@ public interface WaitingListService
      *
      * @param requestID ID of the WaitingListRequest to delete.
      */
-    void deleteRequest(Long requestID);
+    void deleteWaitingListRequestByID(Long requestID);
 }

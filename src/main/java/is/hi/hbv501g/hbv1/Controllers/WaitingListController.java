@@ -189,7 +189,7 @@ public class WaitingListController
     @RequestMapping(value = "/deleteRequest/{requestID}", method = RequestMethod.GET)
     public String deleteRequest(@PathVariable("requestID") Long requestID)
     {
-        waitingListService.deleteRequest(requestID);
+        waitingListService.deleteWaitingListRequestByID(requestID);
 
         return "redirect:/";
     }
