@@ -100,7 +100,7 @@ public class QuestionServiceImplementation implements QuestionService
      * @param questionID ID of the Question to delete.
      */
     @Override
-    public void deleteQuestionById(Long questionID)
+    public void deleteQuestionByID(Long questionID)
     {
         questionRepository.deleteById(questionID);
     }
