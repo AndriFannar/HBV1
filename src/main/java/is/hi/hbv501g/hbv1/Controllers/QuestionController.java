@@ -77,7 +77,7 @@ public class QuestionController
             // If Question has no connected Questionnaires, then delete.
             if (exists.getQuestionnaires().isEmpty())
             {
-                questionService.deleteQuestionById(questionID);
+                questionService.deleteQuestionByID(questionID);
             }
 
             // If not, then add the QuestionnaireID to the session to display message on editQuestionnaire page.
