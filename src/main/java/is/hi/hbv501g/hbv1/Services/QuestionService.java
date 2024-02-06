@@ -54,5 +54,5 @@ public interface QuestionService
      *
      * @param questionID ID of the Question to delete.
      */
-    void deleteQuestionById(Long questionID);
+    void deleteQuestionByID(Long questionID);
 }

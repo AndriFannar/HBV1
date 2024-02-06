@@ -154,7 +154,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      */
     @Override
     @Transactional
-    public void deleteQuestionnaireById(Long questionnaireID)
+    public void deleteQuestionnaireByID(Long questionnaireID)
     {
         Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
 
