@@ -79,5 +79,5 @@ public interface QuestionnaireService
      *
      * @param questionnaireID ID of the Questionnaire to delete.
      */
-    void deleteQuestionnaireById(Long questionnaireID);
+    void deleteQuestionnaireByID(Long questionnaireID);
 }

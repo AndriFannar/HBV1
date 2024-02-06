@@ -144,7 +144,7 @@ public class QuestionnaireController
             // If Questionnaire has no connected WaitingListRequests, then delete.
             if(questionnaire.getWaitingListRequests().isEmpty())
             {
-                questionnaireService.deleteQuestionnaireById(questionnaireID);
+                questionnaireService.deleteQuestionnaireByID(questionnaireID);
             }
             // Else add the QuestionnaireID to the session to display a message on questionnaireOverview page.
             else

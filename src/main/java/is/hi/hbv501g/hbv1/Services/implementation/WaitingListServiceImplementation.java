@@ -191,7 +191,7 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @param requestID ID of the WaitingListRequest to delete.
      */
     @Override
-    public void deleteRequest(Long requestID)
+    public void deleteWaitingListRequestByID(Long requestID)
     {
         waitingListRepository.deleteById(requestID);
     }
