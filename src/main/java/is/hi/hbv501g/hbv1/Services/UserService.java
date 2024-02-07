@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Services;
 import java.util.List;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 
 
@@ -67,7 +68,7 @@ public interface UserService
      * @param includeElevated Include Users with a higher role.
      * @return                List of User objects with matching role, if any.
      */
-    public List<User> getUserByRole(User.UserRole role, boolean includeElevated);
+    public List<User> getUserByRole(UserRole role, boolean includeElevated);
 
 
     /**

@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Persistence.Repositories;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -67,7 +68,7 @@ public interface UserRepository extends JpaRepository<User, Long >
      * @param role Search for User by UserRole.
      * @return     User objects with matching role, if any.
      */
-    List<User> getByRole(User.UserRole role);
+    List<User> getByRole(UserRole role);
 
 
     /**
@@ -76,7 +77,7 @@ public interface UserRepository extends JpaRepository<User, Long >
      * @param role Search for User that has at least UserRole.
      * @return     User objects with matching role or above, if any.
      */
-    List<User> getByRoleGreaterThanEqual(User.UserRole role);
+    List<User> getByRoleGreaterThanEqual(UserRole role);
 
 
     /**

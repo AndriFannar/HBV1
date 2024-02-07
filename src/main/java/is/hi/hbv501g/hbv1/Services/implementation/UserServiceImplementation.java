@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,7 +110,7 @@ public class UserServiceImplementation implements UserService
      * @param includeElevated Include Users with a higher role.
      * @return                List of User objects with matching role, if any.
      */
-    public List<User> getUserByRole(User.UserRole role, boolean includeElevated)
+    public List<User> getUserByRole(UserRole role, boolean includeElevated)
     {
         if (includeElevated) return userRepository.getByRoleGreaterThanEqual(role);
         else return userRepository.getByRole(role);

@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Persistence.Entities.DTOs;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 
 public class UserDTO
@@ -16,7 +17,7 @@ public class UserDTO
     private String address;
     private String specialization;
 
-    private User.UserRole role;
+    private UserRole role;
 
 
     public UserDTO()
@@ -92,11 +93,11 @@ public class UserDTO
         this.specialization = specialization;
     }
 
-    public User.UserRole getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(User.UserRole role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 }

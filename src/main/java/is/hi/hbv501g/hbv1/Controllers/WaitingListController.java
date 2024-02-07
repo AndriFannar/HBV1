@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
@@ -119,7 +120,7 @@ public class WaitingListController
             if((user.isStaffMember()) || (Objects.equals(user.getWaitingListRequest().getId(), requestID)))
             {
                 // Get all Users with Physiotherapist role and all questionnaires to display on update form.
-                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST, true);
+                List<User> staff = userService.getUserByRole(UserRole.PHYSIOTHERAPIST, true);
                 List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
 
                 // Add everything to page model.
@@ -159,7 +160,7 @@ public class WaitingListController
         User user = (User) session.getAttribute("LoggedInUser");
 
         // If the User updating the Request is not an Admin, then mark the Request as not accepted so a member of staff can review updates.
-        if (!(user.getRole() == User.UserRole.STAFF)) waitingListService.updateWaitingListRequestStatus(requestID, false);
+        if (!(user.getRole() == UserRole.STAFF)) waitingListService.updateWaitingListRequestStatus(requestID, false);
 
         return "redirect:/viewRequest/" + requestID;
     }

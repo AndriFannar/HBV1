@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.*;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Services.QuestionService;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 
@@ -61,7 +62,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only display page if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
             model.addAttribute("questionnaires", questionnaires);
@@ -90,7 +91,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only create if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             questionnaireService.saveNewQuestionnaire(questionnaire);
 
@@ -114,7 +115,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only toggle if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             questionnaireService.toggleDisplayQuestionnaireOnForm(questionnaireID);
 
@@ -139,7 +140,7 @@ public class QuestionnaireController
         Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
         // Only delete if User is admin.
-        if (questionnaire != null && loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (questionnaire != null && loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             // If Questionnaire has no connected WaitingListRequests, then delete.
             if(questionnaire.getWaitingListRequests().isEmpty())
@@ -173,7 +174,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only allow edit if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
@@ -215,7 +216,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only add question if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
 
@@ -240,7 +241,7 @@ public class QuestionnaireController
         User loggedInUser = (User) session.getAttribute("LoggedInUser");
 
         // Only remove Question if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == User.UserRole.ADMIN)
+        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
         {
             questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
 

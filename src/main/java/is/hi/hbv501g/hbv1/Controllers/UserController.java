@@ -4,6 +4,7 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.*;
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.SignUpDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -143,7 +144,7 @@ public class UserController
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
         // Makes sure user is logged in and has User role.
-        if (sessionUser != null && sessionUser.getRole() == User.UserRole.USER)
+        if (sessionUser != null && sessionUser.getRole() == UserRole.USER)
         {
             model.addAttribute("LoggedInUser", sessionUser);
 
@@ -159,7 +160,7 @@ public class UserController
                 model.addAttribute("questionnaires", questionnaires);
 
                 // Get Physiotherapists to display on form.
-                List<User> staff = userService.getUserByRole(User.UserRole.PHYSIOTHERAPIST, true);
+                List<User> staff = userService.getUserByRole(UserRole.PHYSIOTHERAPIST, true);
                 model.addAttribute("physiotherapists", staff);
 
                 model.addAttribute("newRequest", new WaitingListRequest());
@@ -194,7 +195,7 @@ public class UserController
                 request.getSession().invalidate();
             }
             // If User is Admin (and is not deleting himself), then don't invalidate login and return to userOverview page.
-            else if (user.getRole() == User.UserRole.ADMIN)
+            else if (user.getRole() == UserRole.ADMIN)
             {
                 userService.deleteUserByID(userID);
 
@@ -281,7 +282,7 @@ public class UserController
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
         // If User that is doing the update is admin, then update.
-        if (sessionUser.getRole() == User.UserRole.ADMIN)
+        if (sessionUser.getRole() == UserRole.ADMIN)
         {
             userService.updateUser(userID, updatedUser);
 
@@ -336,14 +337,14 @@ public class UserController
         if(sessionUser != null && sessionUser.getRole() != null)
         {
             // Only display page if User's role is not user.
-            if (sessionUser.getRole() != User.UserRole.USER)
+            if (sessionUser.getRole() != UserRole.USER)
             {
                 model.addAttribute("LoggedInUser", sessionUser);
 
                 List<WaitingListRequest> requests;
 
                 // If User is physiotherapist, then only get WaitingListRequests associated with that physiotherapist.
-                if(sessionUser.getRole() == User.UserRole.PHYSIOTHERAPIST)
+                if(sessionUser.getRole() == UserRole.PHYSIOTHERAPIST)
                 {
                     requests = waitingListService.getWaitingListRequestByPhysiotherapist(sessionUser);
                 }
@@ -375,7 +376,7 @@ public class UserController
         User sessionUser = (User) session.getAttribute("LoggedInUser");
 
         // Make sure User is admin.
-        if(sessionUser != null && sessionUser.getRole() == User.UserRole.ADMIN)
+        if(sessionUser != null && sessionUser.getRole() == UserRole.ADMIN)
         {
             model.addAttribute("LoggedInUser", sessionUser);
 
