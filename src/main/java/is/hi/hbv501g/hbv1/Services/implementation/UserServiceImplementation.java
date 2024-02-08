@@ -163,7 +163,7 @@ public class UserServiceImplementation implements UserService
     @Override
     public User logInUser(LoginDTO loginDTO)
     {
-        User doesExist = getUserByEmail(loginDTO.getUsername());
+        User doesExist = getUserByEmail(loginDTO.getEmail());
         if(doesExist != null)
         {
             if(doesExist.getPassword().equals(loginDTO.getPassword()))
