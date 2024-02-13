@@ -1,9 +1,7 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.*;
-import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
-import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.SignUpDTO;
-import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.*;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.Services.WaitingListService;
@@ -23,20 +21,18 @@ import jakarta.servlet.http.HttpSession;
 
 import is.hi.hbv501g.hbv1.Services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
- * Controller for Patient objects.
+ * API for User objects.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  * @author  Ástríður Haraldsdóttir Passauer, ahp9@hi.is.
  * @author  Sigurður Örn Gunnarsson, sog6@hi.is.
  * @author  Friðrik Þór Ólafsson, fto2@hi.is.
  * @since   2023-09-27
- * @version 2.0
+ * @version 3.0
  */
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -48,7 +44,7 @@ public class UserController
     private final QuestionnaireService questionnaireService;
 
     /**
-     * Construct a new PatientController.
+     * Construct a new UserController.
      *
      * @param userService          UserService linked to controller.
      * @param waitingListService   WaitingListService linked to controller.
@@ -64,36 +60,42 @@ public class UserController
 
 
     /**
-     * Sign up a new Patient.
+     * Sign up a new User.
      *
-     * @param user    Patient to register.
-     * @param result  captures and handles validation errors
-     * @param model   used to populate data for the view
-     * @param session used to for accessing patient session data
-     * @return        Redirect.
+     * @param signUpDTO SignUPDTO object to create User from.
+     * @return          Redirect.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public ResponseEntity<User> signUp(@RequestBody SignUpDTO signUpDTO)
+    public ResponseEntity<ResponseWrapper<User>> signUp(@RequestBody SignUpDTO signUpDTO)
     {
-        List<String> errors = new ArrayList<>();
+        Map<String, String> errorMap = new HashMap<>();
 
-        errors.add(userService.validateSSN(signUpDTO.getSsn()));
-        errors.add(userService.validatePassword(signUpDTO.getPassword()));
-        errors.add(userService.validateEmail(signUpDTO.getEmail()));
-        errors.add(userService.validatePhoneNumber(signUpDTO.getPhoneNumber()));
+        String error = userService.validateSSN(signUpDTO.getSsn());
 
-        if(signUpDTO.getName().isEmpty()){
-            errors.add("Vantar nafn");
-        }
-        if(signUpDTO.getAddress().isEmpty()){
-            errors.add("Vantar heimilsfang");
-        }
+        if (!error.isEmpty()) errorMap.put("Villa í kennitölu", error);
+
+        error = userService.validatePassword(signUpDTO.getPassword());
+
+        if (!error.isEmpty()) errorMap.put("Villa í lykilorði", error);
+
+        error = userService.validateEmail(signUpDTO.getEmail());
+
+        if (!error.isEmpty()) errorMap.put("Villa í netfangi", error);
+
+        error = userService.validatePhoneNumber(signUpDTO.getPhoneNumber());
+
+        if (!error.isEmpty()) errorMap.put("Villa í símanúmeri", error);
+
+        if(signUpDTO.getName().isEmpty()) errorMap.put("Villa í nafni", "Vantar nafn");
+
+        if(signUpDTO.getAddress().isEmpty()) errorMap.put("Villa í heimilisfangi", "Vantar heimilisfang");
 
 
-        if(errors.isEmpty())
+        // Check if errorMap has any errors, and if so, return them instead of the User.
+        if(!errorMap.isEmpty())
         {
-            System.out.println(errors);
-            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ErrorResponse errorResponse = new ErrorResponse("Villa við nýskráningu", errorMap);
+            return new ResponseEntity<>(new ResponseWrapper<>(errorResponse), HttpStatus.BAD_REQUEST);
         }
 
         User exists = userService.getUserByEmail(signUpDTO.getEmail());
@@ -103,10 +105,12 @@ public class UserController
         {
             User user = new User(signUpDTO);
             userService.saveNewUser(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        errorMap.put("Villa", "Notandi þegar til");
+        ErrorResponse errorResponse = new ErrorResponse("Villa við nýskráningu", errorMap);
+        return new ResponseEntity<>(new ResponseWrapper<>(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
 
@@ -119,16 +123,19 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public ResponseEntity<User> loginPOST(@RequestBody LoginDTO loginDTO)
+    public ResponseEntity<ResponseWrapper<User>> loginPOST(@RequestBody LoginDTO loginDTO)
     {
         User exists = userService.logInUser(loginDTO);
 
         if(exists != null)
         {
-            return new ResponseEntity<>(exists, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWrapper<>(exists), HttpStatus.OK);
         }
 
-      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        Map<String, String> error = new HashMap<>();
+        error.put("Villa við innskráningu", "Rangt notendanafn eða lykilorð");
+
+        return new ResponseEntity<>(new ResponseWrapper<>(new ErrorResponse("Villa við innskráningu", error)), HttpStatus.BAD_REQUEST);
     }
 
     /**
