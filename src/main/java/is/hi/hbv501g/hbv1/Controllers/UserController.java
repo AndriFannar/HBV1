@@ -62,8 +62,8 @@ public class UserController
     /**
      * Sign up a new User.
      *
-     * @param signUpDTO SignUPDTO object to create User from.
-     * @return          Redirect.
+     * @param signUpDTO SignUpDTO object to create User from.
+     * @return          ResponseWrapper containing User signed up, or in case of errors, containing an ErrorResponse.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<User>> signUp(@RequestBody SignUpDTO signUpDTO)
@@ -72,23 +72,23 @@ public class UserController
 
         String error = userService.validateSSN(signUpDTO.getSsn());
 
-        if (!error.isEmpty()) errorMap.put("Villa í kennitölu", error);
+        if (!error.isEmpty()) errorMap.put("ssn", error);
 
         error = userService.validatePassword(signUpDTO.getPassword());
 
-        if (!error.isEmpty()) errorMap.put("Villa í lykilorði", error);
+        if (!error.isEmpty()) errorMap.put("password", error);
 
         error = userService.validateEmail(signUpDTO.getEmail());
 
-        if (!error.isEmpty()) errorMap.put("Villa í netfangi", error);
+        if (!error.isEmpty()) errorMap.put("email", error);
 
         error = userService.validatePhoneNumber(signUpDTO.getPhoneNumber());
 
-        if (!error.isEmpty()) errorMap.put("Villa í símanúmeri", error);
+        if (!error.isEmpty()) errorMap.put("phoneNumber", error);
 
-        if(signUpDTO.getName().isEmpty()) errorMap.put("Villa í nafni", "Vantar nafn");
+        if(signUpDTO.getName().isEmpty()) errorMap.put("name", "Vantar nafn");
 
-        if(signUpDTO.getAddress().isEmpty()) errorMap.put("Villa í heimilisfangi", "Vantar heimilisfang");
+        if(signUpDTO.getAddress().isEmpty()) errorMap.put("address", "Vantar heimilisfang");
 
 
         // Check if errorMap has any errors, and if so, return them instead of the User.
@@ -108,19 +108,18 @@ public class UserController
             return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.OK);
         }
 
-        errorMap.put("Villa", "Notandi þegar til");
+        errorMap.put("exists", "Notandi þegar til");
         ErrorResponse errorResponse = new ErrorResponse("Villa við nýskráningu", errorMap);
         return new ResponseEntity<>(new ResponseWrapper<>(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
 
     /**
-     * Logs in patient.
+     * Logs in a User.
      *
-     * @param user    User to log in.
-     * @param result  captures and handles validation errors.
-     * @param session used to for accessing patient session data.
-     * @return        Redirect.
+     * @param loginDTO LogInDTO object that contains a User's login info.
+     * @return         A ResponseWrapper containing the User that credentials belonged to,
+     *                 or in case of errors, containing an ErrorResponse.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<User>> loginPOST(@RequestBody LoginDTO loginDTO)
@@ -133,7 +132,7 @@ public class UserController
         }
 
         Map<String, String> error = new HashMap<>();
-        error.put("Villa við innskráningu", "Rangt notendanafn eða lykilorð");
+        error.put("login", "Rangt notendanafn eða lykilorð");
 
         return new ResponseEntity<>(new ResponseWrapper<>(new ErrorResponse("Villa við innskráningu", error)), HttpStatus.BAD_REQUEST);
     }
@@ -240,74 +239,59 @@ public class UserController
     /**
      * Update User.
      *
-     * @param userID      ID of User to update.
-     * @param updatedUser User with updated info.
-     * @param result      BindingResult of form.
-     * @param session     Current HttpSession.
-     * @return            Redirect.
+     * @param requestingUserID ID of User making the update.
+     * @param updatedUser      UserDTO with updated info.
      */
-    @RequestMapping(value = "/updateUser/{userID}", method = RequestMethod.POST)
-    public String updateRequest(@PathVariable("userID") Long userID, @ModelAttribute("user") User updatedUser, BindingResult result, HttpSession session)
+    @RequestMapping(value = "/updateUser/{requestingUserID}", method = RequestMethod.POST)
+    public ResponseEntity<ErrorResponse> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
     {
-        User userToUpdate = userService.getUserByID(userID);
+        User userToUpdate = userService.getUserByID(updatedUser.getId());
+
+        Map<String, String> errorMap = new HashMap<>();
 
         // Validate inputted info.
         if(!Objects.equals(userToUpdate.getEmail(), updatedUser.getEmail()))
         {
             String errEmail = userService.validateEmail(updatedUser.getEmail());
 
-            if(!errEmail.isEmpty())
-            {
-                FieldError error = new FieldError( "user", "email", errEmail);
-                result.addError(error);
-            }
+            if(!errEmail.isEmpty()) errorMap.put("email", errEmail);
         }
 
         String errPhN = userService.validatePhoneNumber(updatedUser.getPhoneNumber());
 
-        if(updatedUser.getName().isEmpty())
+        if(!errPhN.isEmpty()) errorMap.put("phoneNumber", errPhN);
+
+        if(updatedUser.getName().isEmpty()) errorMap.put("name", "Vantar nafn");
+
+        if(updatedUser.getAddress().isEmpty()) errorMap.put("address", "Vantar heimilisfang");
+
+        if(!errorMap.isEmpty())
         {
-            FieldError error = new FieldError("user", "name", "Vantar nafn");
-            result.addError(error);
-        }
-        if(updatedUser.getAddress().isEmpty())
-        {
-            FieldError error = new FieldError("user", "address", "Vantar heimilsfang");
-            result.addError(error);
-        }
-        if(!errPhN.isEmpty())
-        {
-            FieldError error = new FieldError("user", "phoneNumber", errPhN);
-            result.addError(error);
+            ErrorResponse errorResponse = new ErrorResponse("Villa við breytingu á notendaupplýsingum", errorMap);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        if(result.hasErrors())
-        {
-            return "redirect:/viewUser/" + userID;
-        }
-
-        User sessionUser = (User) session.getAttribute("LoggedInUser");
+        User requestingUser = userService.getUserByID(requestingUserID);
 
         // If User that is doing the update is admin, then update.
-        if (sessionUser.getRole() == UserRole.ADMIN)
+        if (requestingUser.getRole() == UserRole.ADMIN)
         {
-            userService.updateUser(userID, updatedUser);
+            userService.updateUser(updatedUser);
 
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         // If user that is doing the update is not admin and is updating himself.
-        if(Objects.equals(sessionUser.getId(), userID))
+        if(Objects.equals(updatedUser.getId(), requestingUserID))
         {
             // Make sure that the role is not updated (only admin can update role).
             updatedUser.setRole(null);
-            userService.updateUser(userID, updatedUser);
+            userService.updateUser(updatedUser);
 
-            // After updating, update User in current HttpSession (since the sessionUser is updating himself).
-            User updated = userService.getUserByID(userID);
-            session.setAttribute("LoggedInUser", updated);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return "redirect:/viewUser/" + userID;
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

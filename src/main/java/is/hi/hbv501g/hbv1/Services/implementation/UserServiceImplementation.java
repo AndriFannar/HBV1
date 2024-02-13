@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,19 +121,17 @@ public class UserServiceImplementation implements UserService
     /**
      * Update User.
      *
-     * @param userID      ID of the User to update.
      * @param updatedUser User with updated info.
      */
     @Transactional
-    public void updateUser(Long userID, User updatedUser)
+    public void updateUser(UserDTO updatedUser)
     {
-        User user = userRepository.getById(userID);
+        User user = userRepository.getById(updatedUser.getId());
 
         if (user != null)
         {
             if (updatedUser.getName()           != null) user.setName(updatedUser.getName());
             if (updatedUser.getEmail()          != null) user.setEmail(updatedUser.getEmail());
-            if (updatedUser.getPassword()       != null) user.setPassword(updatedUser.getPassword());
             if (updatedUser.getSsn()            != null) user.setSsn(updatedUser.getSsn());
             if (updatedUser.getPhoneNumber()    != null) user.setPhoneNumber(updatedUser.getPhoneNumber());
             if (updatedUser.getAddress()        != null) user.setAddress(updatedUser.getAddress());

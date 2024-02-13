@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.Services;
 import java.util.List;
 
 import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
 
@@ -74,10 +75,9 @@ public interface UserService
     /**
      * Update User.
      *
-     * @param userID      ID of the User to update.
      * @param updatedUser User with updated info.
      */
-    void updateUser(Long userID, User updatedUser);
+    void updateUser(UserDTO updatedUser);
 
 
     /**
