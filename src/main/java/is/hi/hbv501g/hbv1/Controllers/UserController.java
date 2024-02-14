@@ -242,7 +242,7 @@ public class UserController
      * @param requestingUserID ID of User making the update.
      * @param updatedUser      UserDTO with updated info.
      */
-    @RequestMapping(value = "/updateUser/{requestingUserID}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateUser/{requestingUserID}", method = RequestMethod.PUT)
     public ResponseEntity<ErrorResponse> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
     {
         User userToUpdate = userService.getUserByID(updatedUser.getId());
