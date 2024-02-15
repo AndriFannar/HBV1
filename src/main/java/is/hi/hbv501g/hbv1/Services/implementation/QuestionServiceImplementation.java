@@ -1,8 +1,8 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.services.implementation;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
-import is.hi.hbv501g.hbv1.Services.QuestionService;
+import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
+import is.hi.hbv501g.hbv1.services.QuestionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.List;
 public class QuestionServiceImplementation implements QuestionService
 {
     // Variables.
-    QuestionRepository questionRepository;
+    final QuestionRepository questionRepository;
 
 
     /**
@@ -77,14 +77,14 @@ public class QuestionServiceImplementation implements QuestionService
     /**
      * Update a matching Question.
      *
-     * @param questionID             ID of the question to update.
      * @param updatedQuestion        Updated question.
      */
     @Override
     @Transactional
-    public void updateQuestion(Long questionID, Question updatedQuestion)
+    public void updateQuestion(Question updatedQuestion)
     {
-        Question question = questionRepository.getQuestionById(questionID);
+        Question question = questionRepository.getQuestionById(updatedQuestion.getId());
+
         if (question != null)
         {
             if (updatedQuestion.getQuestionString() != null) question.setQuestionString(updatedQuestion.getQuestionString());

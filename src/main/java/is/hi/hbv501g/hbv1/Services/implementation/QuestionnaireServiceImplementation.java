@@ -1,10 +1,10 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.services.implementation;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
-import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionRepository;
-import is.hi.hbv501g.hbv1.Persistence.Repositories.QuestionnaireRepository;
-import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
+import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
+import is.hi.hbv501g.hbv1.persistence.repositories.QuestionnaireRepository;
+import is.hi.hbv501g.hbv1.services.QuestionnaireService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ import java.util.List;
 public class QuestionnaireServiceImplementation implements QuestionnaireService
 {
     // Variables.
-    QuestionnaireRepository questionnaireRepository;
-    QuestionRepository questionRepository;
+    final QuestionnaireRepository questionnaireRepository;
+    final QuestionRepository questionRepository;
 
 
     /**

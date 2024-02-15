@@ -1,17 +1,17 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.services.implementation;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.LoginDTO;
-import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
-import is.hi.hbv501g.hbv1.Persistence.Entities.User;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.LoginDTO;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
+import is.hi.hbv501g.hbv1.persistence.entities.enums.UserRole;
+import is.hi.hbv501g.hbv1.persistence.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import is.hi.hbv501g.hbv1.Persistence.Repositories.UserRepository;
-import is.hi.hbv501g.hbv1.Services.UserService;
+import is.hi.hbv501g.hbv1.persistence.repositories.UserRepository;
+import is.hi.hbv501g.hbv1.services.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 

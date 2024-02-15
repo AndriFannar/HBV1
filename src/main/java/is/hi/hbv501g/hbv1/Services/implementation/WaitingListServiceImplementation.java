@@ -1,11 +1,11 @@
-package is.hi.hbv501g.hbv1.Services.implementation;
+package is.hi.hbv501g.hbv1.services.implementation;
 
-import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
-import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
-import is.hi.hbv501g.hbv1.Persistence.Entities.User;
-import is.hi.hbv501g.hbv1.Persistence.Entities.WaitingListRequest;
-import is.hi.hbv501g.hbv1.Persistence.Repositories.WaitingListRepository;
-import is.hi.hbv501g.hbv1.Services.WaitingListService;
+import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.entities.User;
+import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.persistence.repositories.WaitingListRepository;
+import is.hi.hbv501g.hbv1.services.WaitingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,13 +119,12 @@ public class WaitingListServiceImplementation implements WaitingListService
     /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param requestID  ID of the request to update.
      * @param updatedRequest WaitingListRequest with updated info.
      */
     @Transactional
-    public void updateWaitingListRequest(Long requestID, WaitingListRequest updatedRequest)
+    public void updateWaitingListRequest(WaitingListRequest updatedRequest)
     {
-        WaitingListRequest waitingLR = waitingListRepository.getById(requestID);
+        WaitingListRequest waitingLR = waitingListRepository.getById(updatedRequest.getId());
 
         if (waitingLR != null)
         {
