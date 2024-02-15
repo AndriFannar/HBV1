@@ -6,14 +6,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class Hbv1ApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
-    @Test
-    void addRequest()
-    {
-
-    }
-
 }
