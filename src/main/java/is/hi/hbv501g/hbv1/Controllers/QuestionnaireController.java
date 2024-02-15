@@ -31,7 +31,6 @@ public class QuestionnaireController
 {
     // Variables.
     private final QuestionnaireService questionnaireService;
-    private final QuestionService questionService;
     private final WaitingListService waitingListService;
 
 
@@ -39,14 +38,12 @@ public class QuestionnaireController
      * Construct a new QuestionnaireController.
      *
      * @param questionnaireService QuestionnaireService linked to controller.
-     * @param questionService      QuestionService linked to controller.
      * @param waitingListService   WaitingListService linked to controller.
      */
     @Autowired
-    public QuestionnaireController(QuestionnaireService questionnaireService, QuestionService questionService, WaitingListService waitingListService)
+    public QuestionnaireController(QuestionnaireService questionnaireService, WaitingListService waitingListService)
     {
         this.questionnaireService = questionnaireService;
-        this.questionService = questionService;
         this.waitingListService = waitingListService;
     }
 
@@ -99,10 +96,12 @@ public class QuestionnaireController
      * Delete a Questionnaire.
      *
      * @param questionnaireID ID of Questionnaire to delete.
-     * @return                HttpStatus 200.
+     * @return                HttpStatus 200 if deleted successfully,
+     *                        HttpStatus 409 if Questionnaire has dependencies.
+     *                        HttpStatus 404 if Questionnaire does not exist.
      */
     @RequestMapping(value = "/delete/{questionnaireID}", method = RequestMethod.DELETE)
-    public ResponseEntity<ErrorResponse> deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID)
+    public ResponseEntity<HttpStatus> deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID)
     {
         Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
@@ -120,56 +119,12 @@ public class QuestionnaireController
             else
             {
                 ErrorResponse errorResponse = new ErrorResponse();
-                return new ResponseEntity<>()
-                session.setAttribute("questionnaireError", questionnaireID);
+
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-
-            return "redirect:/questionnaireOverview";
         }
 
-        return "redirect:/";
-    }
-
-
-    /**
-     * Get a page for editing an existing Questionnaire
-     *
-     * @param questionnaireID ID of Questionnaire to edit.
-     * @param model           Page model.
-     * @param session         Current HttpSession.
-     * @return                Page where the user can edit a Questionnaire.
-     */
-    @RequestMapping(value = "/editQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
-    public String editQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID, Model model, HttpSession session)
-    {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
-
-        // Only allow edit if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
-        {
-            Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
-
-            // If Questionnaire does not exist, redirect back.
-            if(questionnaire == null) return "redirect:/questionnaireOverview";
-
-            // Add Questionnaire to model.
-            model.addAttribute("questionnaire", questionnaire);
-
-            // Get all Questions in database to display.
-            List<Question> questions = questionService.getAllQuestions();
-            model.addAttribute("questions", questions);
-
-            // Create a new Question if the User wants to add one.
-            model.addAttribute("question", new Question());
-
-            // If Question could not be deleted, show a message on page.
-            model.addAttribute("questionError", session.getAttribute("questionError"));
-            session.removeAttribute("questionError");
-
-            return "viewQuestionnaire";
-        }
-
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
@@ -178,23 +133,14 @@ public class QuestionnaireController
      *
      * @param questionID      ID of Question to add to Questionnaire.
      * @param questionnaireID ID of Questionnaire to add Question to.
-     * @param session         Current HttpSession.
-     * @return                Redirect back to page.
+     * @return                HttpStatus 200.
      */
-    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.GET)
-    public String addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
+    @RequestMapping(value = "edit/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.PUT)
+    public ResponseEntity<HttpSession> addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID)
     {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
 
-        // Only add question if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
-        {
-            questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
-
-            return "redirect:/editQuestionnaire/" + questionnaireID;
-        }
-
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -203,44 +149,14 @@ public class QuestionnaireController
      *
      * @param questionID      ID of Question to remove from Questionnaire.
      * @param questionnaireID ID of Questionnaire to remove Question from.
-     * @param session         Current HttpSession.
      * @return                Redirect back to page.
      */
-    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/removeFromQuestionnaire/{questionID}", method = RequestMethod.GET)
-    public String removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID, HttpSession session)
+    @RequestMapping(value = "edit/{questionnaireID}/removeQuestion/{questionID}", method = RequestMethod.PUT)
+    public ResponseEntity<HttpStatus> removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID)
     {
-        User loggedInUser = (User) session.getAttribute("LoggedInUser");
+        questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
 
-        // Only remove Question if User is admin.
-        if (loggedInUser != null && loggedInUser.getRole() == UserRole.ADMIN)
-        {
-            questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
-
-            return "redirect:/editQuestionnaire/" + questionnaireID;
-        }
-
-        return "redirect:/";
-    }
-
-
-    /**
-     * Form for answering a Questionnaire.
-     *
-     * @param requestID ID of WaitingListRequest that the Questionnaire is from.
-     * @param questionnaireID ID of Questionnaire to answer.
-     * @return questionnaire page with Questionnaire object.
-     */
-    @RequestMapping(value = "{requestID}/answerQuestionnaire/{questionnaireID}", method = RequestMethod.GET)
-    public String getQuestionnaire(@PathVariable("requestID") Long requestID, @PathVariable("questionnaireID") Long questionnaireID, Model model)
-    {
-        // Find and add corresponding Questionnaire to model.
-        Questionnaire form = questionnaireService.getQuestionnaireByID(questionnaireID);
-        WaitingListRequest request = waitingListService.getWaitingListRequestByID(requestID);
-
-        model.addAttribute("questionnaire", form);
-        model.addAttribute("request", request);
-
-        return "answerQuestionnaire";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -249,19 +165,13 @@ public class QuestionnaireController
      *
      * @param requestID     ID of WaitingListRequest the answers belong to.
      * @param questionnaire Questionnaire with answers.
-     * @param session       Current HttpSession.
      * @return              Redirect.
      */
     @RequestMapping(value = "{requestID}/answerQuestionnaire", method = RequestMethod.POST)
-    public String answerQuestionnaire(@PathVariable("requestID") Long requestID, Questionnaire questionnaire, HttpSession session)
+    public ResponseEntity<HttpStatus> answerQuestionnaire(@PathVariable("requestID") Long requestID, Questionnaire questionnaire)
     {
-        User patient = (User) session.getAttribute("LoggedInUser");
+        waitingListService.updateQuestionnaireAnswers(requestID, questionnaire);
 
-        if(patient != null)
-        {
-            waitingListService.updateQuestionnaireAnswers(requestID, questionnaire);
-        }
-
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

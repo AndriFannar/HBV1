@@ -4,20 +4,22 @@ import is.hi.hbv501g.hbv1.Persistence.Entities.Question;
 import is.hi.hbv501g.hbv1.Services.QuestionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * Controller for Question.
+ * API for Question.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
+ *          Converted to REST API 2024-02-15.
  * @since   2023-11-07
  * @version 1.0
  */
-@Controller
+@RestController
+@RequestMapping(path = "api/v1/question")
 public class QuestionController
 {
     // Variables.
@@ -39,36 +41,27 @@ public class QuestionController
     /**
      * Create a new Question.
      *
-     * @param questionnaireID ID of Questionnaire the user was viewing. Redirects back to overview of that Questionnaire.
-     * @param question        Question object to save.
-     * @param result          BindingResult of form.
-     * @return                Redirect.
+     * @param question Question object to save.
+     * @return         HttpStatus 200.
      */
-    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/addQuestion", method = RequestMethod.POST)
-    public String saveQuestion(@PathVariable("questionnaireID") Long questionnaireID, Question question, BindingResult result)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ResponseEntity<HttpStatus> saveQuestion(@RequestBody Question question)
     {
-        if(result.hasErrors())
-        {
-            return "redirect:/questionOverview";
-        }
-
-        // Add Question to database if no errors.
         questionService.saveNewQuestion(question);
 
-        return "redirect:/editQuestionnaire/" + questionnaireID;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     /**
      * Delete Question.
      *
-     * @param questionnaireID ID of Questionnaire the user was viewing. Redirects back to overview of that Questionnaire.
-     * @param questionID      ID of Question to delete.
-     * @param session         Current HttpSession.
-     * @return                Redirect.
+     * @param questionID ID of Question to delete.
+     * @return           Redirect.
      */
-    @RequestMapping(value = "editQuestionnaire/{questionnaireID}/deleteQuestion/{questionID}", method = RequestMethod.GET)
-    public String deleteQuestion(@PathVariable("questionnaireID") Long questionnaireID, @PathVariable("questionID") Long questionID, HttpSession session) {
+    @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.DELETE)
+    public ResponseEntity<HttpStatus> deleteQuestion(@PathVariable("questionID") Long questionID)
+    {
         // Get Question from database.
         Question exists = questionService.getQuestionById(questionID);
 
@@ -78,15 +71,17 @@ public class QuestionController
             if (exists.getQuestionnaires().isEmpty())
             {
                 questionService.deleteQuestionByID(questionID);
+
+                return new ResponseEntity<>(HttpStatus.OK);
             }
 
-            // If not, then add the QuestionnaireID to the session to display message on editQuestionnaire page.
+            // If Question has dependencies then return a conflict.
             else
             {
-                session.setAttribute("questionError", exists.getId());
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
 
-        return "redirect:/editQuestionnaire/" + questionnaireID;
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

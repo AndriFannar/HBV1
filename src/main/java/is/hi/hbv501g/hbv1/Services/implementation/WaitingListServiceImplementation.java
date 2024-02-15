@@ -119,13 +119,12 @@ public class WaitingListServiceImplementation implements WaitingListService
     /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param requestID  ID of the request to update.
      * @param updatedRequest WaitingListRequest with updated info.
      */
     @Transactional
-    public void updateWaitingListRequest(Long requestID, WaitingListRequest updatedRequest)
+    public void updateWaitingListRequest(WaitingListRequest updatedRequest)
     {
-        WaitingListRequest waitingLR = waitingListRepository.getById(requestID);
+        WaitingListRequest waitingLR = waitingListRepository.getById(updatedRequest.getId());
 
         if (waitingLR != null)
         {

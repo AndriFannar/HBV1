@@ -241,4 +241,18 @@ public class UserController
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+
+    /**
+     * Gets a list of all Users saved in the API.
+     *
+     * @return List of all saved Users.
+     */
+    @RequestMapping(value="/getByRole", method=RequestMethod.GET)
+    public ResponseEntity<List<User>> getUsersByRole(@RequestBody UserRole userRole)
+    {
+        List<User> users = userService.getUserByRole(userRole);
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }
