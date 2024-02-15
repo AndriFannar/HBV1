@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.Controllers;
 
+import is.hi.hbv501g.hbv1.Persistence.Entities.DTOs.UserDTO;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Enums.UserRole;
 import is.hi.hbv501g.hbv1.Persistence.Entities.Questionnaire;
 import is.hi.hbv501g.hbv1.Persistence.Entities.User;
@@ -11,31 +12,32 @@ import is.hi.hbv501g.hbv1.Services.QuestionnaireService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Objects;
 
 
 /**
- * Controller for WaitingListRequest.
+ * API for WaitingListRequest.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
+ *          Converted to REST API 2024-02-15.
  * @since   2023-09-28
- * @version 1.0
+ * @version 2.0
  */
-@Controller
+@RestController
+@RequestMapping(path = "api/v1/waitingList")
 public class WaitingListController
 {
     // Variables.
     private final WaitingListService waitingListService;
-    private final QuestionnaireService questionnaireService;
     private final UserService userService;
 
 
@@ -43,15 +45,27 @@ public class WaitingListController
      * Construct a new WaitingListController.
      *
      * @param waitingListService   WaitingListService linked to controller.
-     * @param questionnaireService QuestionnaireService linked to controller.
      * @param userService          UserService linked to controller.
      */
     @Autowired
-    public WaitingListController(WaitingListService waitingListService, QuestionnaireService questionnaireService, UserService userService)
+    public WaitingListController(WaitingListService waitingListService, UserService userService)
     {
         this.waitingListService = waitingListService;
-        this.questionnaireService = questionnaireService;
         this.userService = userService;
+    }
+
+
+    /**
+     * Gets a list of all WaitingListRequests saved in the API.
+     *
+     * @return List of all saved WaitingListRequests.
+     */
+    @RequestMapping(value="/getAll", method=RequestMethod.GET)
+    public ResponseEntity<List<WaitingListRequest>> getAllRequests()
+    {
+        List<WaitingListRequest> requests = waitingListService.getAllWaitingListRequests();
+
+        return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
 
@@ -59,22 +73,12 @@ public class WaitingListController
      * Create a new WaitingListRequest.
      *
      * @param waitingListRequest WaitingListRequest object to save.
-     * @param result             BindingResult of form
-     * @param session            Current HttpSession.
-     * @return                   Redirect.
+     * @return                   HttpStatus 200 if Request was saved successfully.
+     *                           If User already has a Request assigned, returns HttpStatus 409.
      */
-    @RequestMapping(value = "/createRequest", method = RequestMethod.POST)
-    public String createNewRequest(WaitingListRequest waitingListRequest, BindingResult result, HttpSession session)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ResponseEntity<HttpStatus> createNewRequest(WaitingListRequest waitingListRequest)
     {
-        if(result.hasErrors())
-        {
-            return "redirect:/";
-        }
-
-        //Get Patient that is logged in, and link to WaitingListRequest.
-        User patient = (User) session.getAttribute("LoggedInUser");
-        waitingListRequest.setPatient(patient);
-
         // Check if User already has a Request linked.
         WaitingListRequest exists = waitingListService.getWaitingListRequestByPatient(waitingListRequest.getPatient());
 
@@ -82,19 +86,13 @@ public class WaitingListController
         if(exists == null)
         {
             waitingListService.saveNewWaitingListRequest(waitingListRequest);
+            User registeredUser = userService.getUserByID(waitingListRequest.getPatient().getId());
+            registeredUser.setWaitingListRequest(waitingListRequest);
 
-            // Get updated User info from database to update current HttpSession.
-            User updatedUser = userService.getUserByID(patient.getId());
-
-            // Make sure Java Spring fetches the User from database, otherwise the Hibernate session might get disconnected when checking this attribute later.
-            if(updatedUser.getRole() != null)
-            {
-                // Update User in current HttpSession.
-                session.setAttribute("LoggedInUser", updatedUser);
-            }
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
 
@@ -102,67 +100,38 @@ public class WaitingListController
      * View WaitingListRequest.
      *
      * @param requestID ID of WaitingListRequest to view.
-     * @param model     Model of page.
-     * @param session   Current HttpSession.
      * @return          Redirect.
      */
-    @RequestMapping(value = "/viewRequest/{requestID}", method = RequestMethod.GET)
-    public String viewRequest(@PathVariable("requestID") Long requestID, Model model, HttpSession session)
+    @RequestMapping(value = "/view/{requestID}", method = RequestMethod.GET)
+    public ResponseEntity<WaitingListRequest> getRequest(@PathVariable("requestID") Long requestID)
     {
-        // Get WaitingListRequest and User.
-        WaitingListRequest exists = waitingListService.getWaitingListRequestByID(requestID);
-        User user = (User) session.getAttribute("LoggedInUser");
+        // Get User to view.
+        WaitingListRequest viewRequest = waitingListService.getWaitingListRequestByID(requestID);
 
-        // Both Request and User must exist, and User must have a valid role.
-        if ((exists != null) && (user != null))
+        if (viewRequest != null)
         {
-            // User must be either a member of staff or the User to which the Request belongs.
-            if((user.isStaffMember()) || (Objects.equals(user.getWaitingListRequest().getId(), requestID)))
-            {
-                // Get all Users with Physiotherapist role and all questionnaires to display on update form.
-                List<User> staff = userService.getUserByRole(UserRole.PHYSIOTHERAPIST, true);
-                List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
-
-                // Add everything to page model.
-                model.addAttribute("request", exists);
-                model.addAttribute("physiotherapists", staff);
-                model.addAttribute("questionnaires", questionnaires);
-                model.addAttribute("LoggedInUser", user);
-
-                return "viewRequest";
-            }
+            return new ResponseEntity<>(viewRequest, HttpStatus.OK);
         }
-
-        return "redirect:/";
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
     /**
      * Update WaitingListRequest.
      *
-     * @param requestID      ID of WaitingListRequest to update.
      * @param updatedRequest WaitingListRequest with updated info.
-     * @param result         BindingResult of form.
-     * @param session        Current HttpSession.
      * @return               Redirect.
      */
-    @RequestMapping(value = "/updateRequest/{requestID}", method = RequestMethod.POST)
-    public String updateRequest(@PathVariable("requestID") Long requestID, @ModelAttribute("request") WaitingListRequest updatedRequest, BindingResult result, HttpSession session)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<HttpStatus> updateRequest(@RequestBody WaitingListRequest updatedRequest)
     {
-        if(result.hasErrors())
-        {
-            return "redirect:/viewRequest/" + requestID;
-        }
-
         // Update WaitingListRequest.
-        waitingListService.updateWaitingListRequest(requestID, updatedRequest);
+        waitingListService.updateWaitingListRequest(updatedRequest);
 
-        User user = (User) session.getAttribute("LoggedInUser");
+        waitingListService.updateWaitingListRequestStatus(updatedRequest.getId(), false);
 
-        // If the User updating the Request is not an Admin, then mark the Request as not accepted so a member of staff can review updates.
-        if (!(user.getRole() == UserRole.STAFF)) waitingListService.updateWaitingListRequestStatus(requestID, false);
-
-        return "redirect:/viewRequest/" + requestID;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -172,12 +141,12 @@ public class WaitingListController
      * @param requestID ID of WaitingListRequest to accept.
      * @return          Redirect.
      */
-    @RequestMapping(value = "/acceptRequest/{requestID}", method = RequestMethod.GET)
-    public String acceptRequest(@PathVariable("requestID") Long requestID)
+    @RequestMapping(value = "/accept/{requestID}", method = RequestMethod.PUT)
+    public ResponseEntity<HttpStatus> acceptRequest(@PathVariable("requestID") Long requestID)
     {
         waitingListService.updateWaitingListRequestStatus(requestID, true);
 
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 
@@ -187,11 +156,11 @@ public class WaitingListController
      * @param requestID ID of WaitingListRequest to delete.
      * @return          Redirect.
      */
-    @RequestMapping(value = "/deleteRequest/{requestID}", method = RequestMethod.GET)
-    public String deleteRequest(@PathVariable("requestID") Long requestID)
+    @RequestMapping(value = "/delete/{requestID}", method = RequestMethod.DELETE)
+    public ResponseEntity<HttpStatus> deleteRequest(@PathVariable("requestID") Long requestID)
     {
         waitingListService.deleteWaitingListRequestByID(requestID);
 
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

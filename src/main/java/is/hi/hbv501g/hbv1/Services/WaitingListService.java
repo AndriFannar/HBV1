@@ -61,10 +61,9 @@ public interface WaitingListService
     /**
      * Updates a corresponding WaitingListRequest.
      *
-     * @param requestID      ID of the request to update.
      * @param updatedRequest WaitingListRequest with updated info.
      */
-    void updateWaitingListRequest(Long requestID, WaitingListRequest updatedRequest);
+    void updateWaitingListRequest(WaitingListRequest updatedRequest);
 
 
     /**

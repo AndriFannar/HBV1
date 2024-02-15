@@ -28,6 +28,7 @@ import java.util.*;
  * API for User objects.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
+ *          Converted to a REST API 2024-02-15.
  * @author  Ástríður Haraldsdóttir Passauer, ahp9@hi.is.
  * @author  Sigurður Örn Gunnarsson, sog6@hi.is.
  * @author  Friðrik Þór Ólafsson, fto2@hi.is.
@@ -40,22 +41,16 @@ public class UserController
 {
     // Variables.
     private final UserService userService;
-    private final WaitingListService waitingListService;
-    private final QuestionnaireService questionnaireService;
 
     /**
      * Construct a new UserController.
      *
      * @param userService          UserService linked to controller.
-     * @param waitingListService   WaitingListService linked to controller.
-     * @param questionnaireService QuestionnaireService linked to controller.
      */
     @Autowired
-    public UserController(UserService userService, WaitingListService waitingListService, QuestionnaireService questionnaireService)
+    public UserController(UserService userService)
     {
         this.userService = userService;
-        this.waitingListService = waitingListService;
-        this.questionnaireService = questionnaireService;
     }
 
 
@@ -105,7 +100,7 @@ public class UserController
         {
             User user = new User(signUpDTO);
             userService.saveNewUser(user);
-            return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.CREATED);
         }
 
         errorMap.put("exists", "Notandi þegar til");
@@ -137,94 +132,32 @@ public class UserController
         return new ResponseEntity<>(new ResponseWrapper<>(new ErrorResponse("Villa við innskráningu", error)), HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Redirects to the homepage of the patient.
-     *
-     * @param session Used to for accessing patient session data.
-     * @param model   Used to populate patient data for the view.
-     * @return        Redirect.
-     */
-    @RequestMapping(value = "/patientIndex", method = RequestMethod.GET)
-    public String patientIndex(HttpSession session, Model model)
-    {
-        User sessionUser = (User) session.getAttribute("LoggedInUser");
-
-        // Makes sure user is logged in and has User role.
-        if (sessionUser != null && sessionUser.getRole() == UserRole.USER)
-        {
-            model.addAttribute("LoggedInUser", sessionUser);
-
-            // Get user's WaitingListRequest.
-            WaitingListRequest request = waitingListService.getWaitingListRequestByPatient(sessionUser);
-            model.addAttribute("request", request);
-
-            // If Request does not exist, get data to populate form.
-            if(request == null)
-            {
-                // Get Questionnaires to display on form.
-                List<Questionnaire> questionnaires = questionnaireService.getQuestionnairesOnForm();
-                model.addAttribute("questionnaires", questionnaires);
-
-                // Get Physiotherapists to display on form.
-                List<User> staff = userService.getUserByRole(UserRole.PHYSIOTHERAPIST, true);
-                model.addAttribute("physiotherapists", staff);
-
-                model.addAttribute("newRequest", new WaitingListRequest());
-            }
-
-            return "patientIndex";
-        }
-
-        return "redirect:/";
-    }
-
 
     /**
-     * Delete User.
+     * Delete User from API.
      *
      * @param userID  ID of User to delete.
-     * @param session Current HttpSession.
-     * @param request Current ServletRequest.
-     * @return        Redirect.
+     * @return        HTTP Status 200.
      */
-    @RequestMapping(value = "/deleteUser/{userID}", method = RequestMethod.GET)
-    public String deleteUser(@PathVariable("userID") Long userID, HttpSession session, HttpServletRequest request)
+    @RequestMapping(value = "/delete/{userID}", method = RequestMethod.DELETE)
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userID") Long userID)
     {
-        User user = (User) session.getAttribute("LoggedInUser");
+        userService.deleteUserByID(userID);
 
-        if (user != null)
-        {
-            // If User that is logged in and User to delete are the same, then invalidate login.
-            if (Objects.equals(user.getId(), userID))
-            {
-                userService.deleteUserByID(userID);
-                request.getSession().invalidate();
-            }
-            // If User is Admin (and is not deleting himself), then don't invalidate login and return to userOverview page.
-            else if (user.getRole() == UserRole.ADMIN)
-            {
-                userService.deleteUserByID(userID);
-
-                return "redirect:/userOverview";
-            }
-
-        }
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     /**
-     * View User page.
+     * Get User.
      *
-     * @param userID  ID of User to view.
-     * @param model   Page model.
-     * @param session Current HttpSession.
+     * @param userID  ID of User to get.
      * @return        Redirect.
      */
-    @RequestMapping(value = "viewUser/{userID}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<UserDTO> viewUser(@PathVariable("userID") Long userID, Model model, HttpSession session)
+    @RequestMapping(value = "view/{userID}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("userID") Long userID)
     {
-        // Get logged in User and User to view.
+        // Get User to view.
         User viewUser = userService.getUserByID(userID);
 
         if (viewUser != null)
@@ -232,7 +165,8 @@ public class UserController
             UserDTO user = new UserDTO(viewUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
@@ -242,7 +176,7 @@ public class UserController
      * @param requestingUserID ID of User making the update.
      * @param updatedUser      UserDTO with updated info.
      */
-    @RequestMapping(value = "/updateUser/{requestingUserID}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update/{requestingUserID}", method = RequestMethod.PUT)
     public ResponseEntity<ErrorResponse> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
     {
         User userToUpdate = userService.getUserByID(updatedUser.getId());
@@ -296,89 +230,15 @@ public class UserController
 
 
     /**
-     * Log out current User.
+     * Gets a list of all Users saved in the API.
      *
-     * @param request Current HttpServletRequest
-     * @return        Redirect.
+     * @return List of all saved Users.
      */
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request)
+    @RequestMapping(value="/getAll", method=RequestMethod.GET)
+    public ResponseEntity<List<User>> getAllUsers()
     {
-        // Invalidate the user's session.
-        request.getSession().invalidate();
+        List<User> users = userService.getAllUsers();
 
-        // Redirect to start page.
-        return "redirect:/";
-    }
-
-
-    /**
-     * Gets the homepage of staff members.
-     *
-     * @param session Used to for accessing staff session data.
-     * @param model   Used to populate staff data for the view.
-     * @return        Redirect.
-     */
-    @RequestMapping(value="/staffIndex", method=RequestMethod.GET)
-    public String staffIndex(HttpSession session, Model model)
-    {
-        User sessionUser = (User) session.getAttribute("LoggedInUser");
-
-        // Make sure User is logged in and that the User has a valid role.
-        if(sessionUser != null && sessionUser.getRole() != null)
-        {
-            // Only display page if User's role is not user.
-            if (sessionUser.getRole() != UserRole.USER)
-            {
-                model.addAttribute("LoggedInUser", sessionUser);
-
-                List<WaitingListRequest> requests;
-
-                // If User is physiotherapist, then only get WaitingListRequests associated with that physiotherapist.
-                if(sessionUser.getRole() == UserRole.PHYSIOTHERAPIST)
-                {
-                    requests = waitingListService.getWaitingListRequestByPhysiotherapist(sessionUser);
-                }
-                // Else, get all WaitingListRequests.
-                else
-                {
-                    requests = waitingListService.getAllWaitingListRequests();
-                }
-
-                model.addAttribute("requests", requests);
-
-                return "staffIndex";
-            }
-        }
-        return "redirect:/";
-    }
-
-
-    /**
-     * Redirects to user overview page.
-     *
-     * @param session Used to for accessing staff session data
-     * @param model   Used to populate staff data for the view
-     * @return        Redirect.
-     */
-    @RequestMapping(value="/userOverview", method=RequestMethod.GET)
-    public String userOverview(HttpSession session, Model model)
-    {
-        User sessionUser = (User) session.getAttribute("LoggedInUser");
-
-        // Make sure User is admin.
-        if(sessionUser != null && sessionUser.getRole() == UserRole.ADMIN)
-        {
-            model.addAttribute("LoggedInUser", sessionUser);
-
-            // Get all Users and display.
-            List<User> users = userService.getAllUsers();
-
-            model.addAttribute("users", users);
-
-            return "userOverview";
-        }
-
-        return "redirect:/";
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }
