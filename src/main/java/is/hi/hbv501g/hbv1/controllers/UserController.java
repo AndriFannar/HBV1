@@ -144,7 +144,7 @@ public class UserController
      * @return        Redirect.
      */
     @RequestMapping(value = "view/{userID}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("userID") Long userID)
+    public ResponseEntity<ResponseWrapper<UserDTO>> getUser(@PathVariable("userID") Long userID)
     {
         // Get User to view.
         User viewUser = userService.getUserByID(userID);
@@ -166,7 +166,7 @@ public class UserController
      * @param updatedUser      UserDTO with updated info.
      */
     @RequestMapping(value = "/update/{requestingUserID}", method = RequestMethod.PUT)
-    public ResponseEntity<ErrorResponse> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
+    public ResponseEntity<ResponseWrapper<User>> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
     {
         User userToUpdate = userService.getUserByID(updatedUser.getId());
 
@@ -224,11 +224,11 @@ public class UserController
      * @return List of all saved Users.
      */
     @RequestMapping(value="/getAll", method=RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers()
+    public ResponseEntity<ResponseWrapper<List<User>>> getAllUsers()
     {
         List<User> users = userService.getAllUsers();
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
     }
 
 
@@ -238,11 +238,11 @@ public class UserController
      * @return List of all saved Users with specified UserRole.
      */
     @RequestMapping(value="/getByRole", method=RequestMethod.GET)
-    public ResponseEntity<List<User>> getUsersByRole(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<User>>> getUsersByRole(@RequestBody UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, false);
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
     }
 
 
@@ -252,10 +252,10 @@ public class UserController
      * @return List of all saved Users with specified UserRole or higher.
      */
     @RequestMapping(value="/getByRoleElevated", method=RequestMethod.GET)
-    public ResponseEntity<List<User>> getUsersByRoleElevated(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<User>>> getUsersByRoleElevated(@RequestBody UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, true);
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
     }
 }
