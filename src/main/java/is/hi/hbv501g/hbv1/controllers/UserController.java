@@ -152,7 +152,7 @@ public class UserController
         if (viewUser != null)
         {
             UserDTO user = new UserDTO(viewUser);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -191,7 +191,7 @@ public class UserController
         if(!errorMap.isEmpty())
         {
             ErrorResponse errorResponse = new ErrorResponse("Villa við breytingu á notendaupplýsingum", errorMap);
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseWrapper<>(errorResponse), HttpStatus.BAD_REQUEST);
         }
 
         User requestingUser = userService.getUserByID(requestingUserID);
