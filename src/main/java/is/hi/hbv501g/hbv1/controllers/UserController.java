@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import is.hi.hbv501g.hbv1.services.UserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -224,11 +225,13 @@ public class UserController
      * @return List of all saved Users.
      */
     @RequestMapping(value="/getAll", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<User>>> getAllUsers()
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getAllUsers()
     {
         List<User> users = userService.getAllUsers();
+        List<UserDTO> userDTOs = users.stream()
+                .map(UserDTO::new).toList();
 
-        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
     }
 
 
