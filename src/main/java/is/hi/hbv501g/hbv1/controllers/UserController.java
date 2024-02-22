@@ -227,6 +227,7 @@ public class UserController
     @RequestMapping(value="/getAll", method=RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<UserDTO>>> getAllUsers()
     {
+        // Convert to UserDTO
         List<User> users = userService.getAllUsers();
         List<UserDTO> userDTOs = users.stream()
                 .map(UserDTO::new).toList();
