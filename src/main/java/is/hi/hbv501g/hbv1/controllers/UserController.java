@@ -245,7 +245,7 @@ public class UserController
      * @return List of all saved Users with specified UserRole.
      */
     @RequestMapping(value="/getByRole", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRole(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRole(@RequestParam UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, false);
 
@@ -262,7 +262,7 @@ public class UserController
      * @return List of all saved Users with specified UserRole or higher.
      */
     @RequestMapping(value="/getByRoleElevated", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRoleElevated(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRoleElevated(@RequestParam UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, true);
 
