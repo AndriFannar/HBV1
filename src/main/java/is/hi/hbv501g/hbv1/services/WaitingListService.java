@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.services;
 
 import is.hi.hbv501g.hbv1.persistence.entities.*;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
 
 import java.util.List;
 
@@ -63,7 +64,7 @@ public interface WaitingListService
      *
      * @param updatedRequest WaitingListRequest with updated info.
      */
-    void updateWaitingListRequest(WaitingListRequest updatedRequest);
+    void updateWaitingListRequest(WaitingListRequestDTO updatedRequest);
 
 
     /**

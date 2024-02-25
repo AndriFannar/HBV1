@@ -1,5 +1,6 @@
 package is.hi.hbv501g.hbv1.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class Question
     private int numberOfAnswers;
 
     @ManyToMany(mappedBy = "questions")
+    @JsonBackReference
     private List<Questionnaire> questionnaires;
 
     @Transient

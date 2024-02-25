@@ -1,10 +1,10 @@
-package is.hi.hbv501g.hbv1.persistence.entities;
+package is.hi.hbv501g.hbv1.persistence.entities.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import is.hi.hbv501g.hbv1.converters.IntegerListConverter;
-import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
-import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
+import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -19,9 +19,7 @@ import java.util.List;
  * @since   2023-09-28
  * @version 1.0
  */
-@Entity
-@Table(name="waiting_List_Request")
-public class WaitingListRequest
+public class WaitingListRequestDTO
 {
     // Database primary key.
     @Id
@@ -39,13 +37,14 @@ public class WaitingListRequest
 
     // Variables.
     @OneToOne(fetch = FetchType.LAZY)
-    private User patient;
+    private UserDTO patient;
     @ManyToOne(fetch = FetchType.LAZY)
-    private User staff;
+    private UserDTO staff;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Questionnaire questionnaire;
     @Column(columnDefinition = "int[]")
     @Convert(converter = IntegerListConverter.class)
@@ -56,7 +55,7 @@ public class WaitingListRequest
     /**
      * Create an empty WaitingListRequest.
      */
-    public WaitingListRequest()
+    public WaitingListRequestDTO()
     {
         this.status = false;
         this.grade = 0;
@@ -67,34 +66,11 @@ public class WaitingListRequest
     }
 
 
-    /**
-     * Create a WaitingListRequest.
-     *
-     * @param patient     The patient requesting treatment.
-     * @param staff       Selected physiotherapist.
-     * @param description Description of ailment.
-     */
-    public WaitingListRequest(User patient, User staff, String description) {
-        this.patient = patient;
-        this.staff = staff;
-        this.description = description;
-
-        this.status = false;
-        this.grade = 0;
-
-        this.dateOfRequest = LocalDate.now();
-
-        this.questionnaireAnswers = new ArrayList<>();
-    }
-
-    /**
-     * Create a new WaitingListRequest from WaitingListRequestDTO.
-     *
-     * @param request WaitingListRequestDTO to create WaitingListRequest from.
-     */
-    public WaitingListRequest(WaitingListRequestDTO request)
+    public WaitingListRequestDTO(WaitingListRequest request)
     {
         this.id = request.getId();
+        this.patient = new UserDTO(request.getPatient());
+        this.staff = new UserDTO(request.getStaff());
         this.description = request.getDescription();
         this.status = request.isStatus();
         this.dateOfRequest = request.getDateOfRequest();
@@ -123,19 +99,19 @@ public class WaitingListRequest
         return id;
     }
 
-    public User getPatient() {
+    public UserDTO getPatient() {
         return patient;
     }
 
-    public void setPatient(User patient) {
+    public void setPatient(UserDTO patient) {
         this.patient = patient;
     }
 
-    public User getStaff() {
+    public UserDTO getStaff() {
         return staff;
     }
 
-    public void setStaff(User staff) {
+    public void setStaff(UserDTO staff) {
         this.staff = staff;
     }
 

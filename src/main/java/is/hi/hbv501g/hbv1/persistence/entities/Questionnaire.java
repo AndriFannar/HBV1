@@ -1,5 +1,7 @@
 package is.hi.hbv501g.hbv1.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -33,11 +35,13 @@ public class Questionnaire
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Question> questions;
 
     private boolean displayOnForm;
 
     @OneToMany(mappedBy = "questionnaire", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<WaitingListRequest> waitingListRequests;
 
 

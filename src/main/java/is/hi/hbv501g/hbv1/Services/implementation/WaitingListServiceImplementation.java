@@ -4,7 +4,9 @@ import is.hi.hbv501g.hbv1.persistence.entities.Question;
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import is.hi.hbv501g.hbv1.persistence.entities.User;
 import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
 import is.hi.hbv501g.hbv1.persistence.repositories.WaitingListRepository;
+import is.hi.hbv501g.hbv1.services.UserService;
 import is.hi.hbv501g.hbv1.services.WaitingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class WaitingListServiceImplementation implements WaitingListService
 {
     // Variables
     private final WaitingListRepository waitingListRepository;
+    private final UserService userService;
 
 
     /**
@@ -34,9 +37,10 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @param waitingListRepository WaitingListRepository linked to service.
      */
     @Autowired
-    public WaitingListServiceImplementation(WaitingListRepository waitingListRepository)
+    public WaitingListServiceImplementation(WaitingListRepository waitingListRepository, UserService userService)
     {
         this.waitingListRepository = waitingListRepository;
+        this.userService = userService;
     }
 
 
@@ -122,13 +126,13 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @param updatedRequest WaitingListRequest with updated info.
      */
     @Transactional
-    public void updateWaitingListRequest(WaitingListRequest updatedRequest)
+    public void updateWaitingListRequest(WaitingListRequestDTO updatedRequest)
     {
         WaitingListRequest waitingLR = waitingListRepository.getById(updatedRequest.getId());
 
         if (waitingLR != null)
         {
-            if (updatedRequest.getStaff() != null) waitingLR.setStaff(updatedRequest.getStaff());
+            if (updatedRequest.getStaff() != null) waitingLR.setStaff(userService.getUserByID(updatedRequest.getStaff().getId()));
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
             if ((updatedRequest.getQuestionnaire() != null) && (updatedRequest.getQuestionnaire() != waitingLR.getQuestionnaire())) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
