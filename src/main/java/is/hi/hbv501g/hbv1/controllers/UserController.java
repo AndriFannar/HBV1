@@ -51,7 +51,7 @@ public class UserController
      * @return          ResponseWrapper containing User signed up, or in case of errors, containing an ErrorResponse.
      */
     @RequestMapping(value="/signUp", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper<User>> signUp(@RequestBody SignUpDTO signUpDTO)
+    public ResponseEntity<ResponseWrapper<UserDTO>> signUp(@RequestBody SignUpDTO signUpDTO)
     {
         Map<String, String> errorMap = new HashMap<>();
 
@@ -90,7 +90,9 @@ public class UserController
         {
             User user = new User(signUpDTO);
             userService.saveNewUser(user);
-            return new ResponseEntity<>(new ResponseWrapper<>(user), HttpStatus.CREATED);
+
+            UserDTO returnUser = new UserDTO(user);
+            return new ResponseEntity<>(new ResponseWrapper<>(returnUser), HttpStatus.CREATED);
         }
 
         errorMap.put("exists", "Notandi þegar til");
@@ -107,13 +109,14 @@ public class UserController
      *                 or in case of errors, containing an ErrorResponse.
      */
     @RequestMapping(value="/login", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper<User>> loginPOST(@RequestBody LoginDTO loginDTO)
+    public ResponseEntity<ResponseWrapper<UserDTO>> loginPOST(@RequestBody LoginDTO loginDTO)
     {
         User exists = userService.logInUser(loginDTO);
 
         if(exists != null)
         {
-            return new ResponseEntity<>(new ResponseWrapper<>(exists), HttpStatus.OK);
+            UserDTO returnUser = new UserDTO(exists);
+            return new ResponseEntity<>(new ResponseWrapper<>(returnUser), HttpStatus.OK);
         }
 
         Map<String, String> error = new HashMap<>();
@@ -167,7 +170,7 @@ public class UserController
      * @param updatedUser      UserDTO with updated info.
      */
     @RequestMapping(value = "/update/{requestingUserID}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<User>> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
+    public ResponseEntity<ResponseWrapper<UserDTO>> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
     {
         User userToUpdate = userService.getUserByID(updatedUser.getId());
 
@@ -242,11 +245,14 @@ public class UserController
      * @return List of all saved Users with specified UserRole.
      */
     @RequestMapping(value="/getByRole", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<User>>> getUsersByRole(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRole(@RequestBody UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, false);
 
-        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
+        List<UserDTO> userDTOs = users.stream()
+                .map(UserDTO::new).toList();
+
+        return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
     }
 
 
@@ -256,10 +262,13 @@ public class UserController
      * @return List of all saved Users with specified UserRole or higher.
      */
     @RequestMapping(value="/getByRoleElevated", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<User>>> getUsersByRoleElevated(@RequestBody UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRoleElevated(@RequestBody UserRole userRole)
     {
         List<User> users = userService.getUserByRole(userRole, true);
 
-        return new ResponseEntity<>(new ResponseWrapper<>(users), HttpStatus.OK);
+        List<UserDTO> userDTOs = users.stream()
+                .map(UserDTO::new).toList();
+
+        return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
     }
 }
