@@ -6,6 +6,7 @@ import is.hi.hbv501g.hbv1.persistence.entities.User;
 import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
 import is.hi.hbv501g.hbv1.persistence.repositories.WaitingListRepository;
+import is.hi.hbv501g.hbv1.services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.services.UserService;
 import is.hi.hbv501g.hbv1.services.WaitingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -29,18 +31,22 @@ public class WaitingListServiceImplementation implements WaitingListService
     // Variables
     private final WaitingListRepository waitingListRepository;
     private final UserService userService;
+    private final QuestionnaireService questionnaireService;
 
 
     /**
      * Constructs a new WaitingListServiceImplementation.
      *
      * @param waitingListRepository WaitingListRepository linked to service.
+     * @param userService           UserService linked to service.
+     * @param questionnaireService  QuestionnaireService linked to service.
      */
     @Autowired
-    public WaitingListServiceImplementation(WaitingListRepository waitingListRepository, UserService userService)
+    public WaitingListServiceImplementation(WaitingListRepository waitingListRepository, UserService userService, QuestionnaireService questionnaireService)
     {
         this.waitingListRepository = waitingListRepository;
         this.userService = userService;
+        this.questionnaireService = questionnaireService;
     }
 
 
@@ -132,10 +138,10 @@ public class WaitingListServiceImplementation implements WaitingListService
 
         if (waitingLR != null)
         {
-            if (updatedRequest.getStaff() != null) waitingLR.setStaff(userService.getUserByID(updatedRequest.getStaff().getId()));
+            if (updatedRequest.getStaffID() != null) waitingLR.setStaff(userService.getUserByID(updatedRequest.getStaffID()));
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
-            if ((updatedRequest.getQuestionnaire() != null) && (updatedRequest.getQuestionnaire() != waitingLR.getQuestionnaire())) waitingLR.setQuestionnaire(updatedRequest.getQuestionnaire());
+            if ((updatedRequest.getQuestionnaireID() != null) && (!Objects.equals(updatedRequest.getQuestionnaireID(), waitingLR.getQuestionnaire().getId()))) waitingLR.setQuestionnaire(questionnaireService.getQuestionnaireByID(updatedRequest.getQuestionnaireID()));
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
         }
     }

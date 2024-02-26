@@ -3,8 +3,8 @@ package is.hi.hbv501g.hbv1.controllers;
 import is.hi.hbv501g.hbv1.persistence.entities.User;
 import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.ResponseWrapper;
-import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
+import is.hi.hbv501g.hbv1.services.QuestionnaireService;
 import is.hi.hbv501g.hbv1.services.UserService;
 import is.hi.hbv501g.hbv1.services.WaitingListService;
 
@@ -31,19 +31,19 @@ public class WaitingListController
     // Variables.
     private final WaitingListService waitingListService;
     private final UserService userService;
-
+    private final QuestionnaireService questionnaireService;
 
     /**
      * Construct a new WaitingListController.
      *
      * @param waitingListService   WaitingListService linked to controller.
      * @param userService          UserService linked to controller.
+     * @param questionnaireService QuestionnaireService linked to controller.
      */
-    @Autowired
-    public WaitingListController(WaitingListService waitingListService, UserService userService)
-    {
+    public WaitingListController(WaitingListService waitingListService, UserService userService, QuestionnaireService questionnaireService) {
         this.waitingListService = waitingListService;
         this.userService = userService;
+        this.questionnaireService = questionnaireService;
     }
 
 
@@ -91,8 +91,7 @@ public class WaitingListController
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> createNewRequest(@RequestBody WaitingListRequestDTO requestDTO)
     {
-        System.out.println(requestDTO);
-        User requester = userService.getUserByID(requestDTO.getPatient().getId());
+        User requester = userService.getUserByID(requestDTO.getPatientID());
 
         // Check if User already has a Request linked.
         WaitingListRequest exists = waitingListService.getWaitingListRequestByPatient(requester);
@@ -102,7 +101,8 @@ public class WaitingListController
         {
             WaitingListRequest waitingListRequest = new WaitingListRequest(requestDTO);
             waitingListRequest.setPatient(requester);
-            waitingListRequest.setStaff(userService.getUserByID(requestDTO.getStaff().getId()));
+            waitingListRequest.setStaff(userService.getUserByID(requestDTO.getStaffID()));
+            waitingListRequest.setQuestionnaire(questionnaireService.getQuestionnaireByID(requestDTO.getQuestionnaireID()));
 
             waitingListService.saveNewWaitingListRequest(waitingListRequest);
             User registeredUser = userService.getUserByID(waitingListRequest.getPatient().getId());

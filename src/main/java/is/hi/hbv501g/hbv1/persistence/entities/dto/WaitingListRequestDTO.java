@@ -1,11 +1,6 @@
 package is.hi.hbv501g.hbv1.persistence.entities.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import is.hi.hbv501g.hbv1.converters.IntegerListConverter;
-import is.hi.hbv501g.hbv1.persistence.entities.Question;
-import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
-import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,16 +21,27 @@ public class WaitingListRequestDTO
 
 
     // Variables.
-    private UserDTO patient;
-    private UserDTO staff;
+    private Long patientID;
+    private Long staffID;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    @JsonManagedReference
-    private Questionnaire questionnaire;
+    private Long questionnaireID;
     private List<Integer> questionnaireAnswers;
     private double grade;
 
+
+    public WaitingListRequestDTO(Long id, Long patientID, Long staffID, String description, boolean status, LocalDate dateOfRequest, Long questionnaireID, List<Integer> questionnaireAnswers, double grade) {
+        this.id = id;
+        this.patientID = patientID;
+        this.staffID = staffID;
+        this.description = description;
+        this.status = status;
+        this.dateOfRequest = dateOfRequest;
+        this.questionnaireID = questionnaireID;
+        this.questionnaireAnswers = questionnaireAnswers;
+        this.grade = grade;
+    }
 
     /**
      * Create an empty WaitingListRequest.
@@ -54,50 +60,38 @@ public class WaitingListRequestDTO
     public WaitingListRequestDTO(WaitingListRequest request)
     {
         this.id = request.getId();
-        this.patient = new UserDTO(request.getPatient());
-        this.staff = new UserDTO(request.getStaff());
+        this.patientID = request.getPatient().getId();
+        this.staffID = request.getStaff().getId();
         this.description = request.getDescription();
         this.status = request.isStatus();
         this.dateOfRequest = request.getDateOfRequest();
-        this.questionnaire = request.getQuestionnaire();
+        this.questionnaireID = request.getQuestionnaire().getId();
         this.questionnaireAnswers = request.getQuestionnaireAnswers();
         this.grade = request.getGrade();
     }
 
-
-    /**
-     * Calculates the waiting list score according to given answers.
-     *
-     * @return Calculated score
-     */
-    public double calculateScore(List<Question> questions)
-    {
-        for (int i = 0; i < questions.size(); i++)
-        {
-            grade += questionnaireAnswers.get(i) * questions.get(i).getWeight();
-        }
-
-        return grade;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
         return id;
     }
 
-    public UserDTO getPatient() {
-        return patient;
+    public Long getPatientID() {
+        return patientID;
     }
 
-    public void setPatient(UserDTO patient) {
-        this.patient = patient;
+    public void setPatientID(Long patientID) {
+        this.patientID = patientID;
     }
 
-    public UserDTO getStaff() {
-        return staff;
+    public Long getStaffID() {
+        return staffID;
     }
 
-    public void setStaff(UserDTO staff) {
-        this.staff = staff;
+    public void setStaffID(Long staffID) {
+        this.staffID = staffID;
     }
 
     public String getDescription() {
@@ -124,13 +118,13 @@ public class WaitingListRequestDTO
         this.dateOfRequest = dateOfRequest;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
+    public Long getQuestionnaireID() {
+        return questionnaireID;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire)
+    public void setQuestionnaireID(Long questionnaireID)
     {
-        this.questionnaire = questionnaire;
+        this.questionnaireID = questionnaireID;
         this.questionnaireAnswers.clear();
     }
 
@@ -162,12 +156,12 @@ public class WaitingListRequestDTO
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patient +
-                ", staff=" + staff +
+                ", patient=" + patientID +
+                ", staff=" + staffID +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
-                ", questionnaireID=" + questionnaire +
+                ", questionnaireID=" + questionnaireID +
                 ", questionnaire=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
