@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.controllers;
 
 import is.hi.hbv501g.hbv1.persistence.entities.*;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.ResponseWrapper;
 import is.hi.hbv501g.hbv1.services.QuestionnaireService;
 
 import is.hi.hbv501g.hbv1.services.WaitingListService;
@@ -50,11 +51,11 @@ public class QuestionnaireController
      * @return List of all Questionnaire saved to the API.
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity<List<Questionnaire>> getAllQuestionnaire()
+    public ResponseEntity<ResponseWrapper<List<Questionnaire>>> getAllQuestionnaire()
     {
         List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
 
-        return new ResponseEntity<>(questionnaires, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(questionnaires), HttpStatus.OK);
     }
 
 
@@ -64,11 +65,11 @@ public class QuestionnaireController
      * @return List of all Questionnaire saved to the API that are marked be displayed on the request form.
      */
     @RequestMapping(value = "/getAllToDisplay", method = RequestMethod.GET)
-    public ResponseEntity<List<Questionnaire>> getAllQuestionnaireToDisplay()
+    public ResponseEntity<ResponseWrapper<List<Questionnaire>>> getAllQuestionnaireToDisplay()
     {
         List<Questionnaire> questionnaires = questionnaireService.getQuestionnairesOnForm();
 
-        return new ResponseEntity<>(questionnaires, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(questionnaires), HttpStatus.OK);
     }
 
 
@@ -79,7 +80,7 @@ public class QuestionnaireController
      * @return              Saves a new Questionnaire to the database.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<HttpSession> createQuestionnaire(@RequestBody Questionnaire questionnaire)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> createQuestionnaire(@RequestBody Questionnaire questionnaire)
     {
         questionnaireService.saveNewQuestionnaire(questionnaire);
 
@@ -94,7 +95,7 @@ public class QuestionnaireController
      * @return                HttpStatus 200.
      */
     @RequestMapping(value = "/toggleDisplayOnForm/{questionnaireID}", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> toggleDisplayOnForm(@PathVariable("questionnaireID") Long questionnaireID)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> toggleDisplayOnForm(@PathVariable("questionnaireID") Long questionnaireID)
     {
         questionnaireService.toggleDisplayQuestionnaireOnForm(questionnaireID);
 
@@ -111,7 +112,7 @@ public class QuestionnaireController
      *                        HttpStatus 404 if Questionnaire does not exist.
      */
     @RequestMapping(value = "/delete/{questionnaireID}", method = RequestMethod.DELETE)
-    public ResponseEntity<HttpStatus> deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> deleteQuestionnaire(@PathVariable("questionnaireID") Long questionnaireID)
     {
         Questionnaire questionnaire = questionnaireService.getQuestionnaireByID(questionnaireID);
 
@@ -142,7 +143,7 @@ public class QuestionnaireController
      * @return                HttpStatus 200.
      */
     @RequestMapping(value = "edit/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.PUT)
-    public ResponseEntity<HttpSession> addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID)
     {
         questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
 
@@ -158,7 +159,7 @@ public class QuestionnaireController
      * @return                Redirect back to page.
      */
     @RequestMapping(value = "edit/{questionnaireID}/removeQuestion/{questionID}", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID)
     {
         questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
 
@@ -174,7 +175,7 @@ public class QuestionnaireController
      * @return              Redirect.
      */
     @RequestMapping(value = "{requestID}/answerQuestionnaire", method = RequestMethod.POST)
-    public ResponseEntity<HttpStatus> answerQuestionnaire(@PathVariable("requestID") Long requestID, Questionnaire questionnaire)
+    public ResponseEntity<ResponseWrapper<Questionnaire>> answerQuestionnaire(@PathVariable("requestID") Long requestID, Questionnaire questionnaire)
     {
         waitingListService.updateQuestionnaireAnswers(requestID, questionnaire);
 

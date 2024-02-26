@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.controllers;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.ResponseWrapper;
 import is.hi.hbv501g.hbv1.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,11 +44,11 @@ public class QuestionController
      * @return List of all Questions saved to the API.
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity<List<Question>> getAllQuestions()
+    public ResponseEntity<ResponseWrapper<List<Question>>> getAllQuestions()
     {
         List<Question> questions = questionService.getAllQuestions();
 
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(questions), HttpStatus.OK);
     }
 
 
@@ -58,7 +59,7 @@ public class QuestionController
      * @return         HttpStatus 200.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<HttpStatus> saveQuestion(@RequestBody Question question)
+    public ResponseEntity<ResponseWrapper<Question>> saveQuestion(@RequestBody Question question)
     {
         questionService.saveNewQuestion(question);
 
@@ -73,7 +74,7 @@ public class QuestionController
      * @return                HttpStatus 200.
      */
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> updateQuestion(@RequestBody Question updatedQuestion)
+    public ResponseEntity<ResponseWrapper<Question>> updateQuestion(@RequestBody Question updatedQuestion)
     {
         // Update Question.
         questionService.updateQuestion(updatedQuestion);
@@ -89,7 +90,7 @@ public class QuestionController
      * @return           Redirect.
      */
     @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.DELETE)
-    public ResponseEntity<HttpStatus> deleteQuestion(@PathVariable("questionID") Long questionID)
+    public ResponseEntity<ResponseWrapper<Question>> deleteQuestion(@PathVariable("questionID") Long questionID)
     {
         // Get Question from database.
         Question exists = questionService.getQuestionById(questionID);

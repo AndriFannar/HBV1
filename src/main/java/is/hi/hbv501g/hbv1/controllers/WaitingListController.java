@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.controllers;
 
 import is.hi.hbv501g.hbv1.persistence.entities.User;
 import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.ResponseWrapper;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
 import is.hi.hbv501g.hbv1.services.UserService;
@@ -52,14 +53,14 @@ public class WaitingListController
      * @return List of all saved WaitingListRequests.
      */
     @RequestMapping(value="/getAll", method=RequestMethod.GET)
-    public ResponseEntity<List<WaitingListRequestDTO>> getAllRequests()
+    public ResponseEntity<ResponseWrapper<List<WaitingListRequestDTO>>> getAllRequests()
     {
         List<WaitingListRequest> requests = waitingListService.getAllWaitingListRequests();
 
         List<WaitingListRequestDTO> waitingListRequestDTOS = requests.stream()
                 .map(WaitingListRequestDTO::new).toList();
 
-        return new ResponseEntity<>(waitingListRequestDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(waitingListRequestDTOS), HttpStatus.OK);
     }
 
 
@@ -69,14 +70,14 @@ public class WaitingListController
      * @return List of all saved WaitingListRequests assigned to a physiotherapist.
      */
     @RequestMapping(value="/getByPhysiotherapist", method=RequestMethod.GET)
-    public ResponseEntity<List<WaitingListRequestDTO>> getAllRequests(@RequestBody User physiotherapist)
+    public ResponseEntity<ResponseWrapper<List<WaitingListRequestDTO>>> getAllRequests(@RequestBody User physiotherapist)
     {
         List<WaitingListRequest> requests = waitingListService.getWaitingListRequestByPhysiotherapist(physiotherapist);
 
         List<WaitingListRequestDTO> waitingListRequestDTOS = requests.stream()
                 .map(WaitingListRequestDTO::new).toList();
 
-        return new ResponseEntity<>(waitingListRequestDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(waitingListRequestDTOS), HttpStatus.OK);
     }
 
 
@@ -88,7 +89,7 @@ public class WaitingListController
      *                   If User already has a Request assigned, returns HttpStatus 409.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<HttpStatus> createNewRequest(WaitingListRequestDTO requestDTO)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> createNewRequest(WaitingListRequestDTO requestDTO)
     {
         User requester = userService.getUserByID(requestDTO.getPatient().getId());
 
@@ -120,7 +121,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/view/{requestID}", method = RequestMethod.GET)
-    public ResponseEntity<WaitingListRequestDTO> getRequest(@PathVariable("requestID") Long requestID)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> getRequest(@PathVariable("requestID") Long requestID)
     {
         // Get User to view.
         WaitingListRequest viewRequest = waitingListService.getWaitingListRequestByID(requestID);
@@ -129,7 +130,7 @@ public class WaitingListController
         {
             WaitingListRequestDTO returnRequest = new WaitingListRequestDTO(viewRequest);
 
-            return new ResponseEntity<>(returnRequest, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseWrapper<>(returnRequest), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -143,7 +144,7 @@ public class WaitingListController
      * @return               HttpStatus 200.
      */
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> updateRequest(@RequestBody WaitingListRequestDTO updatedRequest)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> updateRequest(@RequestBody WaitingListRequestDTO updatedRequest)
     {
         // Update WaitingListRequest.
         waitingListService.updateWaitingListRequest(updatedRequest);
@@ -161,7 +162,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/accept/{requestID}", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> acceptRequest(@PathVariable("requestID") Long requestID)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> acceptRequest(@PathVariable("requestID") Long requestID)
     {
         waitingListService.updateWaitingListRequestStatus(requestID, true);
 
@@ -176,7 +177,7 @@ public class WaitingListController
      * @return          Redirect.
      */
     @RequestMapping(value = "/delete/{requestID}", method = RequestMethod.DELETE)
-    public ResponseEntity<HttpStatus> deleteRequest(@PathVariable("requestID") Long requestID)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> deleteRequest(@PathVariable("requestID") Long requestID)
     {
         waitingListService.deleteWaitingListRequestByID(requestID);
 
