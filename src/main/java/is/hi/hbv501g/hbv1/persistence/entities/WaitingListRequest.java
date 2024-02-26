@@ -94,7 +94,7 @@ public class WaitingListRequest
      */
     public WaitingListRequest(WaitingListRequestDTO request)
     {
-        this.id = request.getId();
+        if (id != 0) this.id = request.getId();
         this.description = request.getDescription();
         this.status = request.isStatus();
         this.dateOfRequest = request.getDateOfRequest();

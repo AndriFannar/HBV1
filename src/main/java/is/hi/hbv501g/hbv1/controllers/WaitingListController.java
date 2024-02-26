@@ -89,8 +89,9 @@ public class WaitingListController
      *                   If User already has a Request assigned, returns HttpStatus 409.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> createNewRequest(WaitingListRequestDTO requestDTO)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> createNewRequest(@RequestBody WaitingListRequestDTO requestDTO)
     {
+        System.out.println(requestDTO);
         User requester = userService.getUserByID(requestDTO.getPatient().getId());
 
         // Check if User already has a Request linked.

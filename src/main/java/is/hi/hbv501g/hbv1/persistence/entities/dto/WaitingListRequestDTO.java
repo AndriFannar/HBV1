@@ -22,32 +22,17 @@ import java.util.List;
 public class WaitingListRequestDTO
 {
     // Database primary key.
-    @Id
-    @SequenceGenerator(
-            name="waitingList_sequence",
-            sequenceName = "waitingList_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "waitingList_sequence"
-    )
     private Long id;
 
 
     // Variables.
-    @OneToOne(fetch = FetchType.LAZY)
     private UserDTO patient;
-    @ManyToOne(fetch = FetchType.LAZY)
     private UserDTO staff;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     private Questionnaire questionnaire;
-    @Column(columnDefinition = "int[]")
-    @Convert(converter = IntegerListConverter.class)
     private List<Integer> questionnaireAnswers;
     private double grade;
 
@@ -177,12 +162,12 @@ public class WaitingListRequestDTO
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patient.getId() +
+                ", patient=" + patient +
                 ", staff=" + staff +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
-                ", questionnaireID=" + questionnaire.getId() +
+                ", questionnaireID=" + questionnaire +
                 ", questionnaire=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
