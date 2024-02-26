@@ -40,6 +40,7 @@ public class WaitingListController
      * @param userService          UserService linked to controller.
      * @param questionnaireService QuestionnaireService linked to controller.
      */
+    @Autowired
     public WaitingListController(WaitingListService waitingListService, UserService userService, QuestionnaireService questionnaireService) {
         this.waitingListService = waitingListService;
         this.userService = userService;
@@ -107,6 +108,8 @@ public class WaitingListController
             waitingListService.saveNewWaitingListRequest(waitingListRequest);
             User registeredUser = userService.getUserByID(waitingListRequest.getPatient().getId());
             registeredUser.setWaitingListRequest(waitingListRequest);
+
+            requestDTO.setId(waitingListRequest.getId());
 
             return new ResponseEntity<>(new ResponseWrapper<>(requestDTO), HttpStatus.CREATED);
         }
