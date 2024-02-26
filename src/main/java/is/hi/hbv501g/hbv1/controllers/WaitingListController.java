@@ -108,7 +108,7 @@ public class WaitingListController
             User registeredUser = userService.getUserByID(waitingListRequest.getPatient().getId());
             registeredUser.setWaitingListRequest(waitingListRequest);
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseWrapper<>(requestDTO), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.CONFLICT);
