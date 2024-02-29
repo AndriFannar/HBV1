@@ -227,6 +227,7 @@ public class User
                 ", address='" + address + '\'' +
                 ", userRole=" + role +
                 ", specialization='" + specialization + '\'' +
+                ", specialization='" + waitingListRequest + '\'' +
                 '}';
     }
 }

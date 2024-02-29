@@ -35,7 +35,11 @@ public class UserDTO
         this.address = user.getAddress();
         this.specialization = user.getSpecialization();
         this.role = user.getRole();
-        this.waitingListRequestID = user.getWaitingListRequest().getId();
+
+        if(user.getWaitingListRequest() != null)
+        {
+            this.waitingListRequestID = user.getWaitingListRequest().getId();
+        }
     }
 
     public Long getId() {
