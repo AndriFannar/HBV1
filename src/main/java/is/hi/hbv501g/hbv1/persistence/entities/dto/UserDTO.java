@@ -37,9 +37,9 @@ public class UserDTO
         this.role = user.getRole();
 
         if(user.getWaitingListRequest() != null)
-        {
             this.waitingListRequestID = user.getWaitingListRequest().getId();
-        }
+        else
+            this.waitingListRequestID = 0L;
     }
 
     public Long getId() {
