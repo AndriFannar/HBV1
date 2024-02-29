@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.services;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionnaireDTO;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface QuestionnaireService
      * @param questionnaire New Questionnaire to save.
      * @return              Saved Questionnaire.
      */
-    Questionnaire saveNewQuestionnaire(Questionnaire questionnaire);
+    QuestionnaireDTO saveNewQuestionnaire(QuestionnaireDTO questionnaire);
 
 
     /**

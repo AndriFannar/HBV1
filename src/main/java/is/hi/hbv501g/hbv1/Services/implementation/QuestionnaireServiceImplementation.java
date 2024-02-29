@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.services.implementation;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionnaireDTO;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionnaireRepository;
 import is.hi.hbv501g.hbv1.services.QuestionnaireService;
@@ -49,9 +50,16 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * @param questionnaire New Questionnaire to save.
      * @return              Saved Questionnaire.
      */
-    public Questionnaire saveNewQuestionnaire(Questionnaire questionnaire)
+    public QuestionnaireDTO saveNewQuestionnaire(QuestionnaireDTO questionnaire)
     {
-        return questionnaireRepository.save(questionnaire);
+        Questionnaire newQuestionnaire = new Questionnaire();
+        newQuestionnaire.setName(questionnaire.getName());
+        newQuestionnaire.setDisplayOnForm(questionnaire.isDisplayOnForm());
+        newQuestionnaire.setQuestions(new ArrayList<>(questionRepository.findAllById(questionnaire.getQuestionIDs())));
+
+        questionnaireRepository.save(newQuestionnaire);
+
+        return questionnaire;
     }
 
 

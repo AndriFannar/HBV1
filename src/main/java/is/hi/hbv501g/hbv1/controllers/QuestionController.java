@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.controllers;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.ResponseWrapper;
 import is.hi.hbv501g.hbv1.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,17 @@ public class QuestionController
      * @return List of all Questions saved to the API.
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<Question>>> getAllQuestions()
+    public ResponseEntity<ResponseWrapper<List<QuestionDTO>>> getAllQuestions()
     {
-        List<Question> questions = questionService.getAllQuestions();
+        List<QuestionDTO> questions = questionService.getAllQuestions().stream().map(QuestionDTO::new).toList();
+
+        return new ResponseEntity<>(new ResponseWrapper<>(questions), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getAllInList", method = RequestMethod.GET)
+    public ResponseEntity<ResponseWrapper<List<QuestionDTO>>> getAllQuestionsInList(@RequestParam List<Long> questionIDs)
+    {
+        List<QuestionDTO> questions = questionService.getAllQuestionsInList(questionIDs).stream().map(QuestionDTO::new).toList();
 
         return new ResponseEntity<>(new ResponseWrapper<>(questions), HttpStatus.OK);
     }
@@ -59,7 +68,7 @@ public class QuestionController
      * @return         HttpStatus 200.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper<Question>> saveQuestion(@RequestBody Question question)
+    public ResponseEntity<ResponseWrapper<QuestionDTO>> saveQuestion(@RequestBody QuestionDTO question)
     {
         questionService.saveNewQuestion(question);
 
@@ -74,7 +83,7 @@ public class QuestionController
      * @return                HttpStatus 200.
      */
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<Question>> updateQuestion(@RequestBody Question updatedQuestion)
+    public ResponseEntity<ResponseWrapper<QuestionDTO>> updateQuestion(@RequestBody QuestionDTO updatedQuestion)
     {
         // Update Question.
         questionService.updateQuestion(updatedQuestion);
@@ -90,7 +99,7 @@ public class QuestionController
      * @return           Redirect.
      */
     @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.DELETE)
-    public ResponseEntity<ResponseWrapper<Question>> deleteQuestion(@PathVariable("questionID") Long questionID)
+    public ResponseEntity<ResponseWrapper<QuestionDTO>> deleteQuestion(@PathVariable("questionID") Long questionID)
     {
         // Get Question from database.
         Question exists = questionService.getQuestionById(questionID);

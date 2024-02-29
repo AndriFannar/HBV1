@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.services.implementation;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionDTO;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
+import is.hi.hbv501g.hbv1.persistence.repositories.QuestionnaireRepository;
 import is.hi.hbv501g.hbv1.services.QuestionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,20 @@ public class QuestionServiceImplementation implements QuestionService
 {
     // Variables.
     final QuestionRepository questionRepository;
+    final QuestionnaireRepository questionnaireRepository;
 
 
     /**
      * Constructs a new QuestionnaireServiceImplementation.
      *
      * @param questionRepository QuestionRepository linked to service.
+     * @param questionnaireRepository QuestionnaireRepository linked to service.
      */
     @Autowired
-    public QuestionServiceImplementation(QuestionRepository questionRepository)
+    public QuestionServiceImplementation(QuestionRepository questionRepository, QuestionnaireRepository questionnaireRepository)
     {
         this.questionRepository = questionRepository;
+        this.questionnaireRepository = questionnaireRepository;
     }
 
 
@@ -43,9 +48,14 @@ public class QuestionServiceImplementation implements QuestionService
      * @return         Saved Question.
      */
     @Override
-    public Question saveNewQuestion(Question question)
+    public Question saveNewQuestion(QuestionDTO question)
     {
-        return questionRepository.save(question);
+        Question newQuestion = new Question();
+        newQuestion.setQuestionString(question.getQuestionString());
+        newQuestion.setWeight(question.getWeight());
+        newQuestion.getQuestionnaires().addAll(questionnaireRepository.findAllById(question.getQuestionnaireIDs()));
+        newQuestion.setAnswer(question.getAnswer());
+        return questionRepository.save(newQuestion);
     }
 
 
@@ -58,6 +68,12 @@ public class QuestionServiceImplementation implements QuestionService
     public List<Question> getAllQuestions()
     {
         return questionRepository.getAllByOrderByQuestionStringAsc();
+    }
+
+    @Override
+    public List<Question> getAllQuestionsInList(List<Long> questionIDs)
+    {
+        return questionRepository.findAllById(questionIDs);
     }
 
 
@@ -81,7 +97,7 @@ public class QuestionServiceImplementation implements QuestionService
      */
     @Override
     @Transactional
-    public void updateQuestion(Question updatedQuestion)
+    public void updateQuestion(QuestionDTO updatedQuestion)
     {
         Question question = questionRepository.getQuestionById(updatedQuestion.getId());
 
@@ -89,7 +105,7 @@ public class QuestionServiceImplementation implements QuestionService
         {
             if (updatedQuestion.getQuestionString() != null) question.setQuestionString(updatedQuestion.getQuestionString());
             if (updatedQuestion.getWeight() != null) question.setWeight(updatedQuestion.getWeight());
-            if (!updatedQuestion.getQuestionnaires().isEmpty()) question.setQuestionnaires(question.getQuestionnaires());
+            if (!updatedQuestion.getQuestionnaireIDs().isEmpty()) question.setQuestionnaires(questionnaireRepository.findAllById(updatedQuestion.getQuestionnaireIDs()));
         }
     }
 

@@ -11,11 +11,11 @@ public class UserDTO
     // Variables.
     private String name;
     private String email;
-
     private String ssn;
     private String phoneNumber;
     private String address;
     private String specialization;
+    private Long waitingListRequestID;
 
     private UserRole role;
 
@@ -35,6 +35,7 @@ public class UserDTO
         this.address = user.getAddress();
         this.specialization = user.getSpecialization();
         this.role = user.getRole();
+        this.waitingListRequestID = user.getWaitingListRequest().getId();
     }
 
     public Long getId() {
@@ -99,5 +100,13 @@ public class UserDTO
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public Long getWaitingListRequestID() {
+        return waitingListRequestID;
+    }
+
+    public void setWaitingListRequestID(Long waitingListRequestID) {
+        this.waitingListRequestID = waitingListRequestID;
     }
 }

@@ -1,7 +1,9 @@
 package is.hi.hbv501g.hbv1.services;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionDTO;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -20,7 +22,7 @@ public interface QuestionService
      * @param question Question to save.
      * @return         Saved Question.
      */
-    Question saveNewQuestion(Question question);
+    Question saveNewQuestion(QuestionDTO question);
 
 
     /**
@@ -29,6 +31,15 @@ public interface QuestionService
      * @return List of all Question objects in database, if any.
      */
     List<Question> getAllQuestions();
+
+
+    /**
+     * Get all questions that have an ID in a list.
+     *
+     * @param questionIDs List of question IDs.
+     * @return            List of questions with corresponding IDs.
+     */
+    List<Question> getAllQuestionsInList(List<Long> questionIDs);
 
 
     /**
@@ -45,7 +56,7 @@ public interface QuestionService
      *
      * @param updatedQuestion        Updated question.
      */
-    void updateQuestion(Question updatedQuestion);
+    void updateQuestion(QuestionDTO updatedQuestion);
 
 
     /**
