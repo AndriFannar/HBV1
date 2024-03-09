@@ -1,9 +1,6 @@
 package is.hi.hbv501g.hbv1.persistence.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import is.hi.hbv501g.hbv1.converters.IntegerListConverter;
-import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.WaitingListRequestDTO;
 import jakarta.persistence.*;
 
@@ -105,17 +102,13 @@ public class WaitingListRequest
 
     /**
      * Calculates the waiting list score according to given answers.
-     *
-     * @return Calculated score
      */
-    public double calculateScore(List<Question> questions)
+    public void calculateScore(List<Question> questions)
     {
         for (int i = 0; i < questions.size(); i++)
         {
             grade += questionnaireAnswers.get(i) * questions.get(i).getWeight();
         }
-
-        return grade;
     }
 
     public Long getId() {
@@ -179,7 +172,6 @@ public class WaitingListRequest
     public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
     {
         this.questionnaireAnswers = questionnaireAnswers;
-        this.grade = calculateScore();
     }
 
     public void addQuestionnaireAnswer(Integer answer)
