@@ -142,6 +142,7 @@ public class WaitingListServiceImplementation implements WaitingListService
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
             if ((updatedRequest.getQuestionnaireID() != null) && (!Objects.equals(updatedRequest.getQuestionnaireID(), waitingLR.getQuestionnaire().getId()))) waitingLR.setQuestionnaire(questionnaireService.getQuestionnaireByID(updatedRequest.getQuestionnaireID()));
+            if ((updatedRequest.getQuestionnaireAnswers() != null) && (!updatedRequest.getQuestionnaireAnswers().isEmpty())) waitingLR.setQuestionnaireAnswers(updatedRequest.getQuestionnaireAnswers());
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
         }
     }
@@ -170,6 +171,7 @@ public class WaitingListServiceImplementation implements WaitingListService
      * @param requestID     WaitingListRequest that the answers belong to.
      * @param questionnaire Questionnaire that has the answers.
      */
+    @Deprecated
     @Transactional
     public void updateQuestionnaireAnswers(Long requestID, Questionnaire questionnaire)
     {

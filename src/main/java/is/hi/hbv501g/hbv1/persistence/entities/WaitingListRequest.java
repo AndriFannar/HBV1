@@ -179,6 +179,7 @@ public class WaitingListRequest
     public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
     {
         this.questionnaireAnswers = questionnaireAnswers;
+        this.grade = calculateScore();
     }
 
     public void addQuestionnaireAnswer(Integer answer)
