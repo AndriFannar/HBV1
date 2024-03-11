@@ -162,7 +162,6 @@ public class WaitingListRequest
     public void setQuestionnaire(Questionnaire questionnaire)
     {
         this.questionnaire = questionnaire;
-        this.questionnaireAnswers.clear();
     }
 
     public List<Integer> getQuestionnaireAnswers() {

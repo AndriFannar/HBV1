@@ -125,7 +125,6 @@ public class WaitingListRequestDTO
     public void setQuestionnaireID(Long questionnaireID)
     {
         this.questionnaireID = questionnaireID;
-        this.questionnaireAnswers.clear();
     }
 
     public List<Integer> getQuestionnaireAnswers() {
@@ -162,7 +161,7 @@ public class WaitingListRequestDTO
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
                 ", questionnaireID=" + questionnaireID +
-                ", questionnaire=" + questionnaireAnswers +
+                ", questionnaireAnswers=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
     }
