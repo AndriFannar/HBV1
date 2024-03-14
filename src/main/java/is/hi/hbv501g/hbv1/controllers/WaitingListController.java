@@ -70,9 +70,11 @@ public class WaitingListController
      *
      * @return List of all saved WaitingListRequests assigned to a physiotherapist.
      */
-    @RequestMapping(value="/getByPhysiotherapist", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<WaitingListRequestDTO>>> getAllRequests(@RequestBody User physiotherapist)
+    @RequestMapping(value="/getByStaffID/{staffID}", method=RequestMethod.GET)
+    public ResponseEntity<ResponseWrapper<List<WaitingListRequestDTO>>> getAllRequests(@PathVariable Long staffID)
     {
+        User physiotherapist = userService.getUserByID(staffID);
+
         List<WaitingListRequest> requests = waitingListService.getWaitingListRequestByPhysiotherapist(physiotherapist);
 
         List<WaitingListRequestDTO> waitingListRequestDTOS = requests.stream()
