@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * API for Question.
+ * API to handle QuestionDTO objects.
+ * Append /question to the base URL to access these endpoints.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  *          Converted to REST API 2024-02-15.
@@ -41,8 +42,9 @@ public class QuestionController
 
     /**
      * Get all Questions saved to the API.
+     * Append /getAll to the base URL to access this endpoint.
      *
-     * @return List of all Questions saved to the API.
+     * @return List of all Questions saved to the API as a List of QuestionDTO.
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<QuestionDTO>>> getAllQuestions()
@@ -52,6 +54,14 @@ public class QuestionController
         return new ResponseEntity<>(new ResponseWrapper<>(questions), HttpStatus.OK);
     }
 
+
+    /**
+     * Get all Questions with corresponding ID from a List of IDs.
+     * Append /getAllInList to the base URL to access this endpoint.
+     *
+     * @param questionIDs IDs of all Questions to fetch.
+     * @return            List of all Questions with corresponding IDs as a List of QuestionDTO.
+     */
     @RequestMapping(value = "/getAllInList", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<QuestionDTO>>> getAllQuestionsInList(@RequestParam List<Long> questionIDs)
     {
@@ -62,10 +72,11 @@ public class QuestionController
 
 
     /**
-     * Create a new Question.
+     * Create a new Question and save it to storage.
+     * Append /create to the base URL to access this endpoint.
      *
-     * @param question Question object to save.
-     * @return         HttpStatus 200.
+     * @param question QuestionDTO object to save.
+     * @return         HTTPStatus 200.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<QuestionDTO>> saveQuestion(@RequestBody QuestionDTO question)
@@ -77,10 +88,11 @@ public class QuestionController
 
 
     /**
-     * Update Question.
+     * Update a stored Question.
+     * Append /update to the base URL to access this endpoint.
      *
-     * @param updatedQuestion Question with updated info.
-     * @return                HttpStatus 200.
+     * @param updatedQuestion QuestionDTO with updated info.
+     * @return                HTTPStatus 200.
      */
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ResponseWrapper<QuestionDTO>> updateQuestion(@RequestBody QuestionDTO updatedQuestion)
@@ -93,10 +105,13 @@ public class QuestionController
 
 
     /**
-     * Delete Question.
+     * Delete a Question from storage.
+     * Append /deleteQuestion/{questionID} to the base URL to access this endpoint.
      *
      * @param questionID ID of Question to delete.
-     * @return           Redirect.
+     * @return           HTTPStatus 200 if successful.
+     *                   HTTPStatus 404 if Question is not found.
+     *                   HTTPStatus 409 if Question has dependencies.
      */
     @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.DELETE)
     public ResponseEntity<ResponseWrapper<QuestionDTO>> deleteQuestion(@PathVariable("questionID") Long questionID)

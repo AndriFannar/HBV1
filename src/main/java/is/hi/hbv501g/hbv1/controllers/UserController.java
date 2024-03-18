@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import is.hi.hbv501g.hbv1.services.UserService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
- * API for User objects.
+ * API for UserDTO objects.
+ * Append /user to the base URL to access these endpoints.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  *          Converted to a REST API 2024-02-15.
@@ -35,7 +35,7 @@ public class UserController
     /**
      * Construct a new UserController.
      *
-     * @param userService          UserService linked to controller.
+     * @param userService UserService linked to controller.
      */
     @Autowired
     public UserController(UserService userService)
@@ -46,6 +46,7 @@ public class UserController
 
     /**
      * Sign up a new User.
+     * Append /signUp to the base URL + Controller URL to access this endpoint.
      *
      * @param signUpDTO SignUpDTO object to create User from.
      * @return          ResponseWrapper containing User signed up, or in case of errors, containing an ErrorResponse.
@@ -102,7 +103,9 @@ public class UserController
 
 
     /**
-     * Logs in a User.
+     * Logs in a User with credentials.
+     * If successful, returns the User.
+     * Append /login to the base URL + Controller URL to access this endpoint.
      *
      * @param loginDTO LogInDTO object that contains a User's login info.
      * @return         A ResponseWrapper containing the User that credentials belonged to,
@@ -128,6 +131,7 @@ public class UserController
 
     /**
      * Delete User from API.
+     * Append /delete/{userID} to the base URL + Controller URL to access this endpoint.
      *
      * @param userID  ID of User to delete.
      * @return        HTTP Status 200.
@@ -142,10 +146,12 @@ public class UserController
 
 
     /**
-     * Get User.
+     * Get User from API.
+     * Append /view/{userID} to the base URL + Controller URL to access this endpoint.
      *
-     * @param userID  ID of User to get.
-     * @return        Redirect.
+     * @param userID ID of User to get.
+     * @return       UserDTO of requested user if successful.
+     *               HTTP Status 404 if User is not found.
      */
     @RequestMapping(value = "view/{userID}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<ResponseWrapper<UserDTO>> getUser(@PathVariable("userID") Long userID)
@@ -164,10 +170,11 @@ public class UserController
 
 
     /**
-     * Update User.
+     * Update stored User.
+     * Append /update/{requestingUserID} to the base URL + Controller URL to access this endpoint.
      *
-     * @param requestingUserID ID of User making the update.
-     * @param updatedUser      UserDTO with updated info.
+     * @param requestingUserID ID of User making the update (for verification).
+     * @param updatedUser      UserDTO with updated info for the User being updated.
      */
     @RequestMapping(value = "/update/{requestingUserID}", method = RequestMethod.PUT)
     public ResponseEntity<ResponseWrapper<UserDTO>> updateUser(@PathVariable("requestingUserID") Long requestingUserID, @RequestBody UserDTO updatedUser)
@@ -223,7 +230,8 @@ public class UserController
 
 
     /**
-     * Gets a list of all Users saved in the API.
+     * Gets a list of all Users saved to the API.
+     * Append /getAll to the base URL + Controller URL to access this endpoint.
      *
      * @return List of all saved Users.
      */
@@ -241,6 +249,7 @@ public class UserController
 
     /**
      * Gets a list of all Users saved in the API with a specified UserRole.
+     * Append /getByRole to the base URL + Controller URL to access this endpoint.
      *
      * @return List of all saved Users with specified UserRole.
      */
@@ -258,6 +267,7 @@ public class UserController
 
     /**
      * Gets a list of all Users saved in the API with a specified UserRole or higher.
+     * Append /getByRoleElevated to the base URL + Controller URL to access this endpoint.
      *
      * @return List of all saved Users with specified UserRole or higher.
      */
