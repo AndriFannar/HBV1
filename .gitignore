@@ -312,7 +312,11 @@ hs_err_pid*
 
 ### Java-Web ###
 ## ignoring target file
-target/
+target/classes
+target/generated-sources
+target/javadoc-bundle-options
+target/maven-status
+target/maven-javadoc-plugin-stale-data.txt
 
 ### Linux ###
 *~

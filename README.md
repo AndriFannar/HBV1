@@ -23,6 +23,7 @@ To run the project, run the following command in the root directory of the proje
 
 ### Documentation
 View the Maven site for the project to see design documents, dependencies and documentation [here](target/site/index.html).
+
 The JavaDoc for the API can be found in the [docs](target/site/apidocs/index.html).
 
 ### Design Documents
