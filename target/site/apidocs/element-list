@@ -6,5 +6,5 @@ is.hi.hbv501g.hbv1.persistence.entities
 is.hi.hbv501g.hbv1.persistence.entities.dto
 is.hi.hbv501g.hbv1.persistence.entities.enums
 is.hi.hbv501g.hbv1.persistence.repositories
-is.hi.hbv501g.hbv1.services
-is.hi.hbv501g.hbv1.services.implementation
+is.hi.hbv501g.hbv1.Services
+is.hi.hbv501g.hbv1.Services.implementation
