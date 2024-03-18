@@ -94,7 +94,7 @@ public class WaitingListController
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> createNewRequest(@RequestBody WaitingListRequestDTO requestDTO)
     {
-        User requester = userService.getUserByID(requestDTO.getPatientID());
+        User requester = userService.getUserByID(requestDTO.getPatient().getId());
 
         // Check if User already has a Request linked.
         WaitingListRequest exists = waitingListService.getWaitingListRequestByPatient(requester);
@@ -104,8 +104,8 @@ public class WaitingListController
         {
             WaitingListRequest waitingListRequest = new WaitingListRequest(requestDTO);
             waitingListRequest.setPatient(requester);
-            waitingListRequest.setStaff(userService.getUserByID(requestDTO.getStaffID()));
-            waitingListRequest.setQuestionnaire(questionnaireService.getQuestionnaireByID(requestDTO.getQuestionnaireID()));
+            waitingListRequest.setStaff(userService.getUserByID(requestDTO.getStaff().getId()));
+            waitingListRequest.setQuestionnaire(questionnaireService.getQuestionnaireByID(requestDTO.getQuestionnaire().getId()));
 
             waitingListService.saveNewWaitingListRequest(waitingListRequest);
             User registeredUser = userService.getUserByID(waitingListRequest.getPatient().getId());

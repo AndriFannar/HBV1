@@ -21,24 +21,24 @@ public class WaitingListRequestDTO
 
 
     // Variables.
-    private Long patientID;
-    private Long staffID;
+    private UserDTO patient;
+    private UserDTO staff;
     private String description;
     private boolean status;
     private LocalDate dateOfRequest;
-    private Long questionnaireID;
+    private QuestionnaireDTO questionnaire;
     private List<Integer> questionnaireAnswers;
     private double grade;
 
 
-    public WaitingListRequestDTO(Long id, Long patientID, Long staffID, String description, boolean status, LocalDate dateOfRequest, Long questionnaireID, List<Integer> questionnaireAnswers, double grade) {
+    public WaitingListRequestDTO(Long id, UserDTO patient, UserDTO staff, String description, boolean status, LocalDate dateOfRequest, QuestionnaireDTO questionnaire, List<Integer> questionnaireAnswers, double grade) {
         this.id = id;
-        this.patientID = patientID;
-        this.staffID = staffID;
+        this.patient = patient;
+        this.staff = staff;
         this.description = description;
         this.status = status;
         this.dateOfRequest = dateOfRequest;
-        this.questionnaireID = questionnaireID;
+        this.questionnaire = questionnaire;
         this.questionnaireAnswers = questionnaireAnswers;
         this.grade = grade;
     }
@@ -60,12 +60,12 @@ public class WaitingListRequestDTO
     public WaitingListRequestDTO(WaitingListRequest request)
     {
         this.id = request.getId();
-        this.patientID = request.getPatient().getId();
-        this.staffID = request.getStaff().getId();
+        this.patient = new UserDTO(request.getPatient());
+        this.staff = new UserDTO(request.getStaff());
         this.description = request.getDescription();
         this.status = request.isStatus();
         this.dateOfRequest = request.getDateOfRequest();
-        this.questionnaireID = request.getQuestionnaire().getId();
+        this.questionnaire = new QuestionnaireDTO(request.getQuestionnaire());
         this.questionnaireAnswers = request.getQuestionnaireAnswers();
         this.grade = request.getGrade();
     }
@@ -78,20 +78,20 @@ public class WaitingListRequestDTO
         return id;
     }
 
-    public Long getPatientID() {
-        return patientID;
+    public UserDTO getPatient() {
+        return patient;
     }
 
-    public void setPatientID(Long patientID) {
-        this.patientID = patientID;
+    public void setPatient(UserDTO patient) {
+        this.patient = patient;
     }
 
-    public Long getStaffID() {
-        return staffID;
+    public UserDTO getStaff() {
+        return staff;
     }
 
-    public void setStaffID(Long staffID) {
-        this.staffID = staffID;
+    public void setStaff(UserDTO staff) {
+        this.staff = staff;
     }
 
     public String getDescription() {
@@ -118,13 +118,13 @@ public class WaitingListRequestDTO
         this.dateOfRequest = dateOfRequest;
     }
 
-    public Long getQuestionnaireID() {
-        return questionnaireID;
+    public QuestionnaireDTO getQuestionnaire() {
+        return questionnaire;
     }
 
-    public void setQuestionnaireID(Long questionnaireID)
+    public void setQuestionnaire(QuestionnaireDTO questionnaire)
     {
-        this.questionnaireID = questionnaireID;
+        this.questionnaire = questionnaire;
     }
 
     public List<Integer> getQuestionnaireAnswers() {
@@ -155,12 +155,12 @@ public class WaitingListRequestDTO
     {
         return "WaitingListRequest{" +
                 "id=" + id +
-                ", patient=" + patientID +
-                ", staff=" + staffID +
+                ", patient=" + patient +
+                ", staff=" + staff +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", dateOfRequest=" + dateOfRequest +
-                ", questionnaireID=" + questionnaireID +
+                ", questionnaire=" + questionnaire +
                 ", questionnaireAnswers=" + questionnaireAnswers +
                 ", grade=" + grade +
                 '}';
