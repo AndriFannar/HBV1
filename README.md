@@ -22,9 +22,9 @@ To run the project, run the following command in the root directory of the proje
 ```mvn spring-boot:run```
 
 ### Documentation
-View the Maven site for the project to see design documents, dependencies and documentation [here](target/site/index.html).
+View the Maven site for the project to see design documents, dependencies and documentation [here](https://andrifannar.github.io/HBV1/target/site/index.html).
 
-The JavaDoc for the API can be found in the [docs](target/site/apidocs/index.html).
+The JavaDoc for the API can be found in the [docs](https://andrifannar.github.io/HBV1/target/site/apidocs/index.html).
 
 ### Design Documents
 It is also possible to view the design documents [here](src/site/markdown/UML.md).
