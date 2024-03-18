@@ -317,6 +317,7 @@ target/generated-sources
 target/javadoc-bundle-options
 target/maven-status
 target/maven-javadoc-plugin-stale-data.txt
+target/staging
 
 ### Linux ###
 *~
