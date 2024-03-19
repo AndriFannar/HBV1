@@ -69,5 +69,5 @@ public interface WaitingListRepository extends JpaRepository<WaitingListRequest,
      * @param staff Staff member assigned to the WaitingListRequest.
      * @return      List of WaitingListRequest with matching Staff member, if any.
      */
-    List<WaitingListRequest> getByStaff(User staff);
+    List<WaitingListRequest> getByStaffOrderByGradeDescPatientNameAsc(User staff);
 }
