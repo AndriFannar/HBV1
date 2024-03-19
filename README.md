@@ -30,5 +30,5 @@ The JavaDoc for the API can be found in the [docs](https://andrifannar.github.io
 It is also possible to view the design documents [here](src/site/markdown/UML.md).
 
 ### License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md), and [SPDX](https://spdx.org/licenses/MIT.html)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE), and [SPDX](https://spdx.org/licenses/MIT.html)
 
