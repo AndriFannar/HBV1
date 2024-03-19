@@ -15,7 +15,8 @@ import java.util.List;
 
 
 /**
- * API for Questionnaire.
+ * API to handle QuestionnaireDTO objects.
+ * Append /questionnaire to the base URL to access these endpoints.
  *
  * @author  Andri Fannar Kristjánsson, afk6@hi.is.
  *          Converted to REST API 2024-02-15.
@@ -47,8 +48,9 @@ public class QuestionnaireController
 
     /**
      * Get all Questionnaires saved to the API.
+     * Append /getAll to the base URL to access this endpoint.
      *
-     * @return List of all Questionnaire saved to the API.
+     * @return List of all Questionnaire saved to the API as a List of QuestionnaireDTO.
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<QuestionnaireDTO>>> getAllQuestionnaire()
@@ -61,9 +63,10 @@ public class QuestionnaireController
 
     /**
      * Get a Questionnaire by ID.
+     * Append /get/{id} to the base URL to access this endpoint.
      *
      * @param id ID of Questionnaire to get.
-     * @return   Questionnaire with given ID.
+     * @return   QuestionnaireDTO with given ID.
      */
     @RequestMapping(value="/get/{id}", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> getQuestionnaire(@PathVariable("id") Long id)
@@ -76,8 +79,9 @@ public class QuestionnaireController
 
     /**
      * Get all Questionnaires saved to the API that are marked to be displayed on the request form.
+     * Append /getAllToDisplay to the base URL to access this endpoint.
      *
-     * @return List of all Questionnaire saved to the API that are marked be displayed on the request form.
+     * @return List of all QuestionnaireDTO saved to the API that are marked be displayed on the request form.
      */
     @RequestMapping(value = "/getAllToDisplay", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<QuestionnaireDTO>>> getAllQuestionnaireToDisplay()
@@ -90,10 +94,11 @@ public class QuestionnaireController
 
 
     /**
-     * Create a new Questionnaire.
+     * Create a new Questionnaire and save it.
+     * Append /create to the base URL to access this endpoint.
      *
      * @param questionnaire New Questionnaire.
-     * @return              Saves a new Questionnaire to the database.
+     * @return              HTTPStatus 201 on successful save.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> createQuestionnaire(@RequestBody QuestionnaireDTO questionnaire)
@@ -106,6 +111,7 @@ public class QuestionnaireController
 
     /**
      * Toggle display Questionnaire on registration form.
+     * Append /toggleDisplayOnForm/{questionnaireID} to the base URL to access this endpoint.
      *
      * @param questionnaireID ID of Questionnaire to toggle.
      * @return                HttpStatus 200.
@@ -120,7 +126,8 @@ public class QuestionnaireController
 
 
     /**
-     * Delete a Questionnaire.
+     * Delete a Questionnaire from storage.
+     * Append /delete/{questionnaireID} to the base URL to access this endpoint.
      *
      * @param questionnaireID ID of Questionnaire to delete.
      * @return                HttpStatus 200 if deleted successfully,
@@ -153,6 +160,7 @@ public class QuestionnaireController
 
     /**
      * Add a Question to a Questionnaire.
+     * Append /edit/{questionnaireID}/addQuestion/{questionID} to the base URL to access this endpoint.
      *
      * @param questionID      ID of Question to add to Questionnaire.
      * @param questionnaireID ID of Questionnaire to add Question to.
@@ -169,10 +177,11 @@ public class QuestionnaireController
 
     /**
      * Remove a Question from a Questionnaire.
+     * Append /edit/{questionnaireID}/removeQuestion/{questionID} to the base URL to access this endpoint.
      *
      * @param questionID      ID of Question to remove from Questionnaire.
      * @param questionnaireID ID of Questionnaire to remove Question from.
-     * @return                Redirect back to page.
+     * @return                HTTPStatus 200.
      */
     @RequestMapping(value = "edit/{questionnaireID}/removeQuestion/{questionID}", method = RequestMethod.PUT)
     public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID)
@@ -184,11 +193,12 @@ public class QuestionnaireController
 
 
     /**
-     * Form for answering a Questionnaire.
+     * Add Questionnaire answers to a WaitingListRequest.
+     * Append /{requestID}/answerQuestionnaire to the base URL to access this endpoint.
      *
      * @param requestID     ID of WaitingListRequest the answers belong to.
      * @param questionnaire Questionnaire with answers.
-     * @return              Redirect.
+     * @return              HTTPStatus 200.
      */
     @RequestMapping(value = "{requestID}/answerQuestionnaire", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> answerQuestionnaire(@PathVariable("requestID") Long requestID, QuestionnaireDTO questionnaire)

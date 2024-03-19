@@ -1,6 +1,7 @@
 package is.hi.hbv501g.hbv1.services.implementation;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionnaireDTO;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
@@ -55,7 +56,7 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
         Questionnaire newQuestionnaire = new Questionnaire();
         newQuestionnaire.setName(questionnaire.getName());
         newQuestionnaire.setDisplayOnForm(questionnaire.isDisplayOnForm());
-        newQuestionnaire.setQuestions(new ArrayList<>(questionRepository.findAllById(questionnaire.getQuestionIDs())));
+        newQuestionnaire.setQuestions(new ArrayList<>(questionRepository.findAllById(questionnaire.getQuestions().stream().map(QuestionDTO::getId).toList())));
 
         questionnaireRepository.save(newQuestionnaire);
 

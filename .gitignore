@@ -312,7 +312,12 @@ hs_err_pid*
 
 ### Java-Web ###
 ## ignoring target file
-target/
+target/classes
+target/generated-sources
+target/javadoc-bundle-options
+target/maven-status
+target/maven-javadoc-plugin-stale-data.txt
+target/staging
 
 ### Linux ###
 *~
@@ -399,7 +404,6 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,java,java-web,intellij,intellij+all,intellij+iml,eclipse,maven
 
-/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### Git ###

@@ -1,8 +1,7 @@
 package is.hi.hbv501g.hbv1.persistence.entities.dto;
 
-import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
-
+import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class QuestionnaireDTO
 
     // Variables
     private String name;
-    private List<Long> questionIDs;
+    private List<QuestionDTO> questions;
     private boolean displayOnForm;
 
 
@@ -28,14 +27,14 @@ public class QuestionnaireDTO
      */
     public QuestionnaireDTO()
     {
-        this.questionIDs = new ArrayList<>();
+        this.questions = new ArrayList<>();
         this.displayOnForm = false;
     }
 
-    public QuestionnaireDTO(String name, List<Long> questionIDs, boolean displayOnForm)
+    public QuestionnaireDTO(String name, List<QuestionDTO> questions, boolean displayOnForm)
     {
         this.name = name;
-        this.questionIDs = questionIDs;
+        this.questions = questions;
         this.displayOnForm = displayOnForm;
     }
 
@@ -43,7 +42,7 @@ public class QuestionnaireDTO
     {
         this.id = questionnaire.getId();
         this.name = questionnaire.getName();
-        this.questionIDs = questionnaire.getQuestions().stream().map(Question::getId).toList();
+        this.questions = questionnaire.getQuestions().stream().map(QuestionDTO::new).toList();
         this.displayOnForm = questionnaire.isDisplayOnForm();
     }
 
@@ -63,22 +62,22 @@ public class QuestionnaireDTO
         this.name = name;
     }
 
-    public List<Long> getQuestionIDs() {
-        return questionIDs;
+    public List<QuestionDTO> getQuestions() {
+        return questions;
     }
 
-    public void setQuestionIDs(List<Long> questionIDs) {
-        this.questionIDs = questionIDs;
+    public void setQuestions(List<QuestionDTO> questions) {
+        this.questions = questions;
     }
 
     public void addQuestion(Question question)
     {
-        this.questionIDs.add(question.getId());
+        this.questions.add(new QuestionDTO(question));
     }
 
     public void removeQuestion(Question question)
     {
-        this.questionIDs.remove(question.getId());
+        this.questions.remove(new QuestionDTO(question));
     }
 
     public boolean isDisplayOnForm() {
@@ -94,7 +93,7 @@ public class QuestionnaireDTO
         return "Questionnaire{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", questions=" + questionIDs.size() +
+                ", questions=" + questions.size() +
                 '}';
     }
 }
