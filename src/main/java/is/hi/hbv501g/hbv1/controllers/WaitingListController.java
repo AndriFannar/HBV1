@@ -170,7 +170,7 @@ public class WaitingListController
 
     /**
      * Change the status of a WaitingListRequest.
-     * Append /setStatus/{requestID}?status=<<newStatus>> to the base URL to access this endpoint.
+     * Append /setStatus/{requestID}?status={newStatus} to the base URL to access this endpoint.
      *
      * @param requestID ID of WaitingListRequest to change status.
      * @param status    New status of WaitingListRequest.

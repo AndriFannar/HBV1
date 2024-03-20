@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"is.hi.hbv501g.hbv1.services","c":"UserServiceImplementationTest","l":"testCreateUser()"},{"p":"is.hi.hbv501g.hbv1.services","c":"UserServiceImplementationTest","l":"UserServiceImplementationTest()","u":"%3Cinit%3E()"}];updateSearchResults();

@@ -250,7 +250,7 @@ public class UserController
     /**
      * Gets a list of all Users saved in the API with a specified UserRole.
      * Also fetches Users with higher roles if specified.
-     * Append /getByRole?userRole=<<UserRole>>&elevated=<<FetchHigherRoles>> to the base URL + Controller URL to access this endpoint.
+     * Append /getByRole to the base URL + Controller URL to access this endpoint.
      *
      * @param userRole Get Users with specified UserRole.
      * @param elevated Get Users with higher role if true.
