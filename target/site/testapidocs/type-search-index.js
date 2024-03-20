@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"is.hi.hbv501g.hbv1.services","l":"UserServiceImplementationTest"}];updateSearchResults();
