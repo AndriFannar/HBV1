@@ -122,7 +122,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public List<WaitingListRequest> getWaitingListRequestByPhysiotherapist(User staff)
     {
-        return waitingListRepository.getByStaff(staff);
+        return waitingListRepository.getByStaffOrderByGradeDescPatientNameAsc(staff);
     }
 
 
