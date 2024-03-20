@@ -169,18 +169,19 @@ public class WaitingListController
 
 
     /**
-     * Accept a WaitingListRequest.
-     * Append /accept/{requestID} to the base URL to access this endpoint.
+     * Change the status of a WaitingListRequest.
+     * Append /setStatus/{requestID}?status={newStatus} to the base URL to access this endpoint.
      *
-     * @param requestID ID of WaitingListRequest to accept.
-     * @return          HttpStatus 202.
+     * @param requestID ID of WaitingListRequest to change status.
+     * @param status    New status of WaitingListRequest.
+     * @return          HttpStatus 200.
      */
-    @RequestMapping(value = "/accept/{requestID}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> acceptRequest(@PathVariable("requestID") Long requestID)
+    @RequestMapping(value = "/setStatus/{requestID}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseWrapper<WaitingListRequestDTO>> setRequestStatus(@PathVariable("requestID") Long requestID, @RequestParam boolean status)
     {
-        waitingListService.updateWaitingListRequestStatus(requestID, true);
+        waitingListService.updateWaitingListRequestStatus(requestID, status);
 
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

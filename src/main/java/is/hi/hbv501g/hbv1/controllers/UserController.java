@@ -249,32 +249,18 @@ public class UserController
 
     /**
      * Gets a list of all Users saved in the API with a specified UserRole.
+     * Also fetches Users with higher roles if specified.
      * Append /getByRole to the base URL + Controller URL to access this endpoint.
      *
+     * @param userRole Get Users with specified UserRole.
+     * @param elevated Get Users with higher role if true.
+     *                 If false, only fetches Users with specified UserRole.
      * @return List of all saved Users with specified UserRole.
      */
     @RequestMapping(value="/getByRole", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRole(@RequestParam UserRole userRole)
+    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRole(@RequestParam UserRole userRole, @RequestParam boolean elevated)
     {
-        List<User> users = userService.getUserByRole(userRole, false);
-
-        List<UserDTO> userDTOs = users.stream()
-                .map(UserDTO::new).toList();
-
-        return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
-    }
-
-
-    /**
-     * Gets a list of all Users saved in the API with a specified UserRole or higher.
-     * Append /getByRoleElevated to the base URL + Controller URL to access this endpoint.
-     *
-     * @return List of all saved Users with specified UserRole or higher.
-     */
-    @RequestMapping(value="/getByRoleElevated", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<List<UserDTO>>> getUsersByRoleElevated(@RequestParam UserRole userRole)
-    {
-        List<User> users = userService.getUserByRole(userRole, true);
+        List<User> users = userService.getUserByRole(userRole, elevated);
 
         List<UserDTO> userDTOs = users.stream()
                 .map(UserDTO::new).toList();
