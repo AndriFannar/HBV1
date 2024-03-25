@@ -1,5 +1,5 @@
 ## HBV1 - Team 1
-# PHISIO-API
+# PHYSIO-API
 An API for a system that manages requests for physiotherapist clinics.
 Supports creation of Users, new requests and the ability to answer health questionnaires to determine the urgency of the request.
 
