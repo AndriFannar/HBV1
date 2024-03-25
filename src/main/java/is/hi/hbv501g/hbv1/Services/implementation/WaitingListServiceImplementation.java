@@ -149,8 +149,6 @@ public class WaitingListServiceImplementation implements WaitingListService
             }
 
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
-
-            System.out.println("Updated request: " + waitingLR.toString());
         }
     }
 
