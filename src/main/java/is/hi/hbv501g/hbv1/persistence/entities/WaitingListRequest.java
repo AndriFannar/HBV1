@@ -173,6 +173,11 @@ public class WaitingListRequest
         this.questionnaireAnswers = questionnaireAnswers;
     }
 
+    public void clearQuestionnaireAnswers()
+    {
+        this.questionnaireAnswers.clear();
+    }
+
     public void addQuestionnaireAnswer(Integer answer)
     {
         this.questionnaireAnswers.add(answer);

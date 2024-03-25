@@ -141,14 +141,16 @@ public class WaitingListServiceImplementation implements WaitingListService
             if (updatedRequest.getStaff().getId() != null) waitingLR.setStaff(userService.getUserByID(updatedRequest.getStaff().getId()));
             if (updatedRequest.getDescription() != null) waitingLR.setDescription(updatedRequest.getDescription());
             if (updatedRequest.isStatus()) waitingLR.setStatus(true);
+            if ((updatedRequest.getQuestionnaireAnswers() != null) && (!updatedRequest.getQuestionnaireAnswers().isEmpty())) waitingLR.setQuestionnaireAnswers(updatedRequest.getQuestionnaireAnswers());
             if ((updatedRequest.getQuestionnaire() != null) && (!Objects.equals(updatedRequest.getQuestionnaire().getId(), waitingLR.getQuestionnaire().getId())))
             {
                 waitingLR.setQuestionnaire(questionnaireService.getQuestionnaireByID(updatedRequest.getQuestionnaire().getId()));
-                waitingLR.setQuestionnaireAnswers(new ArrayList<>());
+                waitingLR.clearQuestionnaireAnswers();
             }
 
-            if ((updatedRequest.getQuestionnaireAnswers() != null) && (!updatedRequest.getQuestionnaireAnswers().isEmpty())) waitingLR.setQuestionnaireAnswers(updatedRequest.getQuestionnaireAnswers());
             if (updatedRequest.getGrade() != 0) waitingLR.setGrade(updatedRequest.getGrade());
+
+            System.out.println("Updated request: " + waitingLR.toString());
         }
     }
 
