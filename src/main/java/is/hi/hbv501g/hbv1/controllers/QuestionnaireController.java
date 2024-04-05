@@ -110,16 +110,17 @@ public class QuestionnaireController
 
 
     /**
-     * Toggle display Questionnaire on registration form.
-     * Append /toggleDisplayOnForm/{questionnaireID} to the base URL to access this endpoint.
+     * Set display for Questionnaire on registration form.
+     * Append /setDisplay/{questionnaireID}?updatedDisplay={updatedDisplay} to the base URL to access this endpoint.
      *
-     * @param questionnaireID ID of Questionnaire to toggle.
+     * @param questionnaireID ID of Questionnaire to update.
+     * @param updatedDisplay  Updated display status of Questionnaire.
      * @return                HttpStatus 200.
      */
-    @RequestMapping(value = "/toggleDisplayOnForm/{questionnaireID}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> toggleDisplayOnForm(@PathVariable("questionnaireID") Long questionnaireID)
+    @RequestMapping(value = "/setDisplay/{questionnaireID}", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> setDisplayOnForm(@PathVariable("questionnaireID") Long questionnaireID, @RequestParam boolean updatedDisplay)
     {
-        questionnaireService.toggleDisplayQuestionnaireOnForm(questionnaireID);
+        questionnaireService.setDisplayQuestionnaireOnForm(questionnaireID, updatedDisplay);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

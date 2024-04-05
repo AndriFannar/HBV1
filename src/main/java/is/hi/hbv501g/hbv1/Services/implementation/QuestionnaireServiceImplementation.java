@@ -142,16 +142,17 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
      * Toggles whether to display Questionnaire on registration page or not.
      *
      * @param questionnaireID ID of the Questionnaire to change.
+     * @param updatedDisplay  Updated display status of Questionnaire.
      */
     @Override
     @Transactional
-    public void toggleDisplayQuestionnaireOnForm(Long questionnaireID)
+    public void setDisplayQuestionnaireOnForm(Long questionnaireID, boolean updatedDisplay)
     {
         Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
 
         if(questionnaire != null)
         {
-            questionnaire.setDisplayOnForm(!questionnaire.isDisplayOnForm());
+            questionnaire.setDisplayOnForm(updatedDisplay);
         }
     }
 

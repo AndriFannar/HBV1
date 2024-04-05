@@ -71,8 +71,9 @@ public interface QuestionnaireService
      * Toggles whether to display Questionnaire on registration page or not.
      *
      * @param questionnaireID ID of the Questionnaire to change.
+     * @param updatedDisplay  Updated display status of Questionnaire.
      */
-    void toggleDisplayQuestionnaireOnForm(Long questionnaireID);
+    void setDisplayQuestionnaireOnForm(Long questionnaireID, boolean updatedDisplay);
 
 
     /**
