@@ -55,6 +55,7 @@ public class QuestionDTO
 
     public QuestionDTO (Question question)
     {
+        this.id = question.getId();
         this.questionString = question.getQuestionString();
         this.weight = question.getWeight();
         this.questionnaireIDs = question.getQuestionnaires().stream().map(Questionnaire::getId).toList();
