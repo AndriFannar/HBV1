@@ -102,38 +102,23 @@ public class QuestionnaireServiceImplementation implements QuestionnaireService
 
 
     /**
-     * Adds a Question to Questionnaire.
+     * Updates Questionnaire with information from an updated Questionnaire object.
      *
-     * @param questionID      ID of Question to add.
-     * @param questionnaireID ID of Questionnaire that Question should be added to.
+     * @param updatedQuestionnaire Questionnaire with updated information.
      */
     @Override
     @Transactional
-    public void addQuestionToQuestionnaire(Long questionID, Long questionnaireID)
+    public void updateQuestionnaire(QuestionnaireDTO updatedQuestionnaire)
     {
-        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
-        Question question = questionRepository.getQuestionById(questionID);
+        Questionnaire questionnaire = getQuestionnaireByID(updatedQuestionnaire.getId());
 
-        if ((questionnaire != null) && (question != null)) questionnaire.addQuestion(question);
-    }
-
-
-    /**
-     * Removes a Question from questionnaire.
-     *
-     * @param questionID      ID of Question to remove.
-     * @param questionnaireID ID of Questionnaire that Question should be removed from.
-     */
-    @Override
-    @Transactional
-    public void removeQuestionFromQuestionnaire(Long questionID, Long questionnaireID)
-    {
-        Questionnaire questionnaire = questionnaireRepository.getById(questionnaireID);
-        Question question = questionRepository.getQuestionById(questionID);
-
-        if ((questionnaire != null) && (question != null))
+        if (questionnaire != null)
         {
-            questionnaire.removeQuestion(question);
+            questionnaire.setName(updatedQuestionnaire.getName());
+            questionnaire.setDisplayOnForm(updatedQuestionnaire.isDisplayOnForm());
+            questionnaire.setQuestions(updatedQuestionnaire.getQuestions().stream()
+                    .map(questionDTO -> questionRepository.getQuestionById(questionDTO.getId()))
+                    .toList());
         }
     }
 

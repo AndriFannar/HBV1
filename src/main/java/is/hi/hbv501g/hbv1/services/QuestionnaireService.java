@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.services;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionnaireDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,21 +51,11 @@ public interface QuestionnaireService
 
 
     /**
-     * Adds a Question to Questionnaire.
+     * Updates Questionnaire with information from an updated Questionnaire object.
      *
-     * @param questionID      ID of Question to add.
-     * @param questionnaireID ID of Questionnaire that Question should be added to.
+     * @param updatedQuestionnaire Questionnaire with updated information.
      */
-    void addQuestionToQuestionnaire(Long questionID, Long questionnaireID);
-
-
-    /**
-     * Removes a Question from questionnaire.
-     *
-     * @param questionID      ID of Question to remove.
-     * @param questionnaireID ID of Questionnaire that Question should be removed from.
-     */
-    void removeQuestionFromQuestionnaire(Long questionID, Long questionnaireID);
+    void updateQuestionnaire(QuestionnaireDTO updatedQuestionnaire);
 
 
     /**

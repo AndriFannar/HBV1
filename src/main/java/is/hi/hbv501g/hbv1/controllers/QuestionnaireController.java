@@ -160,34 +160,16 @@ public class QuestionnaireController
 
 
     /**
-     * Add a Question to a Questionnaire.
-     * Append /edit/{questionnaireID}/addQuestion/{questionID} to the base URL to access this endpoint.
+     * Update a Questionnaire.
+     * Append /update to the base URL to access this endpoint.
      *
-     * @param questionID      ID of Question to add to Questionnaire.
-     * @param questionnaireID ID of Questionnaire to add Question to.
-     * @return                HttpStatus 200.
+     * @param updatedQuestionnaire Questionnaire with updated information.
+     * @return                     HttpStatus 200.
      */
-    @RequestMapping(value = "edit/{questionnaireID}/addQuestion/{questionID}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> addQuestion(@PathVariable("questionID") Long questionID, @PathVariable("questionnaireID") Long questionnaireID)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> updateQuestionnaire(@RequestBody QuestionnaireDTO updatedQuestionnaire)
     {
-        questionnaireService.addQuestionToQuestionnaire(questionID, questionnaireID);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    /**
-     * Remove a Question from a Questionnaire.
-     * Append /edit/{questionnaireID}/removeQuestion/{questionID} to the base URL to access this endpoint.
-     *
-     * @param questionID      ID of Question to remove from Questionnaire.
-     * @param questionnaireID ID of Questionnaire to remove Question from.
-     * @return                HTTPStatus 200.
-     */
-    @RequestMapping(value = "edit/{questionnaireID}/removeQuestion/{questionID}", method = RequestMethod.PUT)
-    public ResponseEntity<ResponseWrapper<QuestionnaireDTO>> removeQuestion(@PathVariable("questionID") Long questionID , @PathVariable("questionnaireID") Long questionnaireID)
-    {
-        questionnaireService.removeQuestionFromQuestionnaire(questionID, questionnaireID);
+        questionnaireService.updateQuestionnaire(updatedQuestionnaire);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
