@@ -106,14 +106,14 @@ public class QuestionController
 
     /**
      * Delete a Question from storage.
-     * Append /deleteQuestion/{questionID} to the base URL to access this endpoint.
+     * Append /delete/{questionID} to the base URL to access this endpoint.
      *
      * @param questionID ID of Question to delete.
      * @return           HTTPStatus 200 if successful.
      *                   HTTPStatus 404 if Question is not found.
      *                   HTTPStatus 409 if Question has dependencies.
      */
-    @RequestMapping(value = "/deleteQuestion/{questionID}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{questionID}", method = RequestMethod.DELETE)
     public ResponseEntity<ResponseWrapper<QuestionDTO>> deleteQuestion(@PathVariable("questionID") Long questionID)
     {
         // Get Question from database.

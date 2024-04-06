@@ -105,7 +105,7 @@ public class QuestionServiceImplementation implements QuestionService
         {
             if (updatedQuestion.getQuestionString() != null) question.setQuestionString(updatedQuestion.getQuestionString());
             if (updatedQuestion.getWeight() != null) question.setWeight(updatedQuestion.getWeight());
-            if (!updatedQuestion.getQuestionnaireIDs().isEmpty()) question.setQuestionnaires(questionnaireRepository.findAllById(updatedQuestion.getQuestionnaireIDs()));
+            if (updatedQuestion.getQuestionnaireIDs() != null) question.setQuestionnaires(questionnaireRepository.findAllById(updatedQuestion.getQuestionnaireIDs()));
         }
     }
 

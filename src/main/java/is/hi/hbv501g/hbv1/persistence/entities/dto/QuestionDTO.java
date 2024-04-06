@@ -2,7 +2,6 @@ package is.hi.hbv501g.hbv1.persistence.entities.dto;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
-import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -23,10 +22,9 @@ public class QuestionDTO
     private String questionString;
     private Double weight;
 
-    private int numberOfAnswers;
+    private QuestionAnswerGroupDTO questionAnswerGroup;
     private List<Long> questionnaireIDs;
 
-    @Transient
     private Integer answer;
 
 
@@ -41,25 +39,31 @@ public class QuestionDTO
     /**
      * Create a new question.
      *
-     * @param questionString Question.
-     * @param weight         Weight of question in score calculation.
-     * @param questionnaireIDs Questionnaires this question belongs on.
+     * @param questionString      Question.
+     * @param weight              Weight of question in score calculation.
+     * @param questionnaireIDs    Questionnaires this question belongs on.
+     * @param questionAnswerGroup The answer group for this Question
      */
-    public QuestionDTO(String questionString, Double weight, List<Long> questionnaireIDs, int numberOfAnswers)
+    public QuestionDTO(String questionString, Double weight, List<Long> questionnaireIDs, QuestionAnswerGroupDTO questionAnswerGroup)
     {
         this.questionString = questionString;
         this.weight = weight;
         this.questionnaireIDs = questionnaireIDs;
-        this.numberOfAnswers = numberOfAnswers;
+        this.questionAnswerGroup = questionAnswerGroup;
     }
 
+    /**
+     * Create a new QuestionDTO from Question.
+     *
+     * @param question Question to convert to QuestionDTO.
+     */
     public QuestionDTO (Question question)
     {
         this.id = question.getId();
         this.questionString = question.getQuestionString();
         this.weight = question.getWeight();
         this.questionnaireIDs = question.getQuestionnaires().stream().map(Questionnaire::getId).toList();
-        this.numberOfAnswers = question.getNumberOfAnswers();
+        this.questionAnswerGroup = new QuestionAnswerGroupDTO(question.getQuestionAnswerGroup());
     }
 
     public Long getId() {
@@ -99,13 +103,13 @@ public class QuestionDTO
         this.questionnaireIDs.add(questionnaire.getId());
     }
 
-    public void setNumberOfAnswers(int numberOfAnswers)
+    public void setQuestionAnswerGroupDTO(QuestionAnswerGroupDTO questionAnswerGroup)
     {
-        this.numberOfAnswers = numberOfAnswers;
+        this.questionAnswerGroup = questionAnswerGroup;
     }
 
-    public int getNumberOfAnswers() {
-        return numberOfAnswers;
+    public QuestionAnswerGroupDTO getQuestionAnswerGroup() {
+        return questionAnswerGroup;
     }
 
     public Integer getAnswer() {
@@ -128,7 +132,7 @@ public class QuestionDTO
                 "id=" + id +
                 ", questionString='" + questionString + '\'' +
                 ", weight=" + weight +
-                ", numberOfAnswers=" + numberOfAnswers +
+                ", questionAnswerGroup=" + questionAnswerGroup +
                 ", questionnaires=" + questionnaireIDs +
                 ", answer=" + answer +
                 '}';

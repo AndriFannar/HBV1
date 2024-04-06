@@ -35,7 +35,8 @@ public class Question
     private String questionString;
     private Double weight;
 
-    private int numberOfAnswers;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private QuestionAnswerGroup questionAnswerGroup;
 
     @ManyToMany(mappedBy = "questions")
     @JsonBackReference
@@ -56,16 +57,17 @@ public class Question
     /**
      * Create a new question.
      *
-     * @param questionString Question.
-     * @param weight         Weight of question in score calculation.
-     * @param questionnaires Questionnaires this question belongs on.
+     * @param questionString      Question.
+     * @param weight              Weight of question in score calculation.
+     * @param questionnaires      Questionnaires this question belongs on.
+     * @param questionAnswerGroup The group of answers for the Question.
      */
-    public Question(String questionString, Double weight, List<Questionnaire> questionnaires, int numberOfAnswers)
+    public Question(String questionString, Double weight, List<Questionnaire> questionnaires, QuestionAnswerGroup questionAnswerGroup)
     {
         this.questionString = questionString;
         this.weight = weight;
         this.questionnaires = questionnaires;
-        this.numberOfAnswers = numberOfAnswers;
+        this.questionAnswerGroup = questionAnswerGroup;
     }
 
     public Long getId() {
@@ -105,13 +107,13 @@ public class Question
         this.questionnaires.add(questionnaire);
     }
 
-    public void setNumberOfAnswers(int numberOfAnswers)
+    public void setQuestionAnswerGroup(QuestionAnswerGroup questionAnswerGroup)
     {
-        this.numberOfAnswers = numberOfAnswers;
+        this.questionAnswerGroup = questionAnswerGroup;
     }
 
-    public int getNumberOfAnswers() {
-        return numberOfAnswers;
+    public QuestionAnswerGroup getQuestionAnswerGroup() {
+        return questionAnswerGroup;
     }
 
     public Integer getAnswer() {
@@ -134,7 +136,7 @@ public class Question
                 "id=" + id +
                 ", questionString='" + questionString + '\'' +
                 ", weight=" + weight +
-                ", numberOfAnswers=" + numberOfAnswers +
+                ", questionAnswerGroup=" + questionAnswerGroup +
                 ", questionnaires=" + questionnaires +
                 ", answer=" + answer +
                 '}';
