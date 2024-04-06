@@ -2,6 +2,7 @@ package is.hi.hbv501g.hbv1.services.implementation;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.QuestionDTO;
+import is.hi.hbv501g.hbv1.persistence.repositories.QuestionAnswerGroupRepository;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionRepository;
 import is.hi.hbv501g.hbv1.persistence.repositories.QuestionnaireRepository;
 import is.hi.hbv501g.hbv1.services.QuestionService;
@@ -25,19 +26,22 @@ public class QuestionServiceImplementation implements QuestionService
     // Variables.
     final QuestionRepository questionRepository;
     final QuestionnaireRepository questionnaireRepository;
+    final QuestionAnswerGroupRepository questionAnswerGroupRepository;
 
 
     /**
      * Constructs a new QuestionnaireServiceImplementation.
      *
-     * @param questionRepository QuestionRepository linked to service.
-     * @param questionnaireRepository QuestionnaireRepository linked to service.
+     * @param questionRepository            QuestionRepository linked to service.
+     * @param questionnaireRepository       QuestionnaireRepository linked to service.
+     * @param questionAnswerGroupRepository QuestionAnswerGroupRepository linked to service.
      */
     @Autowired
-    public QuestionServiceImplementation(QuestionRepository questionRepository, QuestionnaireRepository questionnaireRepository)
+    public QuestionServiceImplementation(QuestionRepository questionRepository, QuestionnaireRepository questionnaireRepository, QuestionAnswerGroupRepository questionAnswerGroupRepository)
     {
         this.questionRepository = questionRepository;
         this.questionnaireRepository = questionnaireRepository;
+        this.questionAnswerGroupRepository = questionAnswerGroupRepository;
     }
 
 
@@ -105,6 +109,7 @@ public class QuestionServiceImplementation implements QuestionService
         {
             if (updatedQuestion.getQuestionString() != null) question.setQuestionString(updatedQuestion.getQuestionString());
             if (updatedQuestion.getWeight() != null) question.setWeight(updatedQuestion.getWeight());
+            if (updatedQuestion.getQuestionAnswerGroup() != null) question.setQuestionAnswerGroup(questionAnswerGroupRepository.getQuestionAnswerGroupById(updatedQuestion.getQuestionAnswerGroup().getId()));
             if (updatedQuestion.getQuestionnaireIDs() != null) question.setQuestionnaires(questionnaireRepository.findAllById(updatedQuestion.getQuestionnaireIDs()));
         }
     }
