@@ -59,6 +59,7 @@ public class QuestionServiceImplementation implements QuestionService
         newQuestion.setWeight(question.getWeight());
         newQuestion.setQuestionnaires(questionnaireRepository.findAllById(question.getQuestionnaireIDs()));
         newQuestion.setAnswer(question.getAnswer());
+        newQuestion.setQuestionAnswerGroup(questionAnswerGroupRepository.getQuestionAnswerGroupById(question.getQuestionAnswerGroup().getId()));
         return questionRepository.save(newQuestion);
     }
 
