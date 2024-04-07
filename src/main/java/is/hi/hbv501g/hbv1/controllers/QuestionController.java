@@ -83,7 +83,7 @@ public class QuestionController
     {
         questionService.saveNewQuestion(question);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(question), HttpStatus.OK);
     }
 
 
