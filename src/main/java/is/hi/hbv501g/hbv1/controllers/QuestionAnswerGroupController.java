@@ -60,9 +60,9 @@ public class QuestionAnswerGroupController
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<QuestionAnswerGroupDTO>> saveQuestionAnswerGroup(@RequestBody QuestionAnswerGroupDTO questionAnswerGroup)
     {
-        questionAnswerGroupService.saveNewQuestionAnswerGroup(questionAnswerGroup);
+        QuestionAnswerGroup savedQuestionAnswerGroup = questionAnswerGroupService.saveNewQuestionAnswerGroup(questionAnswerGroup);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(new QuestionAnswerGroupDTO(savedQuestionAnswerGroup)), HttpStatus.OK);
     }
 
 
