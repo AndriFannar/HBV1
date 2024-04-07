@@ -81,9 +81,9 @@ public class QuestionController
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper<QuestionDTO>> saveQuestion(@RequestBody QuestionDTO question)
     {
-        questionService.saveNewQuestion(question);
+        Question savedQuestion = questionService.saveNewQuestion(question);
 
-        return new ResponseEntity<>(new ResponseWrapper<>(question), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseWrapper<>(new QuestionDTO(savedQuestion)), HttpStatus.OK);
     }
 
 
