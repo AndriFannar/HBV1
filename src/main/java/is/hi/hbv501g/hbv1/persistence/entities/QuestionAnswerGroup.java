@@ -36,7 +36,7 @@ public class QuestionAnswerGroup
     @Convert(converter = StringListConverter.class)
     private List<String> questionAnswers;
 
-    @OneToMany(mappedBy = "questionAnswerGroup" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionAnswerGroup")
     private List<Question> questions;
 
 

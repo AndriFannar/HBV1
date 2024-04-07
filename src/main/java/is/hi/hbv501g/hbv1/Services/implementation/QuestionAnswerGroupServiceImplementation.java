@@ -64,8 +64,9 @@ public class QuestionAnswerGroupServiceImplementation implements QuestionAnswerG
 
         if (existing != null)
         {
-            existing.setQuestionAnswers(updatedQuestionAnswerGroupDto.getQuestionAnswers());
-            existing.setQuestions(questionRepository.findAllById(updatedQuestionAnswerGroupDto.getQuestionIDs()));
+            if (updatedQuestionAnswerGroupDto.getGroupName() != null) existing.setGroupName(updatedQuestionAnswerGroupDto.getGroupName());
+            if (updatedQuestionAnswerGroupDto.getQuestionAnswers() != null) existing.setQuestionAnswers(updatedQuestionAnswerGroupDto.getQuestionAnswers());
+            if (updatedQuestionAnswerGroupDto.getQuestionIDs() != null) existing.setQuestions(questionRepository.findAllById(updatedQuestionAnswerGroupDto.getQuestionIDs()));
         }
     }
 
