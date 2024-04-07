@@ -40,6 +40,7 @@ public class QuestionAnswerGroupServiceImplementation implements QuestionAnswerG
     @Override
     public QuestionAnswerGroup saveNewQuestionAnswerGroup(QuestionAnswerGroupDTO questionAnswerGroupDto) {
         QuestionAnswerGroup questionAnswerGroup = new QuestionAnswerGroup();
+        questionAnswerGroup.setGroupName(questionAnswerGroupDto.getGroupName());
         questionAnswerGroup.setQuestionAnswers(questionAnswerGroupDto.getQuestionAnswers());
         questionAnswerGroup.setQuestions(questionRepository.findAllById(questionAnswerGroupDto.getQuestionIDs()));
 
