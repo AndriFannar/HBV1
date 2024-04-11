@@ -2,6 +2,8 @@ package is.hi.hbv501g.hbv1.persistence.entities.dto;
 
 import is.hi.hbv501g.hbv1.persistence.entities.Question;
 import is.hi.hbv501g.hbv1.persistence.entities.Questionnaire;
+import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class QuestionnaireDTO
     private String name;
     private List<QuestionDTO> questions;
     private boolean displayOnForm;
+    private List<Long> waitingListRequestIDs;
 
 
     /**
@@ -28,14 +31,8 @@ public class QuestionnaireDTO
     public QuestionnaireDTO()
     {
         this.questions = new ArrayList<>();
+        this.waitingListRequestIDs = new ArrayList<>();
         this.displayOnForm = false;
-    }
-
-    public QuestionnaireDTO(String name, List<QuestionDTO> questions, boolean displayOnForm)
-    {
-        this.name = name;
-        this.questions = questions;
-        this.displayOnForm = displayOnForm;
     }
 
     public QuestionnaireDTO(Questionnaire questionnaire)
@@ -44,6 +41,7 @@ public class QuestionnaireDTO
         this.name = questionnaire.getName();
         this.questions = questionnaire.getQuestions().stream().map(QuestionDTO::new).toList();
         this.displayOnForm = questionnaire.isDisplayOnForm();
+        this.waitingListRequestIDs = questionnaire.getWaitingListRequests().stream().map(WaitingListRequest::getId).toList();
     }
 
     public void setId(Long id) {
@@ -86,6 +84,14 @@ public class QuestionnaireDTO
 
     public void setDisplayOnForm(boolean displayOnForm) {
         this.displayOnForm = displayOnForm;
+    }
+
+    public List<Long> getWaitingListRequestIDs() {
+        return waitingListRequestIDs;
+    }
+
+    public void setWaitingListRequestIDs(List<Long> waitingListRequestIDs) {
+        this.waitingListRequestIDs = waitingListRequestIDs;
     }
 
     @Override
