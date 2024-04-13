@@ -84,19 +84,7 @@ public class WaitingListServiceImplementation implements WaitingListService
     @Override
     public WaitingListRequest getWaitingListRequestByID(Long requestID)
     {
-        WaitingListRequest request = waitingListRepository.getById(requestID);
-
-        if (request != null)
-        {
-            List<Integer> answers = request.getQuestionnaireAnswers();
-
-            for (int i = 0; i < request.getQuestionnaireAnswers().size(); i++)
-            {
-                request.getQuestionnaire().getQuestions().get(i).setAnswer(answers.get(i));
-            }
-        }
-
-        return request;
+        return waitingListRepository.getById(requestID);
     }
 
 
