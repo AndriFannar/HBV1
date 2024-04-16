@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -174,12 +175,12 @@ public class WaitingListServiceImplementation implements WaitingListService
         {
             if(!request.getQuestionnaireAnswers().isEmpty())
             {
-                request.setQuestionnaireAnswers(new ArrayList<>());
+                request.setQuestionnaireAnswers(new HashMap<>());
             }
 
             for (Question question : questionnaire.getQuestions())
             {
-                request.addQuestionnaireAnswer(question.getAnswer());
+                request.addQuestionnaireAnswer(question.getId(), question.getAnswer());
             }
 
             Questionnaire requestQuestionnaire = request.getQuestionnaire();

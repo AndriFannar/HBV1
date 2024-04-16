@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -44,9 +46,13 @@ public class WaitingListRequest
     private LocalDate dateOfRequest;
     @ManyToOne(fetch = FetchType.LAZY)
     private Questionnaire questionnaire;
-    @Column(columnDefinition = "int[]")
-    @Convert(converter = IntegerListConverter.class)
-    private List<Integer> questionnaireAnswers;
+
+    @ElementCollection
+    private Map<Long, Integer> questionnaireAnswers;
+
+    //@Column(columnDefinition = "int[]")
+    //@Convert(converter = IntegerListConverter.class)
+    //private List<Integer> questionnaireAnswers;
     private double grade;
 
 
@@ -60,7 +66,8 @@ public class WaitingListRequest
 
         this.dateOfRequest = LocalDate.now();
 
-        this.questionnaireAnswers = new ArrayList<>();
+        this.questionnaireAnswers = new HashMap<>();
+        //this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -81,7 +88,8 @@ public class WaitingListRequest
 
         this.dateOfRequest = LocalDate.now();
 
-        this.questionnaireAnswers = new ArrayList<>();
+        this.questionnaireAnswers = new HashMap<>();
+        //this.questionnaireAnswers = new ArrayList<>();
     }
 
     /**
@@ -164,11 +172,11 @@ public class WaitingListRequest
         this.questionnaire = questionnaire;
     }
 
-    public List<Integer> getQuestionnaireAnswers() {
+    public Map<Long, Integer> getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
+    public void setQuestionnaireAnswers(Map<Long, Integer> questionnaireAnswers)
     {
         this.questionnaireAnswers = questionnaireAnswers;
     }
@@ -178,9 +186,9 @@ public class WaitingListRequest
         this.questionnaireAnswers.clear();
     }
 
-    public void addQuestionnaireAnswer(Integer answer)
+    public void addQuestionnaireAnswer(Long questionID, Integer answer)
     {
-        this.questionnaireAnswers.add(answer);
+        this.questionnaireAnswers.put(questionID, answer);
 
     }
 

@@ -4,7 +4,9 @@ import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -27,11 +29,11 @@ public class WaitingListRequestDTO
     private boolean status;
     private LocalDate dateOfRequest;
     private QuestionnaireDTO questionnaire;
-    private List<Integer> questionnaireAnswers;
+    private Map<Long, Integer> questionnaireAnswers;
     private double grade;
 
 
-    public WaitingListRequestDTO(Long id, UserDTO patient, UserDTO staff, String description, boolean status, LocalDate dateOfRequest, QuestionnaireDTO questionnaire, List<Integer> questionnaireAnswers, double grade) {
+    public WaitingListRequestDTO(Long id, UserDTO patient, UserDTO staff, String description, boolean status, LocalDate dateOfRequest, QuestionnaireDTO questionnaire, Map<Long, Integer> questionnaireAnswers, double grade) {
         this.id = id;
         this.patient = patient;
         this.staff = staff;
@@ -53,7 +55,7 @@ public class WaitingListRequestDTO
 
         this.dateOfRequest = LocalDate.now();
 
-        this.questionnaireAnswers = new ArrayList<>();
+        this.questionnaireAnswers = new HashMap<>();
     }
 
 
@@ -127,18 +129,18 @@ public class WaitingListRequestDTO
         this.questionnaire = questionnaire;
     }
 
-    public List<Integer> getQuestionnaireAnswers() {
+    public Map<Long, Integer> getQuestionnaireAnswers() {
         return questionnaireAnswers;
     }
 
-    public void setQuestionnaireAnswers(List<Integer> questionnaireAnswers)
+    public void setQuestionnaireAnswers(Map<Long, Integer> questionnaireAnswers)
     {
         this.questionnaireAnswers = questionnaireAnswers;
     }
 
-    public void addQuestionnaireAnswer(Integer answer)
+    public void addQuestionnaireAnswer(Long questionID, Integer answer)
     {
-        this.questionnaireAnswers.add(answer);
+        this.questionnaireAnswers.put(questionID, answer);
 
     }
 
