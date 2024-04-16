@@ -49,10 +49,6 @@ public class WaitingListRequest
 
     @ElementCollection
     private Map<Long, Integer> questionnaireAnswers;
-
-    //@Column(columnDefinition = "int[]")
-    //@Convert(converter = IntegerListConverter.class)
-    //private List<Integer> questionnaireAnswers;
     private double grade;
 
 
@@ -67,7 +63,6 @@ public class WaitingListRequest
         this.dateOfRequest = LocalDate.now();
 
         this.questionnaireAnswers = new HashMap<>();
-        //this.questionnaireAnswers = new ArrayList<>();
     }
 
 
@@ -89,7 +84,6 @@ public class WaitingListRequest
         this.dateOfRequest = LocalDate.now();
 
         this.questionnaireAnswers = new HashMap<>();
-        //this.questionnaireAnswers = new ArrayList<>();
     }
 
     /**

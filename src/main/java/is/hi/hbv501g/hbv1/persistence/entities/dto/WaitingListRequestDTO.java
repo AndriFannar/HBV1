@@ -33,6 +33,19 @@ public class WaitingListRequestDTO
     private double grade;
 
 
+    /**
+     * Constructs a new WaitingListRequestDTO.
+     *
+     * @param id                   Unique ID of the WaitingListRequest.
+     * @param patient              Patient registered for the WaitingListRequest.
+     * @param staff                Staff member assigned to the WaitingListRequest.
+     * @param description          Description of the WaitingListRequest.
+     * @param status               Status of the WaitingListRequest.
+     * @param dateOfRequest        Date of the WaitingListRequest.
+     * @param questionnaire        Questionnaire for the WaitingListRequest.
+     * @param questionnaireAnswers Answers to the questionnaire.
+     * @param grade                Grade of the WaitingListRequest.
+     */
     public WaitingListRequestDTO(Long id, UserDTO patient, UserDTO staff, String description, boolean status, LocalDate dateOfRequest, QuestionnaireDTO questionnaire, Map<Long, Integer> questionnaireAnswers, double grade) {
         this.id = id;
         this.patient = patient;
@@ -59,6 +72,11 @@ public class WaitingListRequestDTO
     }
 
 
+    /**
+     * Create a WaitingListRequestDTO from a WaitingListRequest.
+     *
+     * @param request WaitingListRequest to create WaitingListRequestDTO from.
+     */
     public WaitingListRequestDTO(WaitingListRequest request)
     {
         this.id = request.getId();
