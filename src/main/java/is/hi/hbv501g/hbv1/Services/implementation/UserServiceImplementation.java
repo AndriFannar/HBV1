@@ -374,14 +374,4 @@ public class UserServiceImplementation implements UserService
             return "Símanúmer ólöglegt" ;  
         }  
     }
-
-    @Transactional
-    public void encrypt()
-    {
-        List<User> users = getAllUsers();
-
-        for(User user : users){
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-    }
 }

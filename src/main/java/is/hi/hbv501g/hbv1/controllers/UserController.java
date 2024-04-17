@@ -266,12 +266,4 @@ public class UserController
 
         return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
     }
-
-    @RequestMapping(value="/encrypt", method=RequestMethod.GET)
-    public ResponseEntity<ResponseWrapper<UserDTO>> encrypt()
-    {
-        userService.encrypt();
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

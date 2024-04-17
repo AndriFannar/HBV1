@@ -132,6 +132,4 @@ public interface UserService
      * @return            String with error message if phone number is invalid
      */
     String validatePhoneNumber(String phoneNumber);
-
-    void encrypt();
 }
