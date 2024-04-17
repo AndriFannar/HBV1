@@ -3,6 +3,7 @@ package is.hi.hbv501g.hbv1.services;
 import java.util.List;
 
 import is.hi.hbv501g.hbv1.persistence.entities.dto.LoginDTO;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.SignUpDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.enums.UserRole;
 import is.hi.hbv501g.hbv1.persistence.entities.User;
@@ -19,12 +20,12 @@ import is.hi.hbv501g.hbv1.persistence.entities.User;
 public interface UserService
 {
     /**
-     * Save a new User object to database.
+     * Save a new User to database.
      *
-     * @param user User object to save.
-     * @return     Saved User object.
+     * @param signUpDTO SignUp object to create new User from.
+     * @return          Saved User object.
      */
-    User saveNewUser(User user);
+    User saveNewUser(SignUpDTO signUpDTO);
 
 
     /**
@@ -131,4 +132,6 @@ public interface UserService
      * @return            String with error message if phone number is invalid
      */
     String validatePhoneNumber(String phoneNumber);
+
+    void encrypt();
 }

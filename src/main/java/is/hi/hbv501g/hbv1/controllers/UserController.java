@@ -89,8 +89,7 @@ public class UserController
         // If no errors, and Patient does not exist, save.
         if(exists == null)
         {
-            User user = new User(signUpDTO);
-            userService.saveNewUser(user);
+            User user = userService.saveNewUser(signUpDTO);
 
             UserDTO returnUser = new UserDTO(user);
             return new ResponseEntity<>(new ResponseWrapper<>(returnUser), HttpStatus.CREATED);
@@ -266,5 +265,13 @@ public class UserController
                 .map(UserDTO::new).toList();
 
         return new ResponseEntity<>(new ResponseWrapper<>(userDTOs), HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/encrypt", method=RequestMethod.GET)
+    public ResponseEntity<ResponseWrapper<UserDTO>> encrypt()
+    {
+        userService.encrypt();
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
