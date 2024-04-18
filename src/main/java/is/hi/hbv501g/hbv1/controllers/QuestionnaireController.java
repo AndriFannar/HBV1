@@ -86,7 +86,7 @@ public class QuestionnaireController
     @RequestMapping(value = "/getAllToDisplay", method = RequestMethod.GET)
     public ResponseEntity<ResponseWrapper<List<QuestionnaireDTO>>> getAllQuestionnaireToDisplay()
     {
-        List<QuestionnaireDTO> questionnaires = questionnaireService.getAllQuestionnaires()
+        List<QuestionnaireDTO> questionnaires = questionnaireService.getQuestionnairesOnForm()
                 .stream().map(QuestionnaireDTO::new).toList();
 
         return new ResponseEntity<>(new ResponseWrapper<>(questionnaires), HttpStatus.OK);
