@@ -3,11 +3,16 @@ package is.hi.hbv501g.hbv1.services.implementation;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import is.hi.hbv501g.hbv1.persistence.entities.WaitingListRequest;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.LoginDTO;
+import is.hi.hbv501g.hbv1.persistence.entities.dto.SignUpDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.dto.UserDTO;
 import is.hi.hbv501g.hbv1.persistence.entities.enums.UserRole;
 import is.hi.hbv501g.hbv1.persistence.entities.User;
+import is.hi.hbv501g.hbv1.persistence.repositories.WaitingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import is.hi.hbv501g.hbv1.persistence.repositories.UserRepository;
@@ -27,29 +32,36 @@ public class UserServiceImplementation implements UserService
 {
     // Variables.
     private final UserRepository userRepository;
+    private final WaitingListRepository waitingListRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     /**
      * Constructs a new UserServiceImplementation.
      *
-     * @param userRepository UserRepository linked to service.
+     * @param userRepository        UserRepository linked to service.
+     * @param waitingListRepository WaitingListRepository linked to service.
      */
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository)
+    public UserServiceImplementation(UserRepository userRepository , WaitingListRepository waitingListRepository)
     {
         this.userRepository = userRepository;
+        this.waitingListRepository = waitingListRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
 
     /**
-     * Save a new User object to database.
+     * Save a new User to database.
      *
-     * @param user User object to save.
-     * @return     Saved User object.
+     * @param signUpDTO SignUp object to create new User from.
+     * @return          Saved User object.
      */
     @Override
-    public User saveNewUser(User user)
+    public User saveNewUser(SignUpDTO signUpDTO)
     {
+        signUpDTO.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
+        User user = new User(signUpDTO);
         return userRepository.save(user);
     }
 
@@ -87,7 +99,7 @@ public class UserServiceImplementation implements UserService
     @Override
     public User getUserByEmail(String email)
     {
-        return userRepository.getByEmail(email);
+        return userRepository.getByEmailIgnoreCase(email);
     }
 
 
@@ -135,7 +147,18 @@ public class UserServiceImplementation implements UserService
             if (updatedUser.getSsn()            != null) user.setSsn(updatedUser.getSsn());
             if (updatedUser.getPhoneNumber()    != null) user.setPhoneNumber(updatedUser.getPhoneNumber());
             if (updatedUser.getAddress()        != null) user.setAddress(updatedUser.getAddress());
-            if (updatedUser.getRole()           != null) user.setRole(updatedUser.getRole());
+            if (updatedUser.getRole()           != null)
+            {
+                if (updatedUser.getRole() != UserRole.USER)
+                {
+                    WaitingListRequest request = waitingListRepository.getByPatient(user);
+
+                    if (request != null)
+                        waitingListRepository.deleteById(request.getId());
+                }
+
+                user.setRole(updatedUser.getRole());
+            }
             if (updatedUser.getSpecialization() != null) user.setSpecialization(updatedUser.getSpecialization());
         }
     }
@@ -165,7 +188,7 @@ public class UserServiceImplementation implements UserService
         User doesExist = getUserByEmail(loginDTO.getEmail());
         if(doesExist != null)
         {
-            if(doesExist.getPassword().equals(loginDTO.getPassword()))
+            if(passwordEncoder.matches(loginDTO.getPassword(), doesExist.getPassword()))
             {
                 return doesExist;
             }
