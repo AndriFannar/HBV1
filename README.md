@@ -23,6 +23,7 @@ To build the project, run the following command in the root directory of the pro
 ### Run
 To run the project, run the following command in the root directory of the project:
 ```mvn spring-boot:run```
+* Note: The project requires a database to run, which is no longer hosted by the team. Before running the project, make sure that a PostgreSQL database is available and change the information in `application.properties`  to match.
 
 ### Documentation
 View the Maven site for the project to see design documents, dependencies and documentation [here](https://andrifannar.github.io/HBV1/target/site/index.html).
