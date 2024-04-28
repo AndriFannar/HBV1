@@ -4,11 +4,13 @@ An API for a system that manages requests for physiotherapist clinics.
 Supports creation of Users, new requests and the ability to answer health questionnaires to determine the urgency of the request.
 
 ### API Availability
-The API is hosted on Render and can be accessed at the following [URL](https://hbv1-api.onrender.com/api/v1/).
-* To make requests to the API, use the URL above (`https://hbv1-api.onrender.com/api/v1/`) and append the endpoint you want to access, which is found in the documentation for the Controllers.
+~The API is hosted on Render and can be accessed at the following [URL](https://hbv1-api.onrender.com/api/v1/).~
+* The API is no longer hosted online.
+* To make requests to the API, use the API URL ~above (`https://hbv1-api.onrender.com/api/v1/`)~ and append the endpoint you want to access, which is found in the documentation for the Controllers.
 * Note that connecting to the API requires an API key.
 
-There is also a website that makes use of the same codebase, available to view [here](https://hbv1.onrender.com/).
+~There is also a website that makes use of the same codebase, available to view [here](https://hbv1.onrender.com/).~
+* No longer hosted.
 
 ### Installation
 This API uses Maven to manage dependencies and build the project. The IDE should be able to handle the Maven dependencies automatically.
