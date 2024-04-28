@@ -5,12 +5,11 @@ Supports creation of Users, new requests and the ability to answer health questi
 This main branch is the final version of the project since December 2023.
 
 ### Website Availability
-The website is hosted on Render and can be accessed [here](https://hbv1.onrender.com/).
-
-Note: Since the website is hosted on a free Render server, it can take some time to spin up if it has not been contacted for some time. 
+~The website is hosted on Render and can be accessed [here](https://hbv1.onrender.com/).~
+* No longer hosted online.
 
 ### API
-This project has been converted to an RESTful API, which is still being actively developed as of March 2024. To view details about the API please check out the `api` branch [here](https://github.com/AndriFannar/HBV1/tree/api).
+This project has been converted to an RESTful API, which was developed from January 2024 to April 2024. To view details about the API please check out the `api` branch [here](https://github.com/AndriFannar/HBV1/tree/api).
 
 ### Installation
 This Java Spring Application uses Maven to manage dependencies and build the project. The IDE should be able to handle the Maven dependencies automatically.
